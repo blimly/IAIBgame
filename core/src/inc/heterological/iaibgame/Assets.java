@@ -22,7 +22,7 @@ public class Assets {
 
     public static Sound backgound_loop;
     public static Sound ooyeah;
-    public static Sound finicebordel;
+    public static Sound no;
 
     public static void load() {
         textureBack = new Texture(Gdx.files.internal("images/backgrounds/splash.png"));
@@ -35,13 +35,11 @@ public class Assets {
 
         TextureRegion[][] temp = TextureRegion.split(textureSheet, 16, 16);
         frames = new TextureRegion[8];
-        for (int i = 0; i < 8; i++) {
-            frames[i] = temp[1][i];
-        }
+        System.arraycopy(temp[1], 0, frames, 0, 8);
         loading = new Animation(0.1f, frames);
 
         backgound_loop = Gdx.audio.newSound(Gdx.files.internal("audio/bg_loop.wav"));
         ooyeah = Gdx.audio.newSound(Gdx.files.internal("audio/ohoh_yeh.wav"));
-        finicebordel = Gdx.audio.newSound(Gdx.files.internal("audio/finicebordel.wav"));
+        no = Gdx.audio.newSound(Gdx.files.internal("audio/no.wav"));
     }
 }

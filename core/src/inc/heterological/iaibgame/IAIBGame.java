@@ -21,6 +21,7 @@ public class IAIBGame implements Screen {
 	Player player;
 	Rectangle loadingRect;
 	Rectangle screenRect;
+	private static final int MOVE_SPEED = 3;
 
 	public IAIBGame(Game game) {
 		this.game = game;
@@ -38,7 +39,7 @@ public class IAIBGame implements Screen {
 	public void show() {
 		player.bounds.y = 240;
 		player.bounds.x = 300;
-		Assets.backgound_loop.loop();
+		Assets.backgound_loop.loop(0.1f);
 	}
 
 	@Override
@@ -63,13 +64,16 @@ public class IAIBGame implements Screen {
 
 	public void generalUpdate(Vector3 touch, OrthographicCamera camera) {
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.bounds.x -= 5;
-		} else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.bounds.x += 5;
-		} else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			player.bounds.y -= 5;
-		} else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			player.bounds.y += 5;
+			player.bounds.x -= MOVE_SPEED;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			player.bounds.x += MOVE_SPEED;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			player.bounds.y -= MOVE_SPEED;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			player.bounds.y += MOVE_SPEED;
 		}
 		if (Gdx.input.isTouched()) {
 			touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -78,27 +82,17 @@ public class IAIBGame implements Screen {
 			player.bounds.y = (int) touch.y - 32;
 		}
 		if(player.bounds.overlaps(loadingRect)) {
-			player.bounds.y = 240;
+			player.bounds.y = 320;
 			player.bounds.x = 300;
 			Assets.backgound_loop.pause();
-			Assets.ooyeah.play(9f);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			Assets.ooyeah.play(0.6f);
 			Assets.backgound_loop.resume();
 		}
 		if(!player.bounds.overlaps(screenRect)) {
 			player.bounds.y = 240;
 			player.bounds.x = 300;
 			Assets.backgound_loop.pause();
-			Assets.finicebordel.play(10f);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			Assets.no.play(10f);
 			Assets.backgound_loop.resume();
 		}
 	}

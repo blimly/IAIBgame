@@ -25,9 +25,8 @@ public class Assets {
     public static Sound no;
 
     public static void load() {
-        textureBack = new Texture(Gdx.files.internal("images/backgrounds/splash.png"));
-        textureBack.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        spriteBack = new Sprite(textureBack);
+        textureBack = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
+        spriteBack = new Sprite(textureBack, 0, 0, 720, 160);
 
         textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
         player = new Sprite(textureSheet, 0, 0, 16, 16);

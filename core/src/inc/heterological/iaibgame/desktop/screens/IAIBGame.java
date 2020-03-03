@@ -1,19 +1,20 @@
-package inc.heterological.iaibgame;
+package inc.heterological.iaibgame.desktop.screens;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import inc.heterological.iaibgame.desktop.Assets;
+import inc.heterological.iaibgame.desktop.Main;
+import inc.heterological.iaibgame.desktop.characters.Player;
 
 public class IAIBGame implements Screen {
-	Game game;
+	Main game;
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	float stateTime;
@@ -22,8 +23,9 @@ public class IAIBGame implements Screen {
 	Rectangle loadingRect;
 	Rectangle screenRect;
 	private static final int MOVE_SPEED = 3;
+	float zoomamount = 1;
 
-	public IAIBGame(Game game) {
+	public IAIBGame(Main game) {
 		this.game = game;
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 640, 480);
@@ -64,9 +66,11 @@ public class IAIBGame implements Screen {
 
 	public void generalUpdate(Vector3 touch, OrthographicCamera camera) {
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			zoomamount += 0.01f;
 			player.bounds.x -= MOVE_SPEED;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			zoomamount -= 0.01f;
 			player.bounds.x += MOVE_SPEED;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
@@ -95,6 +99,7 @@ public class IAIBGame implements Screen {
 			Assets.no.play(10f);
 			Assets.backgound_loop.resume();
 		}
+		camera.zoom = zoomamount;
 	}
 
 	@Override

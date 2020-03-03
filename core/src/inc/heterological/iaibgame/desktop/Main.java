@@ -1,6 +1,8 @@
-package inc.heterological.iaibgame;
+package inc.heterological.iaibgame.desktop;
 
-public class Game extends com.badlogic.gdx.Game {
+import inc.heterological.iaibgame.desktop.screens.IAIBGame;
+
+public class Main extends com.badlogic.gdx.Game {
 
     public IAIBGame gameScreen;
     @Override

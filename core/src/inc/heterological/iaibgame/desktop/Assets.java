@@ -1,4 +1,4 @@
-package inc.heterological.iaibgame;
+package inc.heterological.iaibgame.desktop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;

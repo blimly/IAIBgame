@@ -1,7 +1,8 @@
-package inc.heterological.iaibgame;
+package inc.heterological.iaibgame.desktop.characters;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import inc.heterological.iaibgame.desktop.Assets;
 
 public class Player {
 

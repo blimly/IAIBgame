@@ -10,6 +10,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 
+    public static Texture texture_start;
+    public static Sprite start_sprite;
+    public static Texture texture_exit;
+    public static Sprite exit_sprite;
+
+    public static Texture mainTextureBack;
+    public static Sprite mainSpriteBack;
     public static Texture textureBack;
     public static Sprite spriteBack;
 
@@ -25,6 +32,13 @@ public class Assets {
     public static Sound no;
 
     public static void load() {
+        texture_start = new Texture(Gdx.files.internal("images/startButton.png"));
+        start_sprite = new Sprite(texture_start);
+        texture_exit = new Texture(Gdx.files.internal("images/exitButton.png"));
+        exit_sprite = new Sprite(texture_exit);
+
+        mainTextureBack = new Texture(Gdx.files.internal("images/backgrounds/splash.png"));
+        mainSpriteBack = new Sprite(mainTextureBack);
         textureBack = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
         spriteBack = new Sprite(textureBack, 0, 0, 720, 160);
 

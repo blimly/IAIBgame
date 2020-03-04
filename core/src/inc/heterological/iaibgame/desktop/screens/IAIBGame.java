@@ -23,7 +23,6 @@ public class IAIBGame implements Screen {
 	Rectangle loadingRect;
 	Rectangle screenRect;
 	private static final int MOVE_SPEED = 3;
-	float zoomamount = 1;
 
 	public IAIBGame(Main game) {
 		this.game = game;
@@ -46,6 +45,7 @@ public class IAIBGame implements Screen {
 
 	@Override
 	public void render(float delta) {
+		stateTime += Gdx.graphics.getDeltaTime();
 		Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f); // clear color magenta
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
@@ -56,7 +56,7 @@ public class IAIBGame implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(Assets.spriteBack, 0, 0, 2160, 480);
-		batch.draw(player.image, player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
+		batch.draw(player.getCurrentFrame(stateTime), player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
 
 		batch.end();
 	}

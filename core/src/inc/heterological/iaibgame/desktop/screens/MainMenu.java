@@ -17,9 +17,6 @@ public class MainMenu implements Screen {
     Vector3 touch;
 
     float stateTime;
-    int startX;
-    int startY;
-
 
     public MainMenu(Main game) {
         this.game = game;
@@ -39,25 +36,25 @@ public class MainMenu implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
         update(touch);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-            batch.draw(Assets.start_sprite, 320 - 90, 260);
-            batch.draw(Assets.exit_sprite, 320 - 90, 180);
+            batch.draw(Assets.mainTextureBack, 0, 0, 640, 480);
+            batch.draw(Assets.start_sprite, 320 - 85, 120, 171, 63);
+            batch.draw(Assets.exit_sprite, 320 - 85, 50, 171, 63);
         batch.end();
     }
 
     public void update(Vector3 touch) {
         if(Gdx.input.isTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            if(touch.x >= 230 && touch.x <= 410 && touch.y >= 260 && touch.y <= 300) {
-                Gdx.app.exit();
-            }
-            if(touch.x >= 230 && touch.x <= 410 && touch.y >= 180 && touch.y <= 220) {
+            if(touch.x >= 235 && touch.x <= 406 && touch.y >= 480 - 183 && touch.y <= 480 - 120) {
                 game.setScreen(new Loading(game));
+            }
+            if(touch.x >= 235 && touch.x <= 406 && touch.y >= 367 && touch.y <= 430) {
+                Gdx.app.exit();
             }
         }
     }

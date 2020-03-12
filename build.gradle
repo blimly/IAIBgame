@@ -61,7 +61,10 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        compile ("com.esotericsoftware:kryonet:2.22.0-RC1") {
+            exclude module : 'kryo'
+        }
+        compile "com.esotericsoftware:kryo:3.0.1"
         
     }
 }

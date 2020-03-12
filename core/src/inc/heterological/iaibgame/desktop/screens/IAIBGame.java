@@ -13,7 +13,10 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Main;
 import inc.heterological.iaibgame.desktop.characters.Player;
 
-public class IAIBGame implements Screen {
+import javax.swing.*;
+import java.awt.*;
+
+public class IAIBGame extends Component implements Screen {
 	Main game;
 	OrthographicCamera camera;
 	SpriteBatch batch;
@@ -24,6 +27,7 @@ public class IAIBGame implements Screen {
 	Rectangle screenRect;
 	private static final int MOVE_SPEED = 3;
 
+
 	public IAIBGame(Main game) {
 		this.game = game;
 		camera = new OrthographicCamera();
@@ -31,9 +35,10 @@ public class IAIBGame implements Screen {
 		touch = new Vector3();
 		batch = new SpriteBatch();
 		stateTime = 0f;
-		player = new Player();
+		player = new Player(JOptionPane.showInputDialog("Your username:"));
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
+
 	}
 
 	@Override
@@ -52,6 +57,7 @@ public class IAIBGame implements Screen {
 		stateTime += Gdx.graphics.getDeltaTime();
 		Assets.current_frame = (TextureRegion) Assets.loading.getKeyFrame(stateTime, true);
 		generalUpdate(touch, camera);
+
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();

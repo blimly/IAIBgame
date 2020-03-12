@@ -8,7 +8,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "I AM INFO BOY";
-		config.width = 640;
+		config.width = 720;
 		config.height = 480;
 		config.resizable = false;
 		config.addIcon("images/icon.png", Files.FileType.Internal);

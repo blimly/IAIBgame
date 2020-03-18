@@ -35,7 +35,7 @@ public class IAIBGame extends Component implements Screen {
 		touch = new Vector3();
 		batch = new SpriteBatch();
 		stateTime = 0f;
-		player = new Player(JOptionPane.showInputDialog("Your username:"));
+		player = new Player();
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
 

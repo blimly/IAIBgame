@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Main;
+import inc.heterological.iaibgame.net.ServerProgram;
 
 public class Loading implements Screen {
     private Main game;
@@ -24,6 +25,7 @@ public class Loading implements Screen {
 
     public Loading(Main game) {
         this.game = game;
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         batch = new SpriteBatch();

@@ -52,6 +52,7 @@ public class MainMenu implements Screen {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             if(touch.x >= 235 && touch.x <= 406 && touch.y >= 480 - 183 && touch.y <= 480 - 120) {
                 game.setScreen(new Loading(game));
+
             }
             if(touch.x >= 235 && touch.x <= 406 && touch.y >= 367 && touch.y <= 430) {
                 Gdx.app.exit();

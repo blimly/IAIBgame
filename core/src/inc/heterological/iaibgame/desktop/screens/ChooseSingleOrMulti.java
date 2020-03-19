@@ -26,7 +26,7 @@ public class ChooseSingleOrMulti implements Screen {
         touch = new Vector2();
 
         singleplayer = new Button(526, 72, 57, 300, Assets.singleplayer);
-        multiplayer = new Button(526, 72, 57, 100, Assets.multiplayer);
+        multiplayer = new Button(526, 72, 57, 200, Assets.multiplayer);
     }
 
     @Override

@@ -40,6 +40,7 @@ public class IAIBGame implements Screen {
 	public void show() {
 		player.bounds.y = 240;
 		player.bounds.x = 300;
+		Assets.menu_loop.stop();
 		Assets.backgound_loop.loop(0.1f);
 	}
 
@@ -81,6 +82,11 @@ public class IAIBGame implements Screen {
 
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 			game.setScreen(new Bye(game));
+		}
+
+		if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+			Assets.backgound_loop.stop();
+			game.setScreen(new MainMenu(game));
 		}
 	}
 

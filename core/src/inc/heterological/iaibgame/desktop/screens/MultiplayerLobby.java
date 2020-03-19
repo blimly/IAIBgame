@@ -1,45 +1,44 @@
 package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Main;
 
-public class Bye  implements Screen {
+public class MultiplayerLobby implements Screen {
 
+    final Main game;
     OrthographicCamera camera;
-    Main game;
-    SpriteBatch batch;
-    float time = 0;
+    Vector2 touch;
 
-    public Bye(Main game) {
+    public MultiplayerLobby(Main game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
-        batch = new SpriteBatch();
-
     }
 
+    @Override
+    public void show() {
+
+    }
 
     @Override
     public void render(float delta) {
-        update();
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
 
-        batch.begin();
-            Assets.font.draw(batch,"Bye",320, 200);
-        batch.end();
-    }
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+            Assets.font.draw(game.batch, "Multiplayer Lobby", 100, Main.GAME_HEIGHT - 100);
+        game.batch.end();
 
-    public void update() {
-        time += Gdx.graphics.getDeltaTime();
-        if (time > 2) {
-            dispose();
-            Gdx.app.exit();
+        if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+            game.setScreen(new ChooseSingleOrMulti(game));
         }
     }
 
@@ -59,17 +58,12 @@ public class Bye  implements Screen {
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void hide() {
 
     }
 
     @Override
     public void dispose() {
-        game.dispose();
+
     }
 }

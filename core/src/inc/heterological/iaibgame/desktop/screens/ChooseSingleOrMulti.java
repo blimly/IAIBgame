@@ -1,6 +1,7 @@
 package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,22 +10,23 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
 import inc.heterological.iaibgame.desktop.Main;
 
-public class MainMenu implements Screen {
+public class ChooseSingleOrMulti implements Screen {
 
     final Main game;
-
     OrthographicCamera camera;
     Vector2 touch;
-    Button playButton;
-    Button exitButton;
 
-    public MainMenu(Main game) {
+    Button singleplayer;
+    Button multiplayer;
+
+    public ChooseSingleOrMulti(Main game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         touch = new Vector2();
-        playButton = new Button(64 * 3, 24 * 3, 235, 120, Assets.play);
-        exitButton = new Button(64 * 3, 24 * 3, 235, 30, Assets.exit);
+
+        singleplayer = new Button(526, 72, 57, 300, Assets.singleplayer);
+        multiplayer = new Button(526, 72, 57, 100, Assets.multiplayer);
     }
 
     @Override
@@ -41,21 +43,23 @@ public class MainMenu implements Screen {
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(Assets.mainSpriteBack, 0, 0, 640, 480);
-            playButton.drawButton(game.batch);
-            exitButton.drawButton(game.batch);
+        singleplayer.drawButton(game.batch);
+        multiplayer.drawButton(game.batch);
         game.batch.end();
     }
 
     public void checkButtons(Vector2 touch) {
         if(Gdx.input.isTouched()) {
             touch.set(Gdx.input.getX(), Main.GAME_HEIGHT - Gdx.input.getY());
-            if(playButton.clicked(touch)) {
-                game.setScreen(new ChooseSingleOrMulti(game));
+            if(singleplayer.clicked(touch)) {
+                game.setScreen(new IAIBGame(game));
             }
-            if(exitButton.clicked(touch)) {
-                game.setScreen(new Bye(game));
+            if(multiplayer.clicked(touch)) {
+                game.setScreen(new MultiplayerLobby(game));
             }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+            game.setScreen(new MainMenu(game));
         }
     }
 
@@ -81,5 +85,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
+
     }
 }

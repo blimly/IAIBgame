@@ -14,43 +14,56 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 public class Assets {
     public static BitmapFont font;
 
-    public static Texture texture_start;
-    public static Sprite start_sprite;
-    public static Texture texture_exit;
-    public static Sprite exit_sprite;
+    public static Texture buttons;
+    public static Sprite play;
+    public static Sprite exit;
+    public static Sprite multiplayer;
+    public static Sprite singleplayer;
 
-    public static Texture mainTextureBack;
     public static Sprite mainSpriteBack;
-    public static Texture textureBack;
+    public static Texture levelsTexture;
     public static Sprite spriteBack;
 
     public static Texture playerTex;
-    public static Animation player;
+    public static Animation<TextureRegion> player;
 
     public static Texture textureSheet;
     public static TextureRegion[] loading_frames;
     public static TextureRegion current_frame;
-    public static Animation loading;
+    public static Animation<TextureRegion> loading;
 
     public static Sound backgound_loop;
     public static Sound ooyeah;
     public static Sound no;
 
     public static void load() {
+        loadFont();
+        loadSprites();
+        loadSounds();
+    }
+
+    public static BitmapFont getFont() {
+        return font;
+    }
+
+    private static void loadFont() {
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("ui/Pixeboy-z8XGD.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 256;
+        parameter.size = 24;
         font = gen.generateFont(parameter);
-        font.setColor(Color.valueOf("d50cff"));
-        texture_start = new Texture(Gdx.files.internal("ui/play.png"));
-        start_sprite = new Sprite(texture_start);
-        texture_exit = new Texture(Gdx.files.internal("ui/exit.png"));
-        exit_sprite = new Sprite(texture_exit);
+        font.setColor(Color.valueOf("39c6e6"));
+    }
 
-        mainTextureBack = new Texture(Gdx.files.internal("images/backgrounds/menu.png"));
-        mainSpriteBack = new Sprite(mainTextureBack);
-        textureBack = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
-        spriteBack = new Sprite(textureBack, 0, 0, 720, 160);
+    private static void loadSprites() {
+        buttons = new Texture(Gdx.files.internal("ui/buttons.png"));
+        play = new Sprite(new TextureRegion(buttons, 0, 0, 64, 24));
+        exit = new Sprite(new TextureRegion(buttons, 0, 24, 64, 24));
+        singleplayer = new Sprite(new TextureRegion(buttons, 0, 48, 192, 24));
+        multiplayer =  new Sprite(new TextureRegion(buttons, 0, 72, 192, 24));
+
+        mainSpriteBack = new Sprite(new Texture(Gdx.files.internal("images/backgrounds/menu.png")));
+        levelsTexture = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
+        spriteBack = new Sprite(levelsTexture, 0, 0, 720, 160);
 
         textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
 
@@ -61,12 +74,17 @@ public class Assets {
 
         loading_frames = new TextureRegion[8];
         System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
-        loading = new Animation(0.1f, loading_frames);
+        loading = new Animation<>(0.1f, loading_frames);
+        player = new Animation<>(0.2f, player_temp[0]);
+    }
 
-        player = new Animation(0.2f, player_temp[0]);
-
+    private static void loadSounds() {
         backgound_loop = Gdx.audio.newSound(Gdx.files.internal("audio/bg_loop.wav"));
         ooyeah = Gdx.audio.newSound(Gdx.files.internal("audio/ohoh_yeh.wav"));
         no = Gdx.audio.newSound(Gdx.files.internal("audio/no.wav"));
+    }
+
+    public static void dispose() {
+        font.dispose();
     }
 }

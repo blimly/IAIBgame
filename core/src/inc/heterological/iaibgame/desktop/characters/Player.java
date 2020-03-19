@@ -11,17 +11,29 @@ public class Player {
     public int id;
     public String username;
 
-    public Player(String username) {
-        this.username = username;
+    private static final int MOVE_SPEED = 200;
+
+    public Player() {
         id = this.hashCode();
         bounds = new Rectangle(0, 0, xWidth, yHeight);
     }
 
-    public Player() {
-        bounds = null;
+    public void moveLeft(double dt) {
+        bounds.x -= MOVE_SPEED * dt;
     }
 
+    public void moveRight(double dt) {
+        bounds.x += MOVE_SPEED * dt;
+    }
+    public void moveUp(double dt) {
+        bounds.y -= MOVE_SPEED * dt;
+    }
+    public void moveDown(double dt) {
+        bounds.y += MOVE_SPEED * dt;
+    }
+
+
     public TextureRegion getCurrentFrame(float delta) {
-        return (TextureRegion) Assets.player.getKeyFrame(delta, true);
+        return Assets.player.getKeyFrame(delta, true);
     }
 }

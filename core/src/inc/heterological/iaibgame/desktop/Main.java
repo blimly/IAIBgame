@@ -1,33 +1,32 @@
 package inc.heterological.iaibgame.desktop;
 
-import inc.heterological.iaibgame.desktop.screens.Bye;
-import inc.heterological.iaibgame.desktop.screens.IAIBGame;
-import inc.heterological.iaibgame.desktop.screens.Loading;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.desktop.screens.MainMenu;
-import inc.heterological.iaibgame.desktop.screens.Test;
 
-public class Main extends com.badlogic.gdx.Game {
+public class Main extends Game {
+    public SpriteBatch batch;
+    public BitmapFont font;
 
-    public IAIBGame gameScreen;
-    public Loading loading;
-    public MainMenu mainMenu;
-    public Test test;
-    public Bye bye;
+    public static final int GAME_WIDTH = 640;
+    public static final int GAME_HEIGHT = 489;
 
     @Override
     public void create() {
+        batch = new SpriteBatch();
         Assets.load();
-        mainMenu = new MainMenu(this);
-        loading = new Loading(this);
-        gameScreen = new IAIBGame(this);
-        test = new Test(this);
-        bye = new Bye(this);
-        setScreen(mainMenu);
+        font = Assets.getFont();
+
+        this.setScreen(new MainMenu(this));
     }
 
     public void render() {
         super.render();
     }
 
-    public void dispose() {}
+    public void dispose() {
+        batch.dispose();
+        Assets.dispose();
+    }
 }

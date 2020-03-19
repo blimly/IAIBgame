@@ -6,17 +6,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Main;
 import inc.heterological.iaibgame.desktop.characters.Player;
 
-import javax.swing.*;
-import java.awt.*;
 
-public class IAIBGame extends Component implements Screen {
+public class IAIBGame implements Screen {
 	Main game;
 	OrthographicCamera camera;
 	SpriteBatch batch;
@@ -25,7 +22,6 @@ public class IAIBGame extends Component implements Screen {
 	Player player;
 	Rectangle loadingRect;
 	Rectangle screenRect;
-	private static final int MOVE_SPEED = 3;
 
 
 	public IAIBGame(Main game) {
@@ -35,10 +31,9 @@ public class IAIBGame extends Component implements Screen {
 		touch = new Vector3();
 		batch = new SpriteBatch();
 		stateTime = 0f;
-		player = new Player(JOptionPane.showInputDialog("Your username:"));
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
-
+		player = new Player();
 	}
 
 	@Override
@@ -55,7 +50,7 @@ public class IAIBGame extends Component implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		stateTime += Gdx.graphics.getDeltaTime();
-		Assets.current_frame = (TextureRegion) Assets.loading.getKeyFrame(stateTime, true);
+		Assets.current_frame = Assets.loading.getKeyFrame(stateTime, true);
 		generalUpdate(touch, camera);
 
 
@@ -68,19 +63,24 @@ public class IAIBGame extends Component implements Screen {
 	}
 
 	public void generalUpdate(Vector3 touch, OrthographicCamera camera) {
+		double delta = Gdx.graphics.getDeltaTime();
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.bounds.x -= MOVE_SPEED;
-			camera.position.x -= MOVE_SPEED;
+			player.moveLeft(delta);
+			camera.position.x -= 200 * delta;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.bounds.x += MOVE_SPEED;
-			camera.position.x += MOVE_SPEED;
+			player.moveRight(delta);
+			camera.position.x += 200 * delta;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			player.bounds.y -= MOVE_SPEED;
+			player.moveUp(delta);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			player.bounds.y += MOVE_SPEED;
+			player.moveDown(delta);
+		}
+
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			game.setScreen(new Bye(game));
 		}
 	}
 

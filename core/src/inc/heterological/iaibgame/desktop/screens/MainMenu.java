@@ -18,6 +18,8 @@ public class MainMenu implements Screen {
     Button playButton;
     Button exitButton;
 
+    float bg_scroll_y;
+
     public MainMenu(Main game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -25,11 +27,12 @@ public class MainMenu implements Screen {
         touch = new Vector2();
         playButton = new Button(64 * 3, 24 * 3, 235, 120, Assets.play);
         exitButton = new Button(64 * 3, 24 * 3, 235, 30, Assets.exit);
+        bg_scroll_y = 0;
     }
 
     @Override
     public void show() {
-
+        Assets.menu_loop.loop(0.1f);
     }
 
     @Override
@@ -38,11 +41,14 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         checkButtons(touch);
+        bg_scroll_y -= 20 * Gdx.graphics.getDeltaTime();
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(Assets.mainSpriteBack, 0, 0, 640, 480);
-            playButton.drawButton(game.batch);
+            game.batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 640, 0, 640, 480);
+            game.batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 640 + 640, 0, 640, 480);
+
+        playButton.drawButton(game.batch);
             exitButton.drawButton(game.batch);
         game.batch.end();
     }

@@ -20,7 +20,9 @@ public class Assets {
     public static Sprite multiplayer;
     public static Sprite singleplayer;
 
-    public static Sprite mainSpriteBack;
+    public static Sprite mainSpriteBack1;
+    public static Sprite mainSpriteBack2;
+
     public static Texture levelsTexture;
     public static Sprite spriteBack;
 
@@ -32,6 +34,7 @@ public class Assets {
     public static TextureRegion current_frame;
     public static Animation<TextureRegion> loading;
 
+    public static Sound menu_loop;
     public static Sound backgound_loop;
     public static Sound ooyeah;
     public static Sound no;
@@ -61,7 +64,9 @@ public class Assets {
         singleplayer = new Sprite(new TextureRegion(buttons, 0, 48, 192, 24));
         multiplayer =  new Sprite(new TextureRegion(buttons, 0, 72, 192, 24));
 
-        mainSpriteBack = new Sprite(new Texture(Gdx.files.internal("images/backgrounds/menu.png")));
+        mainSpriteBack1 = new Sprite(new Texture(Gdx.files.internal("images/backgrounds/menu2.png")));
+        mainSpriteBack2 = new Sprite(new Texture(Gdx.files.internal("images/backgrounds/menu2.png")));
+
         levelsTexture = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
         spriteBack = new Sprite(levelsTexture, 0, 0, 720, 160);
 
@@ -79,6 +84,7 @@ public class Assets {
     }
 
     private static void loadSounds() {
+        menu_loop = Gdx.audio.newSound(Gdx.files.internal("audio/menu_ambient.wav"));
         backgound_loop = Gdx.audio.newSound(Gdx.files.internal("audio/bg_loop.wav"));
         ooyeah = Gdx.audio.newSound(Gdx.files.internal("audio/ohoh_yeh.wav"));
         no = Gdx.audio.newSound(Gdx.files.internal("audio/no.wav"));

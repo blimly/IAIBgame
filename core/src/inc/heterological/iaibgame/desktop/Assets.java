@@ -34,14 +34,20 @@ public class Assets {
     public static TextureRegion current_frame;
     public static Animation<TextureRegion> loading;
 
+    public static Texture runSheet;
+    public static Animation<TextureRegion> run;
+
+
     public static Sound menu_loop;
     public static Sound backgound_loop;
     public static Sound ooyeah;
     public static Sound no;
+    public static Sound hell;
 
     public static void load() {
         loadFont();
         loadSprites();
+        loadAnimations();
         loadSounds();
     }
 
@@ -70,17 +76,8 @@ public class Assets {
         levelsTexture = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
         spriteBack = new Sprite(levelsTexture, 0, 0, 720, 160);
 
-        textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
+        // easter egg
 
-        playerTex = new Texture(Gdx.files.internal("images/characters/maincharacter.png"));
-
-        TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
-        TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
-
-        loading_frames = new TextureRegion[8];
-        System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
-        loading = new Animation<>(0.1f, loading_frames);
-        player = new Animation<>(0.2f, player_temp[0]);
     }
 
     private static void loadSounds() {
@@ -88,6 +85,31 @@ public class Assets {
         backgound_loop = Gdx.audio.newSound(Gdx.files.internal("audio/bg_loop.wav"));
         ooyeah = Gdx.audio.newSound(Gdx.files.internal("audio/ohoh_yeh.wav"));
         no = Gdx.audio.newSound(Gdx.files.internal("audio/no.wav"));
+        hell = Gdx.audio.newSound(Gdx.files.internal("audio/violent_delights.wav"));
+    }
+
+    private static void loadAnimations() {
+        textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
+        playerTex = new Texture(Gdx.files.internal("images/characters/maincharacter.png"));
+        TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
+        TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
+
+        loading_frames = new TextureRegion[8];
+        System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
+        loading = new Animation<>(0.1f, loading_frames);
+        player = new Animation<>(0.2f, player_temp[0]);
+
+        runSheet = new Texture(Gdx.files.internal("images/run-sheet.png"));
+        TextureRegion[][] run_temp = TextureRegion.split(runSheet, 500, 500);
+        TextureRegion[] runFrames = new TextureRegion[60];
+        int index = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (index < 60) runFrames[index++] = run_temp[i][j];
+            }
+        }
+        run = new Animation<>(0.033f, runFrames);
+
     }
 
     public static void dispose() {

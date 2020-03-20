@@ -1,6 +1,7 @@
 package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -62,6 +63,9 @@ public class MainMenu implements Screen {
             if(exitButton.clicked(touch)) {
                 game.setScreen(new Bye(game));
             }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+            game.setScreen(new Hell(game));
         }
     }
 

@@ -13,6 +13,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class Assets {
     public static BitmapFont font;
+    public static BitmapFont byeFont;
+
+    public static Texture healthbar;
+    public static Sprite healthgreen;
+    public static Sprite healthyellow;
+    public static Sprite healthorange;
+    public static Sprite healthred;
+    public static Sprite healthempty;
 
     public static Texture buttons;
     public static Sprite play;
@@ -28,6 +36,9 @@ public class Assets {
 
     public static Texture playerTex;
     public static Animation<TextureRegion> player;
+
+    public static Texture enemy1Tex;
+    public static Animation<TextureRegion> enemy1;
 
     public static Texture textureSheet;
     public static TextureRegion[] loading_frames;
@@ -61,9 +72,18 @@ public class Assets {
         parameter.size = 24;
         font = gen.generateFont(parameter);
         font.setColor(Color.valueOf("39c6e6"));
+        parameter.size = 240;
+        byeFont = gen.generateFont(parameter);
+        byeFont.setColor(Color.valueOf("39c6e6"));
     }
 
     private static void loadSprites() {
+        healthbar = new Texture(Gdx.files.internal("images/characters/Healthbar.png"));
+        healthgreen = new Sprite(new TextureRegion(healthbar, 0, 0, 64, 24));
+        healthyellow = new Sprite(new TextureRegion(healthbar, 0, 24, 64, 24));
+        healthorange = new Sprite(new TextureRegion(healthbar, 0, 48, 64, 24));
+        healthred = new Sprite(new TextureRegion(healthbar, 0, 72, 64, 24));
+        healthempty = new Sprite(new TextureRegion(healthbar, 0, 96, 64, 24));
         buttons = new Texture(Gdx.files.internal("ui/buttons.png"));
         play = new Sprite(new TextureRegion(buttons, 0, 0, 64, 24));
         exit = new Sprite(new TextureRegion(buttons, 0, 24, 64, 24));
@@ -91,13 +111,16 @@ public class Assets {
     private static void loadAnimations() {
         textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
         playerTex = new Texture(Gdx.files.internal("images/characters/maincharacter.png"));
+        enemy1Tex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
         TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
         TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
+        TextureRegion[][] enemy1_temp = TextureRegion.split(enemy1Tex,16,16);
 
         loading_frames = new TextureRegion[8];
         System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
         loading = new Animation<>(0.1f, loading_frames);
         player = new Animation<>(0.2f, player_temp[0]);
+        enemy1 = new Animation<>(0.3f, enemy1_temp[0]);
 
         runSheet = new Texture(Gdx.files.internal("images/run-sheet.png"));
         TextureRegion[][] run_temp = TextureRegion.split(runSheet, 500, 500);

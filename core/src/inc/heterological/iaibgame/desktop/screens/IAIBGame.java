@@ -37,7 +37,7 @@ public class IAIBGame implements Screen {
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
 		player = new Player();
-		enemy = new Enemy(new Vector2(1000, 200), 200, 20);
+		enemy = new Enemy(new Vector2(1000, 200), 300, 20);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class IAIBGame implements Screen {
 		double delta = Gdx.graphics.getDeltaTime();
 		enemy.move(new Vector2(player.bounds.x, player.bounds.y), (float) delta);
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			enemy.setCurrentHealth(enemy.getCurrentHealth() - 5);
+			enemy.setCurrentHealth(enemy.getCurrentHealth() - 1);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			player.moveLeft(delta);

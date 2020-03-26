@@ -10,16 +10,16 @@ public class Enemy {
 
     public Vector2 position;
     public float sense;
-    public int currentHealth;
-    public int maxHealth;
+    public float currentHealth;
+    public float maxHealth;
     protected Healthbar healthbar = new Healthbar(this);
     private boolean alive = true;
 
-    public int getCurrentHealth() {
+    public float getCurrentHealth() {
         return currentHealth;
     }
 
-    public void setCurrentHealth(int currentHealth) {
+    public void setCurrentHealth(float currentHealth) {
         if (currentHealth > 0) {
             this.currentHealth = currentHealth;
         } else {
@@ -27,7 +27,7 @@ public class Enemy {
         }
     }
 
-    public Enemy(Vector2 position, float sense, int health) {
+    public Enemy(Vector2 position, float sense, float health) {
         this.position = position;
         this.currentHealth = health;
         this.maxHealth = health;

@@ -15,12 +15,7 @@ public class Assets {
     public static BitmapFont font;
     public static BitmapFont byeFont;
 
-    public static Texture healthbar;
-    public static Sprite healthgreen;
-    public static Sprite healthyellow;
-    public static Sprite healthorange;
-    public static Sprite healthred;
-    public static Sprite healthempty;
+    public static Texture blank;
 
     public static Texture buttons;
     public static Sprite play;
@@ -78,12 +73,7 @@ public class Assets {
     }
 
     private static void loadSprites() {
-        healthbar = new Texture(Gdx.files.internal("images/characters/Healthbar.png"));
-        healthgreen = new Sprite(new TextureRegion(healthbar, 0, 0, 64, 24));
-        healthyellow = new Sprite(new TextureRegion(healthbar, 0, 24, 64, 24));
-        healthorange = new Sprite(new TextureRegion(healthbar, 0, 48, 64, 24));
-        healthred = new Sprite(new TextureRegion(healthbar, 0, 72, 64, 24));
-        healthempty = new Sprite(new TextureRegion(healthbar, 0, 96, 64, 24));
+        blank = new Texture(Gdx.files.internal("images/blank.png"));
         buttons = new Texture(Gdx.files.internal("ui/buttons.png"));
         play = new Sprite(new TextureRegion(buttons, 0, 0, 64, 24));
         exit = new Sprite(new TextureRegion(buttons, 0, 24, 64, 24));

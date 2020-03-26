@@ -12,8 +12,11 @@ public class Main extends Game {
     public static final int GAME_WIDTH = 640;
     public static final int GAME_HEIGHT = 489;
 
+    public boolean hasPlayedOnce;
+
     @Override
     public void create() {
+        hasPlayedOnce = false;
         batch = new SpriteBatch();
         Assets.load();
         font = Assets.getFont();

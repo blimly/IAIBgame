@@ -33,7 +33,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
-        Assets.menu_loop.loop(0.1f);
+        Assets.menu_loop.loop(0.7f);
     }
 
     @Override
@@ -48,6 +48,9 @@ public class MainMenu implements Screen {
         game.batch.begin();
             game.batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 640, 0, 640, 480);
             game.batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 640 + 640, 0, 640, 480);
+            if (game.hasPlayedOnce) {
+                game.font.draw(game.batch, "press  [ h ]  for help", 245, 460);
+            }
 
         playButton.drawButton(game.batch);
             exitButton.drawButton(game.batch);

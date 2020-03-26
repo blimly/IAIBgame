@@ -38,6 +38,7 @@ public class IAIBGame implements Screen {
 
 	@Override
 	public void show() {
+		game.hasPlayedOnce = true;
 		player.bounds.y = 240;
 		player.bounds.x = 300;
 		Assets.menu_loop.stop();

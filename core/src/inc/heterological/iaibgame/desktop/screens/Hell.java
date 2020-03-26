@@ -38,12 +38,14 @@ public class Hell implements Screen {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = Assets.run.getKeyFrame(stateTime, true);
         game.batch.begin();
-        game.batch.draw(currentFrame, 70, 0); // Draw current frame at (50, 50)
+            game.batch.draw(currentFrame, 0, 0, 640, 640);
+            game.font.draw(game.batch, "There is no help in hell.", 100, 100);
+            game.font.draw(game.batch, "RUN WHILE YOU STILL CAN!", 100, 60);
         game.batch.end();
     }
 
     public void checkButtons() {
-        if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+        if (!Gdx.input.isKeyPressed(Input.Keys.H)) {
             Assets.hell.stop();
             game.setScreen(new MainMenu(game));
         }

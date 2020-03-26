@@ -14,6 +14,9 @@ import inc.heterological.iaibgame.desktop.Main;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class IAIBGame implements Screen {
 	Main game;
@@ -24,7 +27,7 @@ public class IAIBGame implements Screen {
 	Player player;
 	Rectangle loadingRect;
 	Rectangle screenRect;
-	Enemy enemy;
+	List<Enemy> enemies = new ArrayList<>();
 
 
 	public IAIBGame(Main game) {
@@ -37,7 +40,9 @@ public class IAIBGame implements Screen {
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
 		player = new Player();
-		enemy = new Enemy(new Vector2(1000, 200), 300, 20);
+		for (int i = 1; i <= 9; i++) {
+			enemies.add(new Enemy(new Vector2(50 + (i * 40) % 100, i * 43), i* 30, 20 + i));
+		}
 	}
 
 	@Override
@@ -64,15 +69,22 @@ public class IAIBGame implements Screen {
 		batch.begin();
 		batch.draw(Assets.spriteBack, 0, 0, 2160, 480);
 		batch.draw(player.getCurrentFrame(stateTime), player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
-		enemy.drawEnemyAndHealthbar(batch, stateTime);
+		for (Enemy e : enemies) {
+			e.drawEnemyAndHealthbar(batch, stateTime);
+		}
 		batch.end();
 	}
 
 	public void generalUpdate(Vector3 touch, OrthographicCamera camera) {
 		double delta = Gdx.graphics.getDeltaTime();
-		enemy.move(new Vector2(player.bounds.x, player.bounds.y), (float) delta);
+		for (Enemy e : enemies) {
+			e.move(new Vector2(player.bounds.x, player.bounds.y), (float) delta);
+		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			enemy.setCurrentHealth(enemy.getCurrentHealth() - 1);
+			for (Enemy e : enemies) {
+				e.setCurrentHealth(e.getCurrentHealth() - 1);
+			}
+
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			player.moveLeft(delta);

@@ -5,14 +5,28 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.desktop.characters.Player;
-import inc.heterological.iaibgame.net.Network.*;
+import inc.heterological.iaibgame.net.Network.AddPlayer;
+import inc.heterological.iaibgame.net.Network.Login;
+import inc.heterological.iaibgame.net.Network.MovePlayer;
+import inc.heterological.iaibgame.net.Network.Register;
+import inc.heterological.iaibgame.net.Network.RegistrationRequired;
+import inc.heterological.iaibgame.net.Network.RemovePlayer;
+import inc.heterological.iaibgame.net.Network.UpdatePlayer;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class PlayerServer {
     Server server;
     HashSet<Player> loggedIn = new HashSet();
+    static Map<Integer, Player> players = new HashMap<Integer, Player>();
 
     public PlayerServer() throws IOException {
         server = new Server() {
@@ -21,7 +35,7 @@ public class PlayerServer {
             }
         };
 
-        Network.register(server);
+        Network.register(server.getKryo());
         server.addListener(new Listener() {
             public void received (Connection c, Object object) {
                 // We know all connections for this server are actually CharacterConnections.
@@ -138,7 +152,7 @@ public class PlayerServer {
             }
         });
 
-        server.bind(Network.port);
+        server.bind(Network.TCPport, Network.UDPport);
         server.start();
     }
 
@@ -168,30 +182,21 @@ public class PlayerServer {
             player.id = children.length + 1;
         }
 
-        DataOutputStream output = null;
-        try {
-            output = new DataOutputStream(new FileOutputStream(file));
+        try (DataOutputStream output = new DataOutputStream(new FileOutputStream(file))) {
             output.writeInt(player.id);
-            output.writeInt((int)player.bounds.x);
-            output.writeInt((int)player.bounds.y);
+            output.writeInt((int) player.bounds.x);
+            output.writeInt((int) player.bounds.y);
             return true;
         } catch (IOException ex) {
             ex.printStackTrace();
             return false;
-        } finally {
-            try {
-                output.close();
-            } catch (IOException ignored) {
-            }
         }
     }
 
     Player loadPlayer(String name) {
         File file = new File("characters", name.toLowerCase());
         if (!file.exists()) return null;
-        DataInputStream input = null;
-        try {
-            input = new DataInputStream(new FileInputStream(file));
+        try (DataInputStream input = new DataInputStream(new FileInputStream(file))) {
             Player player = new Player();
             player.id = input.readInt();
             player.username = name;
@@ -202,11 +207,6 @@ public class PlayerServer {
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
-        } finally {
-            try {
-                if (input != null) input.close();
-            } catch (IOException ignored) {
-            }
         }
     }
 

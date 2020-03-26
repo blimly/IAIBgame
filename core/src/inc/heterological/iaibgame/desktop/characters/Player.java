@@ -21,7 +21,6 @@ public class Player {
     public void moveLeft(double dt) {
         bounds.x -= MOVE_SPEED * dt;
     }
-
     public void moveRight(double dt) {
         bounds.x += MOVE_SPEED * dt;
     }
@@ -34,6 +33,6 @@ public class Player {
 
 
     public TextureRegion getCurrentFrame(float delta) {
-        return Assets.player.getKeyFrame(delta, true);
+        return (TextureRegion) Assets.player.getKeyFrame(delta, true);
     }
 }

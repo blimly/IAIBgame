@@ -1,15 +1,15 @@
 package inc.heterological.iaibgame.net;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.EndPoint;
 import inc.heterological.iaibgame.desktop.characters.Player;
 
 public class Network {
 
-    static public final int port = 54555;
+    static public final int TCPport = 5201;
+    static public final int UDPport = 5200;
+    static public final String serverIP = "193.40.255.23";
 
-    static public void register (EndPoint endPoint) {
-        Kryo kryo = endPoint.getKryo();
+    static public void register (Kryo kryo) {
         kryo.register(Login.class);
         kryo.register(RegistrationRequired.class);
         kryo.register(Register.class);

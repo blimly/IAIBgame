@@ -1,68 +1,35 @@
 package inc.heterological.iaibgame.net;
 
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.minlog.Log;
+import inc.heterological.iaibgame.desktop.characters.Player;
+import inc.heterological.iaibgame.net.Network.Login;
+import inc.heterological.iaibgame.net.Network.MovePlayer;
+import inc.heterological.iaibgame.net.Network.UpdatePlayer;
+
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Listener.ThreadedListener;
-import com.esotericsoftware.minlog.Log;
-import inc.heterological.iaibgame.desktop.characters.Player;
-import inc.heterological.iaibgame.net.Network.*;
-
-public class PlayerClient {
+public class GameClient {
     UI ui;
     Client client;
     String name;
 
-    public PlayerClient () {
+    public GameClient () {
         client = new Client();
         client.start();
 
         // For consistency, the classes to be sent over the network are
         // registered by the same method for both the client and server.
-        Network.register(client);
+        Network.register(client.getKryo());
 
         // ThreadedListener runs the listener methods on a different thread.
-        client.addListener(new ThreadedListener(new Listener() {
-            public void connected (Connection connection) {
-            }
-
-            public void received (Connection connection, Object object) {
-                if (object instanceof RegistrationRequired) {
-                    Register register = new Register();
-                    register.name = name;
-                    client.sendTCP(register);
-                }
-
-                if (object instanceof AddPlayer) {
-                    AddPlayer msg = (AddPlayer)object;
-                    ui.addPlayer(msg.player);
-                }
-
-                if (object instanceof UpdatePlayer) {
-                    ui.updatePlayer((UpdatePlayer)object);
-                }
-
-                if (object instanceof RemovePlayer) {
-                    RemovePlayer msg = (RemovePlayer)object;
-                    ui.removePlayer(msg.id);
-                }
-            }
-
-            public void disconnected (Connection connection) {
-                System.exit(0);
-            }
-        }));
+        client.addListener(new ClientListener(this));
 
         ui = new UI();
 
-        String host = ui.inputHost();
         try {
-            client.connect(5000, host, Network.port);
+            client.connect(5000, Network.serverIP, Network.TCPport);
             // Server communication after connection can go here, or in Listener#connected().
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -106,18 +73,8 @@ public class PlayerClient {
     static class UI {
         HashMap<Integer, Player> players = new HashMap();
 
-        public String inputHost () {
-            String input = (String)JOptionPane.showInputDialog(null, "Host:", "Connect to server", JOptionPane.QUESTION_MESSAGE,
-                    null, null, "localhost");
-            if (input == null || input.trim().length() == 0) System.exit(1);
-            return input.trim();
-        }
-
         public String inputName () {
-            String input = (String)JOptionPane.showInputDialog(null, "Name:", "Connect to server", JOptionPane.QUESTION_MESSAGE,
-                    null, null, "Test");
-            if (input == null || input.trim().length() == 0) System.exit(1);
-            return input.trim();
+            return "name";
         }
 
         public void addPlayer (Player player) {
@@ -141,6 +98,6 @@ public class PlayerClient {
 
     public static void main (String[] args) {
         Log.set(Log.LEVEL_DEBUG);
-        new PlayerClient();
+        new GameClient();
     }
 }

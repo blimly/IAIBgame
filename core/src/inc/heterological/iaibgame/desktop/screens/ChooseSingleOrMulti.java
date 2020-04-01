@@ -10,30 +10,28 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
 import inc.heterological.iaibgame.desktop.Main;
 
-public class MainMenu implements Screen {
+public class ChooseSingleOrMulti implements Screen {
 
     final Main game;
-
     OrthographicCamera camera;
     Vector2 touch;
-    Button playButton;
-    Button exitButton;
 
-    float bg_scroll_y;
+    Button singleplayer;
+    Button multiplayer;
 
-    public MainMenu(Main game) {
+    public ChooseSingleOrMulti(Main game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         touch = new Vector2();
-        playButton = new Button(64 * 3, 24 * 3, 235, 120, Assets.play);
-        exitButton = new Button(64 * 3, 24 * 3, 235, 30, Assets.exit);
-        bg_scroll_y = 0;
+
+        singleplayer = new Button(526, 72, 57, 300, Assets.singleplayer);
+        multiplayer = new Button(526, 72, 57, 200, Assets.multiplayer);
     }
 
     @Override
     public void show() {
-        Assets.menu_loop.loop(0.7f);
+
     }
 
     @Override
@@ -42,33 +40,26 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         checkButtons(touch);
-        bg_scroll_y -= 20 * Gdx.graphics.getDeltaTime();
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-            game.batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 640, 0, 640, 480);
-            game.batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 640 + 640, 0, 640, 480);
-            if (game.hasPlayedOnce) {
-                game.font.draw(game.batch, "press  [ h ]  for help", 245, 460);
-            }
-
-        playButton.drawButton(game.batch);
-            exitButton.drawButton(game.batch);
+        singleplayer.drawButton(game.batch);
+        multiplayer.drawButton(game.batch);
         game.batch.end();
     }
 
     public void checkButtons(Vector2 touch) {
         if(Gdx.input.isTouched()) {
             touch.set(Gdx.input.getX(), Main.GAME_HEIGHT - Gdx.input.getY());
-            if(playButton.clicked(touch)) {
-                game.setScreen(new ChooseSingleOrMulti(game));
+            if(singleplayer.clicked(touch)) {
+                game.setScreen(new IAIBGame(game));
             }
-            if(exitButton.clicked(touch)) {
-                game.setScreen(new Bye(game));
+            if(multiplayer.clicked(touch)) {
+                game.setScreen(new MultiplayerLobby(game));
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.H)) {
-            game.setScreen(new Hell(game));
+        if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+            game.setScreen(new MainMenu(game));
         }
     }
 
@@ -94,5 +85,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
+
     }
 }

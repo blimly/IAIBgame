@@ -6,17 +6,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Main;
+import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 
-import javax.swing.*;
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class IAIBGame extends Component implements Screen {
+
+public class IAIBGame implements Screen {
 	Main game;
 	OrthographicCamera camera;
 	SpriteBatch batch;
@@ -25,7 +27,7 @@ public class IAIBGame extends Component implements Screen {
 	Player player;
 	Rectangle loadingRect;
 	Rectangle screenRect;
-	private static final int MOVE_SPEED = 3;
+	List<Enemy> enemies = new ArrayList<>();
 
 
 	public IAIBGame(Main game) {
@@ -35,16 +37,20 @@ public class IAIBGame extends Component implements Screen {
 		touch = new Vector3();
 		batch = new SpriteBatch();
 		stateTime = 0f;
-		player = new Player();
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
-
+		player = new Player();
+		for (int i = 1; i <= 9; i++) {
+			enemies.add(new Enemy(new Vector2(50 + (i * 40) % 100, i * 43), i* 30, 20 + i));
+		}
 	}
 
 	@Override
 	public void show() {
+		game.hasPlayedOnce = true;
 		player.bounds.y = 240;
 		player.bounds.x = 300;
+		Assets.menu_loop.stop();
 		Assets.backgound_loop.loop(0.1f);
 	}
 
@@ -55,7 +61,7 @@ public class IAIBGame extends Component implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		stateTime += Gdx.graphics.getDeltaTime();
-		Assets.current_frame = (TextureRegion) Assets.loading.getKeyFrame(stateTime, true);
+		Assets.current_frame = Assets.loading.getKeyFrame(stateTime, true);
 		generalUpdate(touch, camera);
 
 
@@ -63,24 +69,45 @@ public class IAIBGame extends Component implements Screen {
 		batch.begin();
 		batch.draw(Assets.spriteBack, 0, 0, 2160, 480);
 		batch.draw(player.getCurrentFrame(stateTime), player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
-
+		for (Enemy e : enemies) {
+			e.drawEnemyAndHealthbar(batch, stateTime);
+		}
 		batch.end();
 	}
 
 	public void generalUpdate(Vector3 touch, OrthographicCamera camera) {
+		double delta = Gdx.graphics.getDeltaTime();
+		for (Enemy e : enemies) {
+			e.move(new Vector2(player.bounds.x, player.bounds.y), (float) delta);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			for (Enemy e : enemies) {
+				e.setCurrentHealth(e.getCurrentHealth() - 1);
+			}
+
+		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.bounds.x -= MOVE_SPEED;
-			camera.position.x -= MOVE_SPEED;
+			player.moveLeft(delta);
+			camera.position.x -= 200 * delta;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.bounds.x += MOVE_SPEED;
-			camera.position.x += MOVE_SPEED;
+			player.moveRight(delta);
+			camera.position.x += 200 * delta;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			player.bounds.y -= MOVE_SPEED;
+			player.moveUp(delta);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			player.bounds.y += MOVE_SPEED;
+			player.moveDown(delta);
+		}
+
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			game.setScreen(new Bye(game));
+		}
+
+		if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+			Assets.backgound_loop.stop();
+			game.setScreen(new MainMenu(game));
 		}
 	}
 

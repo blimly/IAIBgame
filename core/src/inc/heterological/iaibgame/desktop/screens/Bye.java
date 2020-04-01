@@ -1,15 +1,12 @@
 package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Main;
-
-
 
 public class Bye  implements Screen {
 
@@ -34,14 +31,14 @@ public class Bye  implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-            Assets.font.draw(batch,"Bye",150, 300);
+            Assets.byeFont.draw(batch,"Bye",200, 300);
         batch.end();
-
     }
 
     public void update() {
         time += Gdx.graphics.getDeltaTime();
         if (time > 2) {
+            dispose();
             Gdx.app.exit();
         }
     }
@@ -73,6 +70,6 @@ public class Bye  implements Screen {
 
     @Override
     public void dispose() {
-
+        game.dispose();
     }
 }

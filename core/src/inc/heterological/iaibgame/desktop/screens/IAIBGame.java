@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.Main;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 
@@ -35,7 +35,7 @@ public class IAIBGame implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 640, 480);
 		touch = new Vector3();
-		batch = new SpriteBatch();
+		batch = game.batch;
 		stateTime = 0f;
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
@@ -57,10 +57,9 @@ public class IAIBGame implements Screen {
 	@Override
 	public void render(float delta) {
 		stateTime += Gdx.graphics.getDeltaTime();
-		Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f); // clear color magenta
+		Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
-		stateTime += Gdx.graphics.getDeltaTime();
 		Assets.current_frame = Assets.loading.getKeyFrame(stateTime, true);
 		generalUpdate(touch, camera);
 

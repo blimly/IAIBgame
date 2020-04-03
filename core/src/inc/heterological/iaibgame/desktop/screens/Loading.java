@@ -5,9 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.Main;
-import inc.heterological.iaibgame.net.ServerProgram;
 
 public class Loading implements Screen {
     private Main game;

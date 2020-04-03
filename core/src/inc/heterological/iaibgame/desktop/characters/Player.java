@@ -6,9 +6,11 @@ import inc.heterological.iaibgame.desktop.Assets;
 
 public class Player {
     public final Rectangle bounds;
+    public final Rectangle onlineBounds;
     public int xWidth = 64;
     public int yHeight = 64;
     public int id;
+    public int health;
     public String username;
 
     private static final int MOVE_SPEED = 200;
@@ -16,6 +18,8 @@ public class Player {
     public Player() {
         id = this.hashCode();
         bounds = new Rectangle(0, 0, xWidth, yHeight);
+        onlineBounds = new Rectangle(10, 10, xWidth, yHeight);
+        health = 100;
     }
 
     public void moveLeft(double dt) {

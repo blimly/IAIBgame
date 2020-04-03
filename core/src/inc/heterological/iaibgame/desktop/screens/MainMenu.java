@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
-import inc.heterological.iaibgame.desktop.Main;
+import inc.heterological.iaibgame.Main;
 
 public class MainMenu implements Screen {
 

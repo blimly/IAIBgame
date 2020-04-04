@@ -19,6 +19,9 @@ import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.desktop.managers.MusicPlayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class IAIBGame extends ApplicationAdapter {
 
@@ -42,7 +45,7 @@ public class IAIBGame extends ApplicationAdapter {
 		this.game = game;
 
 		touch = new Vector3();
-		batch = new SpriteBatch();
+		batch = game.batch;
 		stateTime = 0f;
 		loadingRect = new Rectangle(288, 100, 64, 64);
 		screenRect = new Rectangle(64, 64, 640 - 126, 480 - 126);
@@ -91,9 +94,9 @@ public class IAIBGame extends ApplicationAdapter {
 	public void render() {
 		/*
 		stateTime += Gdx.graphics.getDeltaTime();
-
+		Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
-		stateTime += Gdx.graphics.getDeltaTime();
 		Assets.current_frame = Assets.loading.getKeyFrame(stateTime, true);
 		generalUpdate(touch, camera);
 

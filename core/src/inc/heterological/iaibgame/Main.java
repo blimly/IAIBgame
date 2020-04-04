@@ -1,8 +1,9 @@
-package inc.heterological.iaibgame.desktop;
+package inc.heterological.iaibgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.screens.MainMenu;
 
 public class Main extends Game {

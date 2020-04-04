@@ -1,7 +1,12 @@
 package inc.heterological.iaibgame.net.shared;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Connection;
+import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
+import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
+import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
+import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
+import inc.heterological.iaibgame.net.shared.packets.UpdateX;
+import inc.heterological.iaibgame.net.shared.packets.UpdateY;
 
 public class Network {
 
@@ -13,30 +18,4 @@ public class Network {
         kryo.register(PlayerEntity.class);
         kryo.register(OnlinePlayer.class);
     }
-
-    public static class UpdateX {
-        public int id, x;
-    }
-    public static class UpdateY {
-        public int id, y;
-    }
-
-    public static class AddPlayer {
-        public int playerID;
-    }
-    public static class RemovePlayer {
-        public int playerID;
-    }
-
-    public static class PlayerEntity {
-        public int x, y;
-        public int id;
-        public Connection c;
-    }
-
-    public static class OnlinePlayer {
-        public int x, y;
-        public int id;
-    }
-
 }

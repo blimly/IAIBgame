@@ -9,14 +9,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.client.GameClient;
-import inc.heterological.iaibgame.net.shared.Network;
+import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
+import inc.heterological.iaibgame.net.shared.packets.UpdateX;
+import inc.heterological.iaibgame.net.shared.packets.UpdateY;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MultiplayerArena implements Screen {
 
-    private Main game;
     OrthographicCamera camera;
     SpriteBatch batch;
     float stateTime;
@@ -24,10 +25,9 @@ public class MultiplayerArena implements Screen {
     // online stuff
     static Player player = new Player();
     static GameClient gameClient = new GameClient();
-    public static Map<Integer, Network.OnlinePlayer> players = new HashMap<>();
+    public static Map<Integer, OnlinePlayer> players = new HashMap<>();
 
     public MultiplayerArena(Main game) {
-        this.game = game;
         stateTime = 0f;
         batch = game.batch;
         camera = new OrthographicCamera();
@@ -54,7 +54,7 @@ public class MultiplayerArena implements Screen {
         // draw this player
         batch.draw(player.getCurrentFrame(stateTime), player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
         // draw online players
-        for (Network.OnlinePlayer onlinePlayer : players.values()) {
+        for (OnlinePlayer onlinePlayer : players.values()) {
             batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.x, onlinePlayer.y, 64, 64);
         }
         batch.end();
@@ -78,13 +78,13 @@ public class MultiplayerArena implements Screen {
         // move on online
         if (player.onlineBounds.x != player.bounds.x) {
             // send players X value
-            Network.UpdateX packet = new Network.UpdateX();
+            UpdateX packet = new UpdateX();
             packet.x = (int) player.bounds.x;
             gameClient.client.sendUDP(packet);
             player.onlineBounds.x = player.bounds.x;
         }
         if (player.onlineBounds.y != player.bounds.y) {
-            Network.UpdateY packet = new Network.UpdateY();
+            UpdateY packet = new UpdateY();
             packet.y = (int) player.bounds.y;
             gameClient.client.sendUDP(packet);
             player.onlineBounds.y = player.bounds.y;

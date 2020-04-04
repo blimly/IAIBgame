@@ -5,24 +5,29 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.desktop.screens.MultiplayerArena;
 import inc.heterological.iaibgame.net.shared.Network;
+import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
+import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
+import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
+import inc.heterological.iaibgame.net.shared.packets.UpdateX;
+import inc.heterological.iaibgame.net.shared.packets.UpdateY;
 
 public class ClientListener extends Listener {
 
     public void received(Connection c, Object o) {
-        if (o instanceof Network.AddPlayer) {
-            Network.AddPlayer packet = (Network.AddPlayer) o;
-            Network.OnlinePlayer newPlayer = new Network.OnlinePlayer();
+        if (o instanceof AddPlayer) {
+            AddPlayer packet = (AddPlayer) o;
+            OnlinePlayer newPlayer = new OnlinePlayer();
             MultiplayerArena.players.put(packet.playerID, newPlayer);
             Log.info("Player " + packet.playerID + " joined the game");
-        } else if (o instanceof Network.RemovePlayer) {
-            Network.RemovePlayer packet = (Network.RemovePlayer) o;
+        } else if (o instanceof RemovePlayer) {
+            RemovePlayer packet = (RemovePlayer) o;
             MultiplayerArena.players.remove(packet.playerID);
             Log.info("Player " + packet.playerID + " left the game");
-        } else if (o instanceof Network.UpdateX) {
-            Network.UpdateX packet = (Network.UpdateX) o;
+        } else if (o instanceof UpdateX) {
+            UpdateX packet = (UpdateX) o;
             MultiplayerArena.players.get(packet.id).x = packet.x;
-        } else if (o instanceof Network.UpdateY) {
-            Network.UpdateY packet = (Network.UpdateY) o;
+        } else if (o instanceof UpdateY) {
+            UpdateY packet = (UpdateY) o;
             MultiplayerArena.players.get(packet.id).y = packet.y;
         }
     }

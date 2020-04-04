@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.Main;
+import inc.heterological.iaibgame.Main;
 
 public class Hell implements Screen {
 

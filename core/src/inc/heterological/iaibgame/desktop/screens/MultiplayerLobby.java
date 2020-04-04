@@ -6,8 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.Main;
 
 public class MultiplayerLobby implements Screen {
 
@@ -35,10 +35,14 @@ public class MultiplayerLobby implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
             Assets.font.draw(game.batch, "Multiplayer Lobby", 100, Main.GAME_HEIGHT - 100);
+            Assets.font.draw(game.batch, "Press ENTER to go to multiplayer Arena.", 100, Main.GAME_HEIGHT - 300);
         game.batch.end();
 
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
             game.setScreen(new ChooseSingleOrMulti(game));
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            game.setScreen(new MultiplayerArena(game));
         }
     }
 

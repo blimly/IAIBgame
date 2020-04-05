@@ -28,7 +28,7 @@ public class GameStateManager {
             gameState = new ChooseSingleOrMulti(this);
         }
         if (state == PLAY_SINGLEPLAYER) {
-            // gameState = new IAIBGame(this);
+            gameState = new IAIBGame(this);
         }
         if (state == LOBBY) {
             // gamestate = new MuliplayerLobby(this);

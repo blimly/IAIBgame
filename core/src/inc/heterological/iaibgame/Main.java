@@ -1,32 +1,57 @@
 package inc.heterological.iaibgame;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.desktop.Assets;
+import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
+import inc.heterological.iaibgame.desktop.managers.GameKeys;
+import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.desktop.screens.MainMenu;
 
-public class Main extends Game {
+public class Main extends ApplicationAdapter {
     public SpriteBatch batch;
     public BitmapFont font;
 
-    public static final int GAME_WIDTH = 640;
-    public static final int GAME_HEIGHT = 489;
+    public static OrthographicCamera camera;
+    public static GameStateManager gameStateManager;
+
+    public static int GAME_WIDTH = 640;
+    public static int GAME_HEIGHT = 489;
 
     public boolean hasPlayedOnce;
 
     @Override
     public void create() {
-        hasPlayedOnce = false;
-        batch = new SpriteBatch();
-        Assets.load();
-        font = Assets.getFont();
 
-        this.setScreen(new MainMenu(this));
+        GAME_WIDTH = Gdx.graphics.getWidth();
+        GAME_HEIGHT = Gdx.graphics.getHeight();
+
+        batch = new SpriteBatch();
+
+        camera = new OrthographicCamera(GAME_WIDTH, GAME_HEIGHT);
+        camera.setToOrtho(false, 640, 480);
+
+        Gdx.input.setInputProcessor(new GameInputProcessor());
+
+        //new game state manager for render
+        gameStateManager = new GameStateManager();
+
     }
 
     public void render() {
-        super.render();
+
+        Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f); // clear color magenta
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        gameStateManager.update(Gdx.graphics.getDeltaTime());
+        gameStateManager.draw();
+        GameKeys.update();
+
     }
 
     public void dispose() {

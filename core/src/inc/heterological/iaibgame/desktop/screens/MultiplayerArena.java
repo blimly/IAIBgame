@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
@@ -51,8 +52,11 @@ public class MultiplayerArena implements Screen {
 
         batch.begin();
         update();
+
+        batch.draw(Assets.mpArenaTex, player.bounds.x, player.bounds.y);
+
         // draw this player
-        batch.draw(player.getCurrentFrame(stateTime), player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
+        batch.draw(player.getCurrentFrame(stateTime), Main.GAME_WIDTH/ 2 , Main.GAME_WIDTH / 2, player.bounds.width, player.bounds.height);
         // draw online players
         for (OnlinePlayer onlinePlayer : players.values()) {
             batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.x, onlinePlayer.y, 64, 64);

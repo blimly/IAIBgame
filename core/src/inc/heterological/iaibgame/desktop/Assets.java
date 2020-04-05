@@ -29,6 +29,8 @@ public class Assets {
     public static Texture levelsTexture;
     public static Sprite spriteBack;
 
+    public static Texture mpArenaTex;
+
     public static Texture playerTex;
     public static Animation<TextureRegion> player;
 
@@ -86,6 +88,7 @@ public class Assets {
         levelsTexture = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
         spriteBack = new Sprite(levelsTexture, 0, 0, 720, 160);
 
+        mpArenaTex = new Texture(Gdx.files.internal("images/arenas/mp_arena.png"));
         // easter egg
 
     }

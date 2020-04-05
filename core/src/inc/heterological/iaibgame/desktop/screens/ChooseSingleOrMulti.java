@@ -28,6 +28,7 @@ public class ChooseSingleOrMulti extends GameState {
 
     @Override
     public void init() {
+        Assets.load();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         touch = new Vector2();
@@ -45,6 +46,7 @@ public class ChooseSingleOrMulti extends GameState {
     @Override
     public void draw() {
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         handleInput();
 
@@ -52,7 +54,7 @@ public class ChooseSingleOrMulti extends GameState {
         batch.begin();
         singleplayer.drawButton(batch);
         multiplayer.drawButton(batch);
-        batch.end();  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.end();
     }
 
     @Override

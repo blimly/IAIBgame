@@ -29,6 +29,7 @@ public class MainMenu extends GameState{
 
     @Override
     public void init() {
+        Assets.load();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         touch = new Vector2();
@@ -66,7 +67,7 @@ public class MainMenu extends GameState{
         if(Gdx.input.isTouched()) {
             touch.set(Gdx.input.getX(), Main.GAME_HEIGHT - Gdx.input.getY());
             if(playButton.clicked(touch)) {
-                stateManager.setGameState(GameStateManager.PLAY);
+                stateManager.setGameState(GameStateManager.CHOOSE_MODE);
             }
             if(exitButton.clicked(touch)) {
                 Gdx.app.exit();

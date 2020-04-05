@@ -15,7 +15,7 @@ public class GameServer {
 
     public GameServer() throws IOException {
         server = new Server();
-        server.bind(5201, 5200);
+        server.bind(5202, 5200);
         Network.register(server.getKryo());
         server.start();
         server.addListener(new ServerListener());

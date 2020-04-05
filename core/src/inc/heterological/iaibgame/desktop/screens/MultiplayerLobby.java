@@ -20,7 +20,7 @@ public class MultiplayerLobby extends GameState {
     Vector2 touch;
     SpriteBatch batch;
 
-    protected MultiplayerLobby(GameStateManager gsm) {
+    public MultiplayerLobby(GameStateManager gsm) {
         super(gsm);
         init();
     }

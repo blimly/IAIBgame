@@ -31,6 +31,7 @@ public class Loading implements Screen {
 
     @Override
     public void render(float delta) {
+        /*
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
@@ -44,9 +45,11 @@ public class Loading implements Screen {
         game.batch.end();
 
         if (stateTime > 2) {
-            game.setScreen(new IAIBGame(game));
+
             dispose();
         }
+
+         */
     }
 
     @Override

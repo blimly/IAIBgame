@@ -31,10 +31,10 @@ public class GameStateManager {
             gameState = new IAIBGame(this);
         }
         if (state == LOBBY) {
-            // gamestate = new MuliplayerLobby(this);
+            gameState = new MultiplayerLobby(this);
         }
         if (state == PLAY_MULTIPLAYER) {
-            // gameState = new MultiplayerArena(this);
+            gameState = new MultiplayerArena(this);
         }
     }
 

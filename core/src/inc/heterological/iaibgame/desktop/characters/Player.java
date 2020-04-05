@@ -12,6 +12,7 @@ public class Player {
     public int id;
     public int health;
     public String username;
+    public boolean onButton;
 
     private static final int MOVE_SPEED = 200;
 

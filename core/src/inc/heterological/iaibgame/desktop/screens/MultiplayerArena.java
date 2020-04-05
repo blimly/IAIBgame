@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import inc.heterological.iaibgame.desktop.Assets;
+import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.net.client.GameClient;
@@ -13,29 +15,33 @@ import inc.heterological.iaibgame.net.shared.packets.UpdateX;
 import inc.heterological.iaibgame.net.shared.packets.UpdateY;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class MultiplayerArena extends GameState{
 
     OrthographicCamera camera;
     SpriteBatch batch;
     float stateTime;
-
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
     public static Map<Integer, OnlinePlayer> players = new HashMap<>();
 
+    private ArenaButton arenaButton;
+    private Set<Boolean> onButton;
+
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);
         init();
         show();
+        arenaButton = new ArenaButton(480, 480);
+        onButton = new HashSet<>();
     }
 
     public void show() {
-        System.out.println("Trying to connnect");
         gameClient.connect();
-        System.out.println("connected to server");
     }
 
 
@@ -94,13 +100,29 @@ public class MultiplayerArena extends GameState{
 
         batch.begin();
         update();
+
+        batch.draw(Assets.mpArenaTex, -player.bounds.x, -player.bounds.y, 1024, 1024);
+        updateOnButtons();
+        arenaButton.draw(batch, 480 - (int) player.bounds.x, 480 - (int) player.bounds.y, onButton);
+
+        Assets.font.draw(batch, "X: " + player.bounds.x, 5, 40);
+        Assets.font.draw(batch, "Y: " + player.bounds.y, 5, 20);
         // draw this player
-        batch.draw(player.getCurrentFrame(stateTime), player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
+        batch.draw(player.getCurrentFrame(stateTime), 288, 208 , player.bounds.width, player.bounds.height);
         // draw online players
         for (OnlinePlayer onlinePlayer : players.values()) {
-            batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.x, onlinePlayer.y, 64, 64);
+            batch.draw(player.getCurrentFrame(stateTime), 288+onlinePlayer.x-player.bounds.x, 208+onlinePlayer.y-player.bounds.y, 64, 64);
         }
+
+        onButton.clear();
         batch.end();
+    }
+
+    private void updateOnButtons() {
+        onButton.add(arenaButton.playerOnButton((int) player.bounds.x, (int) player.bounds.y));
+        for (OnlinePlayer onlinePlayer : players.values()) {
+            onButton.add(arenaButton.playerOnButton(onlinePlayer.x, onlinePlayer.y));
+        }
     }
 
     @Override

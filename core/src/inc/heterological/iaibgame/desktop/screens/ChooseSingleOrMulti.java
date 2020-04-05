@@ -2,85 +2,73 @@ package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 
-public class ChooseSingleOrMulti implements Screen {
+public class ChooseSingleOrMulti extends GameState {
 
-    final Main game;
     OrthographicCamera camera;
     Vector2 touch;
 
     Button singleplayer;
     Button multiplayer;
+    SpriteBatch batch;
 
-    public ChooseSingleOrMulti(Main game) {
-        this.game = game;
+    public ChooseSingleOrMulti(GameStateManager gsm) {
+        super(gsm);
+        init();
+    }
+
+
+    @Override
+    public void init() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         touch = new Vector2();
+        batch = new SpriteBatch();
 
         singleplayer = new Button(526, 72, 57, 300, Assets.singleplayer);
         multiplayer = new Button(526, 72, 57, 200, Assets.multiplayer);
     }
 
     @Override
-    public void show() {
+    public void update(float dt) {
 
     }
 
     @Override
-    public void render(float delta) {
+    public void draw() {
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        checkButtons(touch);
+        handleInput();
 
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        singleplayer.drawButton(game.batch);
-        multiplayer.drawButton(game.batch);
-        game.batch.end();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        singleplayer.drawButton(batch);
+        multiplayer.drawButton(batch);
+        batch.end();  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
-    public void checkButtons(Vector2 touch) {
+    @Override
+    public void handleInput() {
         if(Gdx.input.isTouched()) {
             touch.set(Gdx.input.getX(), Main.GAME_HEIGHT - Gdx.input.getY());
             if(singleplayer.clicked(touch)) {
-                game.setScreen(new IAIBGame(game));
+                stateManager.setGameState(GameStateManager.PLAY_SINGLEPLAYER);
             }
             if(multiplayer.clicked(touch)) {
-                game.setScreen(new MultiplayerLobby(game));
+                stateManager.setGameState(GameStateManager.LOBBY);
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
-            game.setScreen(new MainMenu(game));
+            stateManager.setGameState(GameStateManager.MENU);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.esotericsoftware.minlog.Log;
 public class ServerLauncher {
     public static void main(String[] args) {
         try {
-            Log.set(Log.LEVEL_DEBUG);
+            Log.set(Log.LEVEL_INFO);
             new GameServer();
 
         } catch (Exception e) {

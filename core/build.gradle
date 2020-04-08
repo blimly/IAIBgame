@@ -4,18 +4,3 @@ sourceCompatibility = 1.7
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
-
-jar {
-    manifest {
-        attributes (
-                'Main-Class': 'inc.heterological.iaibgame.net.server.ServerLauncher'
-        )
-    }
-
-}
-dependencies {
-    compile ("com.esotericsoftware:kryonet:2.22.0-RC1") {
-        exclude module : 'kryo'
-    }
-    compile "com.esotericsoftware:kryo:3.0.1"
-}

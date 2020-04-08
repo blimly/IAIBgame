@@ -1,10 +1,12 @@
 package inc.heterological.iaibgame.net.shared;
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
 import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
+import inc.heterological.iaibgame.net.shared.packets.UpdateEnemy;
 import inc.heterological.iaibgame.net.shared.packets.UpdateX;
 import inc.heterological.iaibgame.net.shared.packets.UpdateY;
 
@@ -17,5 +19,8 @@ public class Network {
         kryo.register(RemovePlayer.class);
         kryo.register(PlayerEntity.class);
         kryo.register(OnlinePlayer.class);
+        kryo.register(AddPlayer.class);
+        kryo.register(UpdateEnemy.class);
+        kryo.register(Vector2.class);
     }
 }

@@ -2,6 +2,7 @@ package inc.heterological.iaibgame.net.server;
 
 import com.esotericsoftware.kryonet.Server;
 import inc.heterological.iaibgame.net.shared.Network;
+import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ public class GameServer {
 
     static Server server;
     static Map<Integer, PlayerEntity> players = new HashMap<>();
+    static Map<Integer, EnemyEntity> enemies = new HashMap<>();
 
     public GameServer() throws IOException {
         server = new Server();

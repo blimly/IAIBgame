@@ -20,13 +20,10 @@ public class ArenaButton {
         if (isActivated || all(players)) {
             isActivated = true;
             batch.draw(Assets.arenaButton[2], x, y, 128, 84);
-            Assets.font.draw(batch, "ButtonState: " + 2, 5, 60);
         } else if (any(players)) {
             batch.draw(Assets.arenaButton[1], x, y, 128, 84);
-            Assets.font.draw(batch, "ButtonState: " + 1, 5, 60);
         } else {
             batch.draw(Assets.arenaButton[0], x, y, 128, 84);
-            Assets.font.draw(batch, "ButtonState: " + 0, 5, 60);
         }
     }
 

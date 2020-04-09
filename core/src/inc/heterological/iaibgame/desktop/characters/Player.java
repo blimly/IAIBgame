@@ -2,40 +2,47 @@ package inc.heterological.iaibgame.desktop.characters;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
 
 public class Player {
     public final Rectangle bounds;
     public final Rectangle onlineBounds;
-    public int xWidth = 64;
-    public int yHeight = 64;
-    public int id;
+    public int width = 64;
+    public int height = 64;
     public int health;
+
+    public Vector2 position;
+    public Vector2 velocity;
+    public Vector2 friction;
+
     public String username;
     public boolean onButton;
 
     private static final int MOVE_SPEED = 200;
 
     public Player() {
-        id = this.hashCode();
-        bounds = new Rectangle(0, 0, xWidth, yHeight);
-        onlineBounds = new Rectangle(10, 10, xWidth, yHeight);
+        position = new Vector2(Main.GAME_WIDTH / 2 - width / 2, Main.GAME_HEIGHT / 2 - height / 2);
+        bounds = new Rectangle(position.x, position.y, width, height);
+        onlineBounds = new Rectangle(Main.GAME_WIDTH / 2 - width / 2, Main.GAME_HEIGHT / 2 - height / 2, width, height);
         health = 100;
+        velocity = new Vector2(0, 0);
+        friction = new Vector2(0, 0);
     }
 
     public void moveLeft(double dt) {
-        bounds.x -= MOVE_SPEED * dt;
+        position.add((float) dt * -MOVE_SPEED, 0);
     }
     public void moveRight(double dt) {
-        bounds.x += MOVE_SPEED * dt;
+        position.add((float) dt * MOVE_SPEED, 0);
     }
     public void moveUp(double dt) {
-        bounds.y -= MOVE_SPEED * dt;
+        position.add(0, (float) dt * -MOVE_SPEED);
     }
     public void moveDown(double dt) {
-        bounds.y += MOVE_SPEED * dt;
+        position.add(0, (float) dt * MOVE_SPEED);
     }
-
 
     public TextureRegion getCurrentFrame(float delta) {
         return (TextureRegion) Assets.player.getKeyFrame(delta, true);

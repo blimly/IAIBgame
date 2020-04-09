@@ -2,15 +2,14 @@ package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
@@ -104,11 +103,10 @@ public class IAIBGame extends GameState{
 		Assets.current_frame = Assets.loading.getKeyFrame(stateTime, true);
 		generalUpdate(touch, camera);
 
-
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(Assets.spriteBack, 0, 0, 2160, 480);
-		batch.draw(player.getCurrentFrame(stateTime), player.bounds.x, player.bounds.y, player.bounds.width, player.bounds.height);
+		batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y, player.width, player.height);
 		for (Enemy e : enemies) {
 			e.drawEnemyAndHealthbar(batch, stateTime);
 		}

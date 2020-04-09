@@ -16,12 +16,7 @@ import inc.heterological.iaibgame.net.shared.packets.OnlineEnemy;
 import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
 import inc.heterological.iaibgame.net.shared.packets.UpdateX;
 import inc.heterological.iaibgame.net.shared.packets.UpdateY;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MultiplayerArena extends GameState{
 
@@ -37,6 +32,7 @@ public class MultiplayerArena extends GameState{
 
     private ArenaButton arenaButton;
     private Set<Boolean> onButton;
+
 
     ArrayList<Enemy> e;
 

@@ -106,7 +106,7 @@ public class Assets {
 
     private static void loadAnimations() {
         textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
-        playerTex = new Texture(Gdx.files.internal("images/characters/maincharacter.png"));
+        playerTex = new Texture(Gdx.files.internal("images/characters/maincharacter_idle.png"));
         enemy1Tex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
         TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
         TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
@@ -125,6 +125,7 @@ public class Assets {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (index < 60) runFrames[index++] = run_temp[i][j];
+
             }
         }
         run = new Animation<>(0.033f, runFrames);

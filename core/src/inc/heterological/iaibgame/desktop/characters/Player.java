@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.Rectangle;
 import inc.heterological.iaibgame.desktop.Assets;
 
 public class Player {
+    public enum Condition {IDLE, MOVE, JAB, KICK}
+    public Condition previousState;
+    public Condition currentState;
     public final Rectangle bounds;
     public final Rectangle onlineBounds;
     public int xWidth = 64;
@@ -38,6 +41,18 @@ public class Player {
 
 
     public TextureRegion getCurrentFrame(float delta) {
+        if (currentState == Condition.IDLE) {
+
+        }
+        if (currentState == Condition.MOVE) {
+
+        }
+        if (currentState == Condition.JAB) {
+
+        }
+        if (currentState == Condition.KICK) {
+
+        }
         return (TextureRegion) Assets.player.getKeyFrame(delta, true);
     }
 }

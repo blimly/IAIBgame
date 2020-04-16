@@ -17,11 +17,13 @@ public class Assets {
 
     public static Texture blank;
 
+    // menu
     public static Texture buttons;
     public static Sprite play;
     public static Sprite exit;
     public static Sprite multiplayer;
     public static Sprite singleplayer;
+    public static Texture lobbySelect;
 
     public static Sprite mainSpriteBack1;
     public static Sprite mainSpriteBack2;
@@ -45,6 +47,8 @@ public class Assets {
 
     public static Texture runSheet;
     public static Animation<TextureRegion> run;
+
+
 
 
     public static Sound menu_loop;
@@ -94,6 +98,8 @@ public class Assets {
         Texture buttonSheet = new Texture(Gdx.files.internal("images/arena_big_button.png"));
         arenaButton = TextureRegion.split(buttonSheet, 32, 21)[0];
 
+
+        lobbySelect = new Texture(Gdx.files.internal("images/lobby_character.png"));
     }
 
     private static void loadSounds() {
@@ -128,7 +134,6 @@ public class Assets {
             }
         }
         run = new Animation<>(0.033f, runFrames);
-
     }
 
     public static void dispose() {

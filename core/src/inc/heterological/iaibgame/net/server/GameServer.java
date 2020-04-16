@@ -1,6 +1,7 @@
 package inc.heterological.iaibgame.net.server;
 
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.net.shared.Network;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -12,6 +13,7 @@ import java.util.Map;
 public class GameServer {
 
     static Server server;
+    private ServerLogic serverLogic = new ServerLogic();
     static Map<Integer, PlayerEntity> players = new HashMap<>();
     static Map<Integer, EnemyEntity> enemies = new HashMap<>();
 
@@ -23,4 +25,7 @@ public class GameServer {
         server.addListener(new ServerListener());
     }
 
+    public void onStartGame() {
+        Log.info("Server arena ready");
+    }
 }

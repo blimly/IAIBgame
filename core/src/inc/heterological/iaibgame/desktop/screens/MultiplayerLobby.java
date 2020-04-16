@@ -43,8 +43,9 @@ public class MultiplayerLobby extends GameState {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        Assets.font.draw(batch, "Multiplayer Lobby", 100, Main.GAME_HEIGHT - 100);
-        Assets.font.draw(batch, "Press ENTER to go to multiplayer Arena.", 100, Main.GAME_HEIGHT - 300);
+        batch.draw(Assets.lobbySelect, 100, 100, 320, 240);
+        Assets.font.draw(batch, "Lobby", 100, Main.GAME_HEIGHT - 50);
+        Assets.font.draw(batch, "Press ENTER to go to multiplayer Arena.", 100, 50);
         batch.end();
 
     }

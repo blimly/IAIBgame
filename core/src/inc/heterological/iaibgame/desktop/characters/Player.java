@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import inc.heterological.iaibgame.desktop.Assets;
 
 public class Player {
-    public enum Condition {IDLE, MOVE, JAB, KICK}
+    public enum Condition {IDLE_RIGHT, IDLE_LEFT, MOVE_LEFT, MOVE_RIGHT, JAB_RIGHT, JAB_LEFT, KICK_RIGHT, KICK_LEFT}
     public Condition previousState;
     public Condition currentState;
     public final Rectangle bounds;
@@ -24,6 +24,8 @@ public class Player {
         bounds = new Rectangle(0, 0, xWidth, yHeight);
         onlineBounds = new Rectangle(10, 10, xWidth, yHeight);
         health = 100;
+        previousState = Condition.IDLE_RIGHT;
+        currentState = Condition.IDLE_RIGHT;
     }
 
     public void moveLeft(double dt) {
@@ -33,26 +35,27 @@ public class Player {
         bounds.x += MOVE_SPEED * dt;
     }
     public void moveUp(double dt) {
-        bounds.y -= MOVE_SPEED * dt;
+        bounds.y += MOVE_SPEED * dt;
     }
     public void moveDown(double dt) {
-        bounds.y += MOVE_SPEED * dt;
+        bounds.y -= MOVE_SPEED * dt;
     }
 
 
     public TextureRegion getCurrentFrame(float delta) {
-        if (currentState == Condition.IDLE) {
+        if (currentState == Condition.MOVE_RIGHT) {
+            return Assets.playerMove.getKeyFrame(delta, true);
+        } else if ( currentState == Condition.JAB_RIGHT) {
+            currentState = Condition.IDLE_RIGHT;
+            return Assets.playerJab.getKeyFrame(delta, false);
+
+        } else if (currentState == Condition.KICK_RIGHT) {
+            currentState = Condition.IDLE_RIGHT;
+            return Assets.playerKick.getKeyFrame(delta, false);
 
         }
-        if (currentState == Condition.MOVE) {
-
+        else {
+            return Assets.playerIdle.getKeyFrame(delta, true);
         }
-        if (currentState == Condition.JAB) {
-
-        }
-        if (currentState == Condition.KICK) {
-
-        }
-        return (TextureRegion) Assets.player.getKeyFrame(delta, true);
     }
 }

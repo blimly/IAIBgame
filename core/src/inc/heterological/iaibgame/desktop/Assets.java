@@ -9,6 +9,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class Assets {
@@ -33,7 +38,10 @@ public class Assets {
     public static TextureRegion[] arenaButton;
 
     public static Texture playerTex;
-    public static Animation<TextureRegion> player;
+    public static Animation<TextureRegion> playerIdle;
+    public static Animation<TextureRegion> playerMove;
+    public static Animation<TextureRegion> playerKick;
+    public static Animation<TextureRegion> playerJab;
 
     public static Texture enemy1Tex;
     public static Animation<TextureRegion> enemy1;
@@ -106,17 +114,29 @@ public class Assets {
 
     private static void loadAnimations() {
         textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
-        playerTex = new Texture(Gdx.files.internal("images/characters/maincharacter_idle.png"));
+        playerTex = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE.png"));
         enemy1Tex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
         TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
         TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
-        TextureRegion[][] enemy1_temp = TextureRegion.split(enemy1Tex,16,16);
+        TextureRegion[] playerIdleSprites = Arrays.copyOfRange(player_temp[0], 0, 6, TextureRegion[].class);
+        TextureRegion[] playerMoveSprites = Arrays.copyOfRange(player_temp[0], 6, 11, TextureRegion[].class);
+        TextureRegion[] playerKickSprites = Arrays.copyOfRange(player_temp[0], 12, 16, TextureRegion[].class);
+        TextureRegion[] playerJabSprites = Arrays.copyOfRange(player_temp[0], 16, 21, TextureRegion[].class);
 
+        TextureRegion[][] enemy1_temp = TextureRegion.split(enemy1Tex,16,16);
         loading_frames = new TextureRegion[8];
+
+
         System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
         loading = new Animation<>(0.1f, loading_frames);
-        player = new Animation<>(0.2f, player_temp[0]);
+
+        playerIdle = new Animation<>(0.1f, playerIdleSprites);
+        playerMove = new Animation<>(0.1f, playerMoveSprites);
+        playerKick = new Animation<>(0.7f, playerKickSprites);
+        playerJab = new Animation<>(0.3f, playerJabSprites);
+
         enemy1 = new Animation<>(0.3f, enemy1_temp[0]);
+
 
         runSheet = new Texture(Gdx.files.internal("images/run-sheet.png"));
         TextureRegion[][] run_temp = TextureRegion.split(runSheet, 500, 500);
@@ -128,6 +148,8 @@ public class Assets {
 
             }
         }
+
+
         run = new Animation<>(0.033f, runFrames);
 
     }

@@ -1,5 +1,6 @@
 package inc.heterological.iaibgame.desktop.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,12 +11,16 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
+import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
+import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.OnlineEnemy;
 import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
 import inc.heterological.iaibgame.net.shared.packets.UpdateX;
 import inc.heterological.iaibgame.net.shared.packets.UpdateY;
+import javafx.print.PageLayout;
+
 import java.util.*;
 
 public class MultiplayerArena extends GameState{
@@ -56,18 +61,29 @@ public class MultiplayerArena extends GameState{
     public void update() {
         double delta = Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (GameKeys.isDown(GameKeys.LEFT)) {
+            player.previousState = Player.Condition.IDLE_LEFT;
+            player.currentState = Player.Condition.MOVE_LEFT;
             player.moveLeft(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (GameKeys.isDown(GameKeys.RIGHT)) {
+            player.previousState = Player.Condition.IDLE_RIGHT;
+            player.currentState = Player.Condition.MOVE_RIGHT;
             player.moveRight(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (GameKeys.isDown(GameKeys.UP)) {
             player.moveUp(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (GameKeys.isDown(GameKeys.DOWN)) {
             player.moveDown(delta);
         }
+        if (GameKeys.isPressed(GameKeys.KICK) && player.previousState == Player.Condition.IDLE_RIGHT) {
+            player.currentState = Player.Condition.KICK_RIGHT;
+        }
+        if (GameKeys.isPressed(GameKeys.JAB) && player.previousState == Player.Condition.IDLE_RIGHT) {
+            player.currentState = Player.Condition.JAB_RIGHT;
+        }
+
         // move on online
         if (player.onlineBounds.x != player.bounds.x) {
             UpdateX packet = new UpdateX();

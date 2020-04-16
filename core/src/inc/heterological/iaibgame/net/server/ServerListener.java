@@ -3,6 +3,7 @@ package inc.heterological.iaibgame.net.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
@@ -13,8 +14,8 @@ public class ServerListener extends Listener {
 
     public void connected(Connection c) {
         PlayerEntity player = new PlayerEntity();
-        player.x = 0;
-        player.y = 0;
+        player.x = Main.GAME_WIDTH / 2;
+        player.y = Main.GAME_HEIGHT / 2;
         player.c = c;
         AddPlayer addPlayer = new AddPlayer();
         addPlayer.playerID = c.getID();

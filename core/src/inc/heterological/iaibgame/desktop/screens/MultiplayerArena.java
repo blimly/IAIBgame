@@ -77,13 +77,13 @@ public class MultiplayerArena extends GameState{
         camera.position.lerp(new Vector3(player.position.x + player.width / 2, player.position.y + player.height / 2, 0), (float) delta);
 
         // move on online
-        if (player.onlineBounds.x != player.bounds.x) {
+        if (player.onlineBounds.x != player.position.x) {
             UpdateX packet = new UpdateX();
             packet.x = (int) player.position.x;
             gameClient.client.sendUDP(packet);
             player.onlineBounds.x = player.position.x;
         }
-        if (player.onlineBounds.y != player.bounds.y) {
+        if (player.onlineBounds.y != player.position.y) {
             UpdateY packet = new UpdateY();
             packet.y = (int) player.position.y;
             gameClient.client.sendUDP(packet);
@@ -137,11 +137,13 @@ public class MultiplayerArena extends GameState{
             }
         }
 
-        batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y , player.width, player.height);
-
+        // draw online players
         for (OnlinePlayer onlinePlayer : players.values()) {
-            batch.draw(player.getCurrentFrame(stateTime), 288+onlinePlayer.x, 208+onlinePlayer.y, 64, 64);
+            batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.x, onlinePlayer.y, 64, 64);
         }
+
+        // draw myself
+        batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y , player.width, player.height);
 
         onButton.clear();
         batch.end();

@@ -1,6 +1,6 @@
 package inc.heterological.iaibgame.desktop.screens;
 
-import com.badlogic.gdx.Game;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,7 +11,6 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
-import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.net.client.GameClient;
@@ -19,7 +18,7 @@ import inc.heterological.iaibgame.net.shared.packets.OnlineEnemy;
 import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
 import inc.heterological.iaibgame.net.shared.packets.UpdateX;
 import inc.heterological.iaibgame.net.shared.packets.UpdateY;
-import javafx.print.PageLayout;
+
 
 import java.util.*;
 
@@ -38,7 +37,6 @@ public class MultiplayerArena extends GameState{
     private ArenaButton arenaButton;
     private Set<Boolean> onButton;
 
-
     ArrayList<Enemy> e;
 
     public MultiplayerArena(GameStateManager gsm) {
@@ -52,6 +50,7 @@ public class MultiplayerArena extends GameState{
         e.add(new Enemy(new Vector2(0, 0), 0, 100));
         e.add(new Enemy(new Vector2(0, 0), 0, 100));
         e.add(new Enemy(new Vector2(0, 0), 0, 100));
+
     }
 
     public void show() {
@@ -59,30 +58,31 @@ public class MultiplayerArena extends GameState{
     }
 
     public void update() {
-        double delta = Gdx.graphics.getDeltaTime();
+        float delta = Gdx.graphics.getDeltaTime();
 
-        if (GameKeys.isDown(GameKeys.LEFT)) {
-            player.previousState = Player.Condition.IDLE_LEFT;
-            player.currentState = Player.Condition.MOVE_LEFT;
+        if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
+            player.stand();
+        } else if (GameKeys.isDown(GameKeys.LEFT)) {
             player.moveLeft(delta);
-        }
-        if (GameKeys.isDown(GameKeys.RIGHT)) {
-            player.previousState = Player.Condition.IDLE_RIGHT;
-            player.currentState = Player.Condition.MOVE_RIGHT;
+        } else if (GameKeys.isDown(GameKeys.RIGHT)) {
             player.moveRight(delta);
+        } else if (GameKeys.isPressed(GameKeys.KICK)) {
+            player.kick();
+        } else if (GameKeys.isPressed(GameKeys.JAB) || !player.hasJabbed(stateTime)) {
+            player.jab();
+        } else {
+            player.stand();
         }
+
+
         if (GameKeys.isDown(GameKeys.UP)) {
             player.moveUp(delta);
         }
+
         if (GameKeys.isDown(GameKeys.DOWN)) {
             player.moveDown(delta);
         }
-        if (GameKeys.isPressed(GameKeys.KICK) && player.previousState == Player.Condition.IDLE_RIGHT) {
-            player.currentState = Player.Condition.KICK_RIGHT;
-        }
-        if (GameKeys.isPressed(GameKeys.JAB) && player.previousState == Player.Condition.IDLE_RIGHT) {
-            player.currentState = Player.Condition.JAB_RIGHT;
-        }
+
 
         // move on online
         if (player.onlineBounds.x != player.bounds.x) {
@@ -144,8 +144,11 @@ public class MultiplayerArena extends GameState{
                 enemy.drawEnemyAndHealthbar(batch, stateTime);
             }
         }
-
-        batch.draw(player.getCurrentFrame(stateTime), 288, 208 , player.bounds.width, player.bounds.height);
+        if (player.previousState == Player.Condition.IDLE_LEFT) {
+            batch.draw(player.getCurrentFrame(stateTime), 288 + player.bounds.width, 208 , -player.bounds.width, player.bounds.height);
+        } else {
+            batch.draw(player.getCurrentFrame(stateTime), 288, 208 , player.bounds.width, player.bounds.height);
+        }
 
         for (OnlinePlayer onlinePlayer : players.values()) {
             batch.draw(player.getCurrentFrame(stateTime), 288+onlinePlayer.x-player.bounds.x, 208+onlinePlayer.y-player.bounds.y, 64, 64);

@@ -130,10 +130,10 @@ public class Assets {
         System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
         loading = new Animation<>(0.1f, loading_frames);
 
-        playerIdle = new Animation<>(0.1f, playerIdleSprites);
-        playerMove = new Animation<>(0.1f, playerMoveSprites);
-        playerKick = new Animation<>(0.7f, playerKickSprites);
-        playerJab = new Animation<>(0.3f, playerJabSprites);
+        playerIdle = new Animation<>(0.15f, playerIdleSprites);
+        playerMove = new Animation<>(0.15f, playerMoveSprites);
+        playerKick = new Animation<>(0.5f, playerKickSprites);
+        playerJab = new Animation<>(0.5f, playerJabSprites);
 
         enemy1 = new Animation<>(0.3f, enemy1_temp[0]);
 

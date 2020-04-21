@@ -2,6 +2,8 @@ package inc.heterological.iaibgame.desktop.characters;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 
@@ -12,10 +14,15 @@ public class Player {
     public Condition currentState;
     public final Rectangle bounds;
     public final Rectangle onlineBounds;
-    public int xWidth = 64;
-    public int yHeight = 64;
+    public int width = 64;
+    public int height = 64;
     public int id;
     public int health;
+
+    public Vector2 position;
+    public Vector2 velocity;
+    public Vector2 friction;
+
     public String username;
     public boolean onButton;
 
@@ -23,9 +30,12 @@ public class Player {
 
     public Player() {
         id = this.hashCode();
-        bounds = new Rectangle(0, 0, xWidth, yHeight);
-        onlineBounds = new Rectangle(10, 10, xWidth, yHeight);
+        position = new Vector2(Main.GAME_WIDTH / 2 - width / 2, Main.GAME_HEIGHT / 2 - height / 2);
+        bounds = new Rectangle(position.x, position.y, width, height);
+        onlineBounds = new Rectangle(Main.GAME_WIDTH / 2 - width / 2, Main.GAME_HEIGHT / 2 - height / 2, width, height);
         health = 100;
+        velocity = new Vector2(0, 0);
+        friction = new Vector2(0, 0);
         //ANIMATION
         previousState = Condition.IDLE_RIGHT;
         currentState = Condition.IDLE_RIGHT;
@@ -35,7 +45,8 @@ public class Player {
     public void moveLeft(double dt) {
         previousState = Player.Condition.IDLE_LEFT;
         currentState = Player.Condition.MOVE_LEFT;
-        bounds.x -= MOVE_SPEED * dt;
+        position.add((float) dt * -MOVE_SPEED, 0);
+
         if (!GameKeys.isDown(GameKeys.LEFT)) {
             currentState = Condition.IDLE_LEFT;
         }
@@ -43,7 +54,7 @@ public class Player {
     public void moveRight(double dt) {
         previousState = Player.Condition.IDLE_RIGHT;
         currentState = Player.Condition.MOVE_RIGHT;
-        bounds.x += MOVE_SPEED * dt;
+        position.add((float) dt * MOVE_SPEED, 0);
         if (!GameKeys.isDown(GameKeys.RIGHT)) {
             currentState = Condition.IDLE_RIGHT;
         }
@@ -60,7 +71,7 @@ public class Player {
                 currentState = Condition.IDLE_LEFT;
             }
         }
-        bounds.y += MOVE_SPEED * dt;
+        position.add(0, (float) dt * -MOVE_SPEED);
     }
     public void moveDown(double dt) {
         if (previousState == Condition.IDLE_RIGHT) {
@@ -74,7 +85,7 @@ public class Player {
                 currentState = Condition.IDLE_LEFT;
             }
         }
-        bounds.y -= MOVE_SPEED * dt;
+        position.add(0, (float) dt * MOVE_SPEED);
     }
     public void jab() {
         if (previousState == Condition.IDLE_LEFT) {

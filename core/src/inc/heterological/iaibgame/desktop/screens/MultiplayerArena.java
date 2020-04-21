@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
@@ -58,7 +60,7 @@ public class MultiplayerArena extends GameState{
     }
 
     public void update() {
-        float delta = Gdx.graphics.getDeltaTime();
+        double delta = Gdx.graphics.getDeltaTime();
 
         if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
             player.stand();
@@ -73,7 +75,7 @@ public class MultiplayerArena extends GameState{
         } else {
             player.stand();
         }
-
+        camera.position.lerp(new Vector3(player.position.x + player.width / 2, player.position.y + player.height / 2, 0), (float) delta);
 
         if (GameKeys.isDown(GameKeys.UP)) {
             player.moveUp(delta);
@@ -104,8 +106,7 @@ public class MultiplayerArena extends GameState{
         stateTime = 0f;
         gameClient = new GameClient();
         batch = new SpriteBatch();
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640, 480);
+        camera = Main.camera;
     }
 
     @Override
@@ -118,6 +119,7 @@ public class MultiplayerArena extends GameState{
         stateTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 

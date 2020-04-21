@@ -126,30 +126,30 @@ public class MultiplayerArena extends GameState{
         batch.begin();
         update();
 
-        batch.draw(Assets.mpArenaTex, -player.bounds.x, -player.bounds.y, 1024, 1024);
+        batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
         updateOnButtons();
-        arenaButton.draw(batch, 480 - (int) player.bounds.x, 480 - (int) player.bounds.y, onButton);
+        arenaButton.draw(batch, 480, 480, onButton);
 
-        //Assets.font.draw(batch, "X: " + player.bounds.x, 5, 40);
-        //Assets.font.draw(batch, "Y: " + player.bounds.y, 5, 20);
+        Assets.font.draw(batch, "X: " + player.position.x, 5, 40);
+        Assets.font.draw(batch, "Y: " + player.position.y, 5, 20);
         if (arenaButton.isActivated) {
-            e.get(0).position.x = 480 + 0 - player.bounds.x;
-            e.get(0).position.y = 480 + 200 - player.bounds.y;
-            e.get(1).position.x = 480 + 0 - player.bounds.x;
-            e.get(1).position.y = 480 + -200 - player.bounds.y;
-            e.get(2).position.x = 480 + 200 - player.bounds.x;
-            e.get(2).position.y = 480 + 0 - player.bounds.y;
-            e.get(3).position.x = 480 + -200 - player.bounds.x;
-            e.get(3).position.y = 480 + 0 - player.bounds.y;
+            e.get(0).position.x = 480;
+            e.get(0).position.y = 480 + 200;
+            e.get(1).position.x = 480;
+            e.get(1).position.y = 480 - 200;
+            e.get(2).position.x = 480 + 200;
+            e.get(2).position.y = 480;
+            e.get(3).position.x = 480 -200;
+            e.get(3).position.y = 480;
 
             for (Enemy enemy : e) {
                 enemy.drawEnemyAndHealthbar(batch, stateTime);
             }
         }
         if (player.previousState == Player.Condition.IDLE_LEFT) {
-            batch.draw(player.getCurrentFrame(stateTime), 288 + player.bounds.width, 208 , -player.bounds.width, player.bounds.height);
+            batch.draw(player.getCurrentFrame(stateTime), player.position.x + player.bounds.width, player.position.y , -player.bounds.width, player.bounds.height);
         } else {
-            batch.draw(player.getCurrentFrame(stateTime), 288, 208 , player.bounds.width, player.bounds.height);
+            batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y , player.bounds.width, player.bounds.height);
         }
 
         for (OnlinePlayer onlinePlayer : players.values()) {
@@ -161,7 +161,7 @@ public class MultiplayerArena extends GameState{
     }
 
     private void updateOnButtons() {
-        onButton.add(arenaButton.playerOnButton((int) player.bounds.x, (int) player.bounds.y));
+        onButton.add(arenaButton.playerOnButton((int) player.position.x, (int) player.position.y));
         for (OnlinePlayer onlinePlayer : players.values()) {
             onButton.add(arenaButton.playerOnButton(onlinePlayer.x, onlinePlayer.y));
         }

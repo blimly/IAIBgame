@@ -71,7 +71,7 @@ public class Player {
                 currentState = Condition.IDLE_LEFT;
             }
         }
-        position.add(0, (float) dt * -MOVE_SPEED);
+        position.add(0, (float) dt * MOVE_SPEED);
     }
     public void moveDown(double dt) {
         if (previousState == Condition.IDLE_RIGHT) {
@@ -85,7 +85,7 @@ public class Player {
                 currentState = Condition.IDLE_LEFT;
             }
         }
-        position.add(0, (float) dt * MOVE_SPEED);
+        position.add(0, (float) dt * -MOVE_SPEED);
     }
     public void jab() {
         if (previousState == Condition.IDLE_LEFT) {

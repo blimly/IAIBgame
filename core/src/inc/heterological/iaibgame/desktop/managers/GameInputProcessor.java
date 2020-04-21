@@ -33,7 +33,7 @@ public class GameInputProcessor extends InputAdapter {
         if (key == Input.Keys.BACKSPACE) {
             GameKeys.setKeys(GameKeys.BACKSPACE, true);
         }
-        return true;
+        return false;
     }
 
     public boolean keyUp(int key) {

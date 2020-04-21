@@ -1,5 +1,6 @@
 package inc.heterological.iaibgame.desktop.screens;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,6 +13,7 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
+import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.OnlineEnemy;
@@ -19,11 +21,8 @@ import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
 import inc.heterological.iaibgame.net.shared.packets.UpdateX;
 import inc.heterological.iaibgame.net.shared.packets.UpdateY;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 
 public class MultiplayerArena extends GameState{
 
@@ -53,6 +52,7 @@ public class MultiplayerArena extends GameState{
         e.add(new Enemy(new Vector2(0, 0), 0, 100));
         e.add(new Enemy(new Vector2(0, 0), 0, 100));
         e.add(new Enemy(new Vector2(0, 0), 0, 100));
+
     }
 
     public void show() {
@@ -62,16 +62,26 @@ public class MultiplayerArena extends GameState{
     public void update() {
         double delta = Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
+            player.stand();
+        } else if (GameKeys.isDown(GameKeys.LEFT)) {
             player.moveLeft(delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (GameKeys.isDown(GameKeys.RIGHT)) {
             player.moveRight(delta);
+        } else if (GameKeys.isPressed(GameKeys.KICK)) {
+            player.kick();
+        } else if (GameKeys.isPressed(GameKeys.JAB) || !player.hasJabbed(stateTime)) {
+            player.jab();
+        } else {
+            player.stand();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        camera.position.lerp(new Vector3(player.position.x + player.width / 2, player.position.y + player.height / 2, 0), (float) delta);
+
+        if (GameKeys.isDown(GameKeys.UP)) {
             player.moveUp(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+
+        if (GameKeys.isDown(GameKeys.DOWN)) {
             player.moveDown(delta);
         }
         camera.position.lerp(new Vector3(player.position.x + player.width / 2, player.position.y + player.height / 2, 0), (float) delta);
@@ -136,8 +146,12 @@ public class MultiplayerArena extends GameState{
                 enemy.drawEnemyAndHealthbar(batch, stateTime);
             }
         }
+        if (player.previousState == Player.Condition.IDLE_LEFT) {
+            batch.draw(player.getCurrentFrame(stateTime), player.position.x + player.bounds.width, player.position.y , -player.bounds.width, player.bounds.height);
+        } else {
+            batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y , player.bounds.width, player.bounds.height);
+        }
 
-        // draw online players
         for (OnlinePlayer onlinePlayer : players.values()) {
             batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.x, onlinePlayer.y, 64, 64);
         }

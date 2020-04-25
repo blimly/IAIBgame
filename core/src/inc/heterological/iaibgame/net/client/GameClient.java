@@ -10,15 +10,16 @@ public class GameClient {
 
     public GameClient() {
         client = new Client();
-
     }
+
     public void connect() {
         Network.register(client.getKryo());
+
         client.start();
 
         try {
             client.connect(50000, "193.40.255.23", 5201, 5200);
-            // client.connect(50000, "localhost", 5201, 5200);
+            //client.connect(50000, "localhost", 5201, 5200);
 
         } catch (IOException e) {
             e.printStackTrace();

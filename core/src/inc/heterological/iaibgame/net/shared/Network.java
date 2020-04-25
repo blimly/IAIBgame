@@ -2,25 +2,41 @@ package inc.heterological.iaibgame.net.shared;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
+import inc.heterological.iaibgame.net.shared.packets.AddEnemy;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
-import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
+import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
+import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
+import inc.heterological.iaibgame.net.shared.packets.RemoveEnemy;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
-import inc.heterological.iaibgame.net.shared.packets.UpdateEnemy;
-import inc.heterological.iaibgame.net.shared.packets.UpdateX;
-import inc.heterological.iaibgame.net.shared.packets.UpdateY;
 
-public class Network {
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+public final class Network {
 
     public static void register(Kryo kryo) {
-        kryo.register(UpdateX.class);
-        kryo.register(UpdateY.class);
+        kryo.register(Vector2.class);
+        kryo.register(HashMap.class);
+        kryo.register(Map.class);
+        kryo.register(Integer.class);
+
+        kryo.register(HashSet.class);
+
         kryo.register(AddPlayer.class);
         kryo.register(RemovePlayer.class);
         kryo.register(PlayerEntity.class);
-        kryo.register(OnlinePlayer.class);
-        kryo.register(AddPlayer.class);
-        kryo.register(UpdateEnemy.class);
-        kryo.register(Vector2.class);
+
+        kryo.register(AddEnemy.class);
+        kryo.register(RemoveEnemy.class);
+        kryo.register(EnemyEntity.class);
+
+        kryo.register(Play.class);
+        kryo.register(Play.Players.class);
+        kryo.register(Play.Enemies.class);
+        kryo.register(Play.EntitiesToBeRemoved.class);
+
     }
+
 }

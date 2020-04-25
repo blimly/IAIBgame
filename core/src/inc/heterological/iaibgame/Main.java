@@ -10,6 +10,8 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
+import inc.heterological.iaibgame.net.client.GameClient;
+import inc.heterological.iaibgame.net.server.GameServer;
 
 public class Main extends ApplicationAdapter {
     public SpriteBatch batch;
@@ -19,9 +21,11 @@ public class Main extends ApplicationAdapter {
     public static GameStateManager gameStateManager;
 
     public static int GAME_WIDTH = 640;
-    public static int GAME_HEIGHT = 489;
+    public static int GAME_HEIGHT = 480;
 
-    public boolean hasPlayedOnce;
+
+    public static GameServer server;
+    public static GameClient client;
 
     @Override
     public void create() {

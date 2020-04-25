@@ -29,10 +29,9 @@ public class Player {
     private static final int MOVE_SPEED = 200;
 
     public Player() {
-        id = this.hashCode();
-        position = new Vector2(Main.GAME_WIDTH / 2 - width / 2, Main.GAME_HEIGHT / 2 - height / 2);
+        position = new Vector2(Main.GAME_WIDTH / 2f - width / 2f, Main.GAME_HEIGHT / 2f - height / 2f);
         bounds = new Rectangle(position.x, position.y, width, height);
-        onlineBounds = new Rectangle(Main.GAME_WIDTH / 2 - width / 2, Main.GAME_HEIGHT / 2 - height / 2, width, height);
+        onlineBounds = new Rectangle(Main.GAME_WIDTH / 2f, Main.GAME_HEIGHT / 2f, width, height);
         health = 100;
         velocity = new Vector2(0, 0);
         friction = new Vector2(0, 0);

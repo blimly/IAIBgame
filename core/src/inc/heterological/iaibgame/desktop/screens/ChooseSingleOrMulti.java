@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.SelectArrow;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 
 public class ChooseSingleOrMulti extends GameState {
@@ -19,6 +20,7 @@ public class ChooseSingleOrMulti extends GameState {
     Button singleplayer;
     Button multiplayer;
     SpriteBatch batch;
+    SelectArrow arrow = new SelectArrow(15,300 ,300, 200, 100);
 
     public ChooseSingleOrMulti(GameStateManager gsm) {
         super(gsm);
@@ -40,6 +42,21 @@ public class ChooseSingleOrMulti extends GameState {
 
     @Override
     public void update(float dt) {
+        handleInput();
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            if(arrow.y == 300) {
+                stateManager.setGameState(GameStateManager.PLAY_SINGLEPLAYER);
+            }
+            if(arrow.y == 200) {
+                stateManager.setGameState(GameStateManager.LOBBY);
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            arrow.moveArrow(Input.Keys.UP);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            arrow.moveArrow(Input.Keys.DOWN);
+        }
 
     }
 
@@ -54,6 +71,7 @@ public class ChooseSingleOrMulti extends GameState {
         batch.begin();
         singleplayer.drawButton(batch);
         multiplayer.drawButton(batch);
+        arrow.drawArrow(batch);
         batch.end();
     }
 

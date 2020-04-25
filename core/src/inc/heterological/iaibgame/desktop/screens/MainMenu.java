@@ -1,6 +1,7 @@
 package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.SelectArrow;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 
 public class MainMenu extends GameState{
@@ -18,6 +20,7 @@ public class MainMenu extends GameState{
     Button playButton;
     Button exitButton;
     SpriteBatch batch;
+    SelectArrow arrow = new SelectArrow(180,120 ,120, 30, 90);
 
     float bg_scroll_y;
 
@@ -41,7 +44,21 @@ public class MainMenu extends GameState{
 
     @Override
     public void update(float dt) {
-
+        handleInput();
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            if(arrow.y == 120) {
+                stateManager.setGameState(GameStateManager.CHOOSE_MODE);
+            }
+            if(arrow.y == 30) {
+                Gdx.app.exit();
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            arrow.moveArrow(Input.Keys.UP);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            arrow.moveArrow(Input.Keys.DOWN);
+        }
     }
 
     @Override
@@ -56,7 +73,7 @@ public class MainMenu extends GameState{
         batch.begin();
         batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 640, 0, 640, 480);
         batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 640 + 640, 0, 640, 480);
-
+        arrow.drawArrow(batch);
         playButton.drawButton(batch);
         exitButton.drawButton(batch);
         batch.end();

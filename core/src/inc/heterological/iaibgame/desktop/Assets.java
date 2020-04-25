@@ -27,6 +27,7 @@ public class Assets {
     public static Sprite exit;
     public static Sprite multiplayer;
     public static Sprite singleplayer;
+    public static Texture selectArrow;
 
     public static Sprite mainSpriteBack1;
     public static Sprite mainSpriteBack2;
@@ -85,6 +86,7 @@ public class Assets {
 
     private static void loadSprites() {
         blank = new Texture(Gdx.files.internal("images/blank.png"));
+        selectArrow = new Texture(Gdx.files.internal("images/SelectArrow.png"));
         buttons = new Texture(Gdx.files.internal("ui/buttons.png"));
         play = new Sprite(new TextureRegion(buttons, 0, 0, 64, 24));
         exit = new Sprite(new TextureRegion(buttons, 0, 24, 64, 24));

@@ -33,8 +33,8 @@ public class Enemy {
         this.maxHealth = health;
         this.sense = sense;
     }
-    public TextureRegion getCurrentFrame(float delta) {
-        return Assets.enemy1.getKeyFrame(delta, true);
+    public TextureRegion getCurrentFrame(float statetime) {
+        return Assets.enemy1.getKeyFrame(statetime, true);
     }
 
     public void drawEnemyAndHealthbar(SpriteBatch batch, float statetime) {

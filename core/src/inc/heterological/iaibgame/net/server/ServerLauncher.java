@@ -7,7 +7,8 @@ import java.io.IOException;
 public class ServerLauncher {
     public static void main(String[] args) {
         try {
-            Log.set(Log.LEVEL_ERROR);
+            //Log.set(Log.LEVEL_DEBUG);
+            Log.set(Log.LEVEL_INFO);
             new GameServer();
         } catch (IOException e) {
             Log.error("Could not start server.");

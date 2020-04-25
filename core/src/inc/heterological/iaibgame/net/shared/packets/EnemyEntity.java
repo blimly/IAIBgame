@@ -7,6 +7,6 @@ import java.io.Serializable;
 
 public class EnemyEntity implements Serializable {
     public Vector2 pos;
-    public int id;
+    public int id, health;
     public Connection c;
 }

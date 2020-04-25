@@ -14,14 +14,11 @@ import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.net.client.GameClient;
-import inc.heterological.iaibgame.net.shared.packets.OnlineEnemy;
-import inc.heterological.iaibgame.net.shared.packets.OnlinePlayer;
-import inc.heterological.iaibgame.net.shared.packets.UpdateX;
-import inc.heterological.iaibgame.net.shared.packets.UpdateY;
+import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
+import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
+import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,26 +30,18 @@ public class MultiplayerArena extends GameState{
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
-    public static Map<Integer, OnlinePlayer> players = new HashMap<>();
-    public static Map<Integer, OnlineEnemy> enemies = new HashMap<>();
+    public static Map<Integer, PlayerEntity> players = new HashMap<>();
+    public static Map<Integer, EnemyEntity> enemies = new HashMap<>(); // enemie positions on server
 
 
     private ArenaButton arenaButton;
     private Set<Boolean> onButton;
-
-    ArrayList<Enemy> e;
+    private Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
 
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);
         init();
         show();
-        arenaButton = new ArenaButton(480, 480);
-        onButton = new HashSet<>();
-        e = new ArrayList<>();
-        e.add(new Enemy(new Vector2(0, 0), 0, 100));
-        e.add(new Enemy(new Vector2(0, 0), 0, 100));
-        e.add(new Enemy(new Vector2(0, 0), 0, 100));
-        e.add(new Enemy(new Vector2(0, 0), 0, 100));
     }
 
     public void show() {
@@ -74,20 +63,14 @@ public class MultiplayerArena extends GameState{
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.moveDown(delta);
         }
-        camera.position.lerp(new Vector3(player.position.x + player.width / 2, player.position.y + player.height / 2, 0), (float) delta);
+        camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), (float) delta);
 
-        // move on online
-        if (player.onlineBounds.x != player.position.x) {
-            UpdateX packet = new UpdateX();
-            packet.x = (int) player.position.x;
+        // move on server
+        if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
+            PlayerEntity packet = new PlayerEntity();
+            packet.pos = player.position;
             gameClient.client.sendUDP(packet);
-            player.onlineBounds.x = player.position.x;
-        }
-        if (player.onlineBounds.y != player.position.y) {
-            UpdateY packet = new UpdateY();
-            packet.y = (int) player.position.y;
-            gameClient.client.sendUDP(packet);
-            player.onlineBounds.y = player.position.y;
+            player.onlineBounds.setPosition(player.position);
         }
     }
 
@@ -117,42 +100,31 @@ public class MultiplayerArena extends GameState{
         update();
 
         batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
-        updateOnButtons();
-        arenaButton.draw(batch, 480, 480, onButton);
-
-        Assets.font.draw(batch, "X: " + player.position.x, 5, 40);
-        Assets.font.draw(batch, "Y: " + player.position.y, 5, 20);
-        if (arenaButton.isActivated) {
-            e.get(0).position.x = 480;
-            e.get(0).position.y = 480 + 200;
-            e.get(1).position.x = 480;
-            e.get(1).position.y = 480 - 200;
-            e.get(2).position.x = 480 + 200;
-            e.get(2).position.y = 480;
-            e.get(3).position.x = 480 -200;
-            e.get(3).position.y = 480;
-
-            for (Enemy enemy : e) {
-                enemy.drawEnemyAndHealthbar(batch, stateTime);
-            }
-        }
+        //updateOnButtons();
+        //arenaButton.draw(batch, 480, 480, onButton);
 
         // draw online players
-        for (OnlinePlayer onlinePlayer : players.values()) {
-            batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.x, onlinePlayer.y, 64, 64);
+        for (PlayerEntity onlinePlayer : players.values()) {
+            batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
+        }
+
+        // draw enemies on server
+        for (EnemyEntity onlineEnemy : enemies.values()) {
+            batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
         }
 
         // draw myself
         batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y , player.width, player.height);
 
-        onButton.clear();
+        //onButton.clear();
         batch.end();
+        handleInput();
     }
 
     private void updateOnButtons() {
         onButton.add(arenaButton.playerOnButton((int) player.position.x, (int) player.position.y));
-        for (OnlinePlayer onlinePlayer : players.values()) {
-            onButton.add(arenaButton.playerOnButton(onlinePlayer.x, onlinePlayer.y));
+        for (PlayerEntity onlinePlayer : players.values()) {
+            onButton.add(arenaButton.playerOnButton((int)onlinePlayer.pos.x, (int)onlinePlayer.pos.y));
         }
     }
 
@@ -162,6 +134,11 @@ public class MultiplayerArena extends GameState{
             Gdx.app.exit();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+            RemovePlayer removePlayer = new RemovePlayer();
+            removePlayer.playerID = gameClient.client.getID();
+            gameClient.client.sendUDP(removePlayer);
+            players.clear();
+            enemies.clear();
             stateManager.setGameState(GameStateManager.MENU);
         }
     }

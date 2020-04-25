@@ -23,9 +23,9 @@ public class Player {
     private static final int MOVE_SPEED = 200;
 
     public Player() {
-        position = new Vector2(Main.GAME_WIDTH / 2 - width / 2, Main.GAME_HEIGHT / 2 - height / 2);
+        position = new Vector2(Main.GAME_WIDTH / 2f - width / 2f, Main.GAME_HEIGHT / 2f - height / 2f);
         bounds = new Rectangle(position.x, position.y, width, height);
-        onlineBounds = new Rectangle(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, width, height);
+        onlineBounds = new Rectangle(Main.GAME_WIDTH / 2f, Main.GAME_HEIGHT / 2f, width, height);
         health = 100;
         velocity = new Vector2(0, 0);
         friction = new Vector2(0, 0);
@@ -44,7 +44,7 @@ public class Player {
         position.add(0, (float) dt * MOVE_SPEED);
     }
 
-    public TextureRegion getCurrentFrame(float delta) {
-        return (TextureRegion) Assets.player.getKeyFrame(delta, true);
+    public TextureRegion getCurrentFrame(float statetime) {
+        return (TextureRegion) Assets.player.getKeyFrame(statetime, true);
     }
 }

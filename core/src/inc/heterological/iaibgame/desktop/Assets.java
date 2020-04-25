@@ -90,6 +90,7 @@ public class Assets {
         buttons = new Texture(Gdx.files.internal("ui/buttons.png"));
         play = new Sprite(new TextureRegion(buttons, 0, 0, 64, 24));
         exit = new Sprite(new TextureRegion(buttons, 0, 24, 64, 24));
+        
         singleplayer = new Sprite(new TextureRegion(buttons, 0, 48, 192, 24));
         multiplayer =  new Sprite(new TextureRegion(buttons, 0, 72, 192, 24));
 

@@ -9,4 +9,5 @@ public class PlayerEntity implements Serializable {
     public Vector2 pos;
     public int id;
     public long latency;
+    public String option;
 }

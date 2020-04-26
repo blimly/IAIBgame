@@ -10,6 +10,7 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.SelectArrow;
+import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 
 public class MainMenu extends GameState{
@@ -45,7 +46,7 @@ public class MainMenu extends GameState{
     @Override
     public void update(float dt) {
         handleInput();
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+        if (GameKeys.isPressed(GameKeys.ENTER)) {
             if(arrow.y == 120) {
                 stateManager.setGameState(GameStateManager.CHOOSE_MODE);
             }
@@ -53,11 +54,11 @@ public class MainMenu extends GameState{
                 Gdx.app.exit();
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            arrow.moveArrow(Input.Keys.UP);
+        if (GameKeys.isPressed(GameKeys.UP)) {
+            arrow.moveArrow(GameKeys.UP);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            arrow.moveArrow(Input.Keys.DOWN);
+        if (GameKeys.isPressed(GameKeys.DOWN)) {
+            arrow.moveArrow(GameKeys.DOWN);
         }
     }
 

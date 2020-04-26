@@ -10,13 +10,13 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.SelectArrow;
+import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 
 public class ChooseSingleOrMulti extends GameState {
 
     OrthographicCamera camera;
     Vector2 touch;
-
     Button singleplayer;
     Button multiplayer;
     SpriteBatch batch;
@@ -35,7 +35,6 @@ public class ChooseSingleOrMulti extends GameState {
         camera.setToOrtho(false, 640, 480);
         touch = new Vector2();
         batch = new SpriteBatch();
-
         singleplayer = new Button(526, 72, 57, 300, Assets.singleplayer);
         multiplayer = new Button(526, 72, 57, 200, Assets.multiplayer);
     }
@@ -43,7 +42,7 @@ public class ChooseSingleOrMulti extends GameState {
     @Override
     public void update(float dt) {
         handleInput();
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+        if (GameKeys.isPressed(GameKeys.ENTER)) {
             if(arrow.y == 300) {
                 stateManager.setGameState(GameStateManager.PLAY_SINGLEPLAYER);
             }
@@ -51,11 +50,11 @@ public class ChooseSingleOrMulti extends GameState {
                 stateManager.setGameState(GameStateManager.LOBBY);
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            arrow.moveArrow(Input.Keys.UP);
+        if (GameKeys.isPressed(GameKeys.UP)) {
+            arrow.moveArrow(GameKeys.UP);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            arrow.moveArrow(Input.Keys.DOWN);
+        if (GameKeys.isPressed(GameKeys.DOWN)) {
+            arrow.moveArrow(GameKeys.DOWN);
         }
 
     }

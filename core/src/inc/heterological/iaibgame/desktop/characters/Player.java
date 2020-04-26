@@ -41,6 +41,10 @@ public class Player {
 
     }
 
+    public void setChar(int charindex) {
+
+    }
+
     public void moveLeft(double dt) {
         previousState = Player.Condition.IDLE_LEFT;
         currentState = Player.Condition.MOVE_LEFT;

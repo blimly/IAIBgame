@@ -31,7 +31,7 @@ public class Bye  implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-            Assets.byeFont.draw(batch,"Bye",200, 300);
+            Assets.byeFont.draw(batch,"Bye",0, 0);
         batch.end();
     }
 

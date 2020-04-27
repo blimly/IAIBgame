@@ -106,7 +106,7 @@ public class IAIBGame extends GameState{
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(Assets.spriteBack, 0, 0, 2160, 480);
-		batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y, player.width, player.height);
+		batch.draw(player.getCurrentFrame(stateTime, Gdx.graphics.getDeltaTime()), player.position.x, player.position.y, player.width, player.height);
 		for (Enemy e : enemies) {
 			e.drawEnemyAndHealthbar(batch, stateTime);
 		}

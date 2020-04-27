@@ -28,6 +28,7 @@ public class MultiplayerArena extends GameState{
     OrthographicCamera camera;
     SpriteBatch batch;
     float stateTime;
+    float delta;
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
@@ -37,7 +38,7 @@ public class MultiplayerArena extends GameState{
 
     private ArenaButton arenaButton;
     private Set<Boolean> onButton;
-    private Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
+    private final Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
 
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);
@@ -50,23 +51,22 @@ public class MultiplayerArena extends GameState{
     }
 
     public void update() {
-        double delta = Gdx.graphics.getDeltaTime();
+        delta = Gdx.graphics.getDeltaTime();
+        stateTime += delta;
 
         if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
             player.stand();
+        } else if (GameKeys.isPressed(GameKeys.KICK)) {
+            player.kick();
+        } else if (GameKeys.isPressed(GameKeys.JAB)) {
+            player.jab();
         } else if (GameKeys.isDown(GameKeys.LEFT)) {
             player.moveLeft(delta);
         } else if (GameKeys.isDown(GameKeys.RIGHT)) {
             player.moveRight(delta);
-        } else if (GameKeys.isPressed(GameKeys.KICK)) {
-            player.kick();
-        } else if (GameKeys.isPressed(GameKeys.JAB) || !player.hasJabbed(stateTime)) {
-            player.jab();
         } else {
             player.stand();
         }
-        camera.position.lerp(new Vector3(player.position.x + player.width / 2, player.position.y + player.height / 2, 0), (float) delta);
-
         if (GameKeys.isDown(GameKeys.UP)) {
             player.moveUp(delta);
         }
@@ -74,12 +74,15 @@ public class MultiplayerArena extends GameState{
         if (GameKeys.isDown(GameKeys.DOWN)) {
             player.moveDown(delta);
         }
-        camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), (float) delta);
+
+        camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
 
         // move on server
         if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
             PlayerEntity packet = new PlayerEntity();
             packet.pos = player.position;
+            packet.currentState = player.currentState;
+            packet.facingRight = player.facingRight;
             gameClient.client.sendUDP(packet);
             player.onlineBounds.setPosition(player.position);
         }
@@ -100,7 +103,6 @@ public class MultiplayerArena extends GameState{
 
     @Override
     public void draw() {
-        stateTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -113,10 +115,11 @@ public class MultiplayerArena extends GameState{
         batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
         //updateOnButtons();
         //arenaButton.draw(batch, 480, 480, onButton);
+        Assets.font.draw(batch, player.currentState.toString(), 0, 0);
 
         // draw online players
         for (PlayerEntity onlinePlayer : players.values()) {
-            batch.draw(player.getCurrentFrame(stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
+            batch.draw(player.getCurrentFrame(stateTime, delta), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
         }
 
         // draw enemies on server
@@ -125,7 +128,11 @@ public class MultiplayerArena extends GameState{
         }
 
         // draw myself
-        batch.draw(player.getCurrentFrame(stateTime), player.position.x, player.position.y , player.width, player.height);
+        if (player.facingRight) {
+            batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
+        } else {
+            batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
+        }
 
         //onButton.clear();
         batch.end();

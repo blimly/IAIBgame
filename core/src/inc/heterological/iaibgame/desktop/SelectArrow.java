@@ -2,6 +2,7 @@ package inc.heterological.iaibgame.desktop;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import inc.heterological.iaibgame.desktop.managers.GameKeys;
 
 public class SelectArrow {
     int x;
@@ -18,10 +19,10 @@ public class SelectArrow {
     }
 
     public void moveArrow(int key) {
-        if(key == Input.Keys.UP && this.y + btnSeparation <= frstButtonY) {
+        if(key == GameKeys.UP && this.y + btnSeparation <= frstButtonY) {
             this.y += btnSeparation;
         }
-        if(key == Input.Keys.DOWN && this.y - btnSeparation >= lstButtonY) {
+        if(key == GameKeys.DOWN && this.y - btnSeparation >= lstButtonY) {
             this.y -= btnSeparation;
         }
     }

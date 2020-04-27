@@ -19,12 +19,29 @@ public class Assets {
 
     public static Texture blank;
 
+    public static Texture triangle;
+    public static Sprite triangleUp;
+    public static Sprite triangleDown;
+
+    public static Texture lockTex;
+    public static Sprite lock;
+
     public static Texture buttons;
     public static Sprite play;
     public static Sprite exit;
     public static Sprite multiplayer;
     public static Sprite singleplayer;
+
+    public static Texture playerTex1;
+    public static Texture playerTex2;
+    public static Texture playerTex3;
+    public static Texture playerTex4;
     public static Texture selectArrow;
+
+    public static Sprite player1_select;
+    public static Sprite player2_select;
+    public static Sprite player3_select;
+    public static Sprite player4_select;
 
     public static Sprite mainSpriteBack1;
     public static Sprite mainSpriteBack2;
@@ -82,11 +99,29 @@ public class Assets {
     }
 
     private static void loadSprites() {
+        lockTex = new Texture(Gdx.files.internal("images/lock.png"));
+        lock = new Sprite(lockTex);
         blank = new Texture(Gdx.files.internal("images/blank.png"));
+        triangle = new Texture(Gdx.files.internal("images/triangle.png"));
+        triangleUp = new Sprite(triangle);
+        triangleUp.flip(false, true);
+        triangleDown = new Sprite(triangle);
         selectArrow = new Texture(Gdx.files.internal("images/SelectArrow.png"));
         buttons = new Texture(Gdx.files.internal("ui/buttons.png"));
+        playerTex1 = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE.png"));
+        playerTex2 = new Texture(Gdx.files.internal("images/characters/MainCharacter_TWO.png"));
+        playerTex3 = new Texture(Gdx.files.internal("images/characters/MainCharacter_THREE.png"));
+        playerTex4 = new Texture(Gdx.files.internal("images/characters/MainCharacter_FOUR.png"));
         play = new Sprite(new TextureRegion(buttons, 0, 0, 64, 24));
         exit = new Sprite(new TextureRegion(buttons, 0, 24, 64, 24));
+        player1_select = new Sprite(new TextureRegion(playerTex1, 0, 0, 16, 10));
+        player2_select = new Sprite(new TextureRegion(playerTex2, 0, 0, 16, 10));
+        player3_select = new Sprite(new TextureRegion(playerTex3, 0, 0, 16, 10));
+        player4_select = new Sprite(new TextureRegion(playerTex4, 0, 0, 16, 10));
+        Assets.player1_select.flip(true,false);
+        Assets.player2_select.flip(true,false);
+        Assets.player3_select.flip(true,false);
+        Assets.player4_select.flip(true,false);
         
         singleplayer = new Sprite(new TextureRegion(buttons, 0, 48, 192, 24));
         multiplayer =  new Sprite(new TextureRegion(buttons, 0, 72, 192, 24));

@@ -86,10 +86,10 @@ public class IAIBGame extends GameState{
 			player.moveRight(delta);
 			camera.position.x += 200 * delta;
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			player.moveUp(delta);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			player.moveDown(delta);
 		}
 	}

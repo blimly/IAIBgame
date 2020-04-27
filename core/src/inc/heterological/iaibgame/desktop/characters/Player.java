@@ -5,15 +5,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.managers.GameKeys;
 
 
 public class Player {
-    public enum Condition {IDLE_RIGHT, IDLE_LEFT, MOVE_LEFT, MOVE_RIGHT, JAB_RIGHT, JAB_LEFT, KICK_RIGHT, KICK_LEFT}
-    public Condition previousState;
-    public Condition currentState;
+    private static final int MOVE_SPEED = 200;
     public final Rectangle bounds;
     public final Rectangle onlineBounds;
+    public Condition currentState;
     public int width = 64;
     public int height = 64;
     public int id;
@@ -26,7 +24,8 @@ public class Player {
     public String username;
     public boolean onButton;
 
-    private static final int MOVE_SPEED = 200;
+    public boolean facingRight;
+    private float attackStateTime = 0;
 
     public Player() {
         position = new Vector2(Main.GAME_WIDTH / 2f - width / 2f, Main.GAME_HEIGHT / 2f - height / 2f);
@@ -36,83 +35,74 @@ public class Player {
         velocity = new Vector2(0, 0);
         friction = new Vector2(0, 0);
         //ANIMATION
-        previousState = Condition.IDLE_RIGHT;
-        currentState = Condition.IDLE_RIGHT;
+        currentState = Condition.IDLE;
+        facingRight = true;
 
     }
 
-    public void moveLeft(double dt) {
-        previousState = Player.Condition.IDLE_LEFT;
-        currentState = Player.Condition.MOVE_LEFT;
-        position.add((float) dt * -MOVE_SPEED, 0);
+    public void moveLeft(float dt) {
+        facingRight = false;
+        currentState = Condition.MOVE;
+        position.add(dt * -MOVE_SPEED, 0);
+    }
 
-        if (!GameKeys.isDown(GameKeys.LEFT)) {
-            currentState = Condition.IDLE_LEFT;
-        }
+    public void moveRight(float dt) {
+        facingRight = true;
+        currentState = Condition.MOVE;
+        position.add(dt * MOVE_SPEED, 0);
     }
-    public void moveRight(double dt) {
-        previousState = Player.Condition.IDLE_RIGHT;
-        currentState = Player.Condition.MOVE_RIGHT;
-        position.add((float) dt * MOVE_SPEED, 0);
-        if (!GameKeys.isDown(GameKeys.RIGHT)) {
-            currentState = Condition.IDLE_RIGHT;
-        }
+
+    public void moveUp(float dt) {
+        currentState = Condition.MOVE;
+        position.add(0, dt * MOVE_SPEED);
     }
-    public void moveUp(double dt) {
-        if (previousState == Condition.IDLE_RIGHT) {
-            currentState = Condition.MOVE_RIGHT;
-            if (!GameKeys.isDown(GameKeys.UP)) {
-                currentState = Condition.IDLE_RIGHT;
-            }
-        } else if (previousState == Condition.IDLE_LEFT) {
-            currentState = Condition.MOVE_LEFT;
-            if (!GameKeys.isDown(GameKeys.UP)) {
-                currentState = Condition.IDLE_LEFT;
-            }
-        }
-        position.add(0, (float) dt * MOVE_SPEED);
+
+    public void moveDown(float dt) {
+        currentState = Condition.MOVE;
+        position.add(0, dt * -MOVE_SPEED);
     }
-    public void moveDown(double dt) {
-        if (previousState == Condition.IDLE_RIGHT) {
-            currentState = Condition.MOVE_RIGHT;
-            if (!GameKeys.isDown(GameKeys.DOWN)) {
-                currentState = Condition.IDLE_RIGHT;
-            }
-        } else if (previousState == Condition.IDLE_LEFT) {
-            currentState = Condition.MOVE_LEFT;
-            if (!GameKeys.isDown(GameKeys.DOWN)) {
-                currentState = Condition.IDLE_LEFT;
-            }
-        }
-        position.add(0, (float) dt * -MOVE_SPEED);
-    }
+
     public void jab() {
-        if (previousState == Condition.IDLE_LEFT) {
-            currentState = Condition.JAB_LEFT;
-        } else { currentState = Condition.JAB_RIGHT; }
-
-
+        currentState = Condition.JAB;
     }
+
     public void kick() {
-        if (previousState == Condition.IDLE_LEFT) {
-            currentState = Condition.KICK_LEFT;
-        } else { currentState = Condition.KICK_RIGHT; }
+        currentState = Condition.KICK;
     }
 
     public void stand() {
-        if (previousState == Player.Condition.IDLE_RIGHT) {
-            currentState = Player.Condition.IDLE_RIGHT;
-        } else {
-            currentState = Player.Condition.IDLE_LEFT;
+        if (currentState != Condition.JAB && currentState != Condition.KICK) {
+            currentState = Condition.IDLE;
         }
     }
 
-    public boolean hasJabbed(float stateTime) {
-        return Assets.playerJab.isAnimationFinished(stateTime);
-    }
+    public TextureRegion getCurrentFrame(float stateTime, float delta) {
 
-    public TextureRegion getCurrentFrame(float delta) {
-
+        switch (currentState) {
+            case JAB:
+                if (attackStateTime < Assets.playerJab.getAnimationDuration()) {
+                    attackStateTime += delta;
+                    return Assets.playerJab.getKeyFrame(attackStateTime, false);
+                } else {
+                    currentState = Condition.IDLE;
+                    attackStateTime = 0;
+                }
+            case KICK:
+                if (attackStateTime < Assets.playerKick.getAnimationDuration()) {
+                    attackStateTime += delta;
+                    return Assets.playerKick.getKeyFrame(attackStateTime, false);
+                } else {
+                    currentState = Condition.IDLE;
+                    attackStateTime = 0;
+                }
+            case MOVE:
+                return Assets.playerMove.getKeyFrame(stateTime, true);
+            case IDLE:
+                return Assets.playerIdle.getKeyFrame(stateTime, true);
+            default:
+                break;
+        }
+/*
         if (currentState == Condition.MOVE_RIGHT || currentState == Condition.MOVE_LEFT) {
             return Assets.playerMove.getKeyFrame(delta, true);
         } else if (currentState == Condition.JAB_RIGHT || currentState == Condition.JAB_LEFT) {
@@ -122,5 +112,10 @@ public class Player {
         } else {
             return Assets.playerIdle.getKeyFrame(delta, true);
         }
+
+ */
+        return null;
     }
+
+    public enum Condition {IDLE, MOVE, JAB, KICK}
 }

@@ -9,11 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class Assets {
@@ -135,8 +132,8 @@ public class Assets {
 
         playerIdle = new Animation<>(0.15f, playerIdleSprites);
         playerMove = new Animation<>(0.15f, playerMoveSprites);
-        playerKick = new Animation<>(0.5f, playerKickSprites);
-        playerJab = new Animation<>(0.5f, playerJabSprites);
+        playerKick = new Animation<>(0.1f, playerKickSprites);
+        playerJab = new Animation<>(0.05f, playerJabSprites);
 
         enemy1 = new Animation<>(0.3f, enemy1_temp[0]);
 

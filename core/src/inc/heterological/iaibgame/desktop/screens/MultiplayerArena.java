@@ -26,7 +26,6 @@ import java.util.*;
 public class MultiplayerArena extends GameState{
 
     OrthographicCamera camera;
-    SpriteBatch batch;
     float stateTime;
     float delta;
     // online stuff
@@ -92,7 +91,6 @@ public class MultiplayerArena extends GameState{
     public void init() {
         stateTime = 0f;
         gameClient = new GameClient();
-        batch = new SpriteBatch();
         camera = Main.camera;
     }
 
@@ -107,35 +105,35 @@ public class MultiplayerArena extends GameState{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        Main.batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();
+        Main.batch.begin();
         update();
 
-        batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
+        Main.batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
         //updateOnButtons();
         //arenaButton.draw(batch, 480, 480, onButton);
-        Assets.font.draw(batch, player.currentState.toString(), 0, 0);
+        Assets.font.draw(Main.batch, player.currentState.toString(), 0, 0);
 
         // draw online players
         for (PlayerEntity onlinePlayer : players.values()) {
-            batch.draw(player.getCurrentFrame(stateTime, delta), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
+            Main.batch.draw(player.getCurrentFrame(stateTime, delta), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
         }
 
         // draw enemies on server
         for (EnemyEntity onlineEnemy : enemies.values()) {
-            batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+            Main.batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
         }
 
         // draw myself
         if (player.facingRight) {
-            batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
+            Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
         } else {
-            batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
+            Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
         }
 
         //onButton.clear();
-        batch.end();
+        Main.batch.end();
         handleInput();
     }
 

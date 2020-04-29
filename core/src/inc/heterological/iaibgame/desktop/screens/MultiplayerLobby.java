@@ -14,7 +14,6 @@ public class MultiplayerLobby extends GameState {
 
 
     OrthographicCamera camera;
-    SpriteBatch batch;
 
     public MultiplayerLobby(GameStateManager gsm) {
         super(gsm);
@@ -24,10 +23,8 @@ public class MultiplayerLobby extends GameState {
 
     @Override
     public void init() {
-        Assets.load();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
-        batch = new SpriteBatch();
     }
 
     @Override
@@ -40,11 +37,11 @@ public class MultiplayerLobby extends GameState {
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        Assets.font.draw(batch, "Multiplayer Lobby", 100, Main.GAME_HEIGHT - 100);
-        Assets.font.draw(batch, "Press ENTER to go to multiplayer Arena.", 100, Main.GAME_HEIGHT - 300);
-        batch.end();
+        Main.batch.setProjectionMatrix(camera.combined);
+        Main.batch.begin();
+        Assets.font.draw(Main.batch, "Multiplayer Lobby", 100, Main.GAME_HEIGHT - 100);
+        Assets.font.draw(Main.batch, "Press ENTER to go to multiplayer Arena.", 100, Main.GAME_HEIGHT - 300);
+        Main.batch.end();
 
     }
 

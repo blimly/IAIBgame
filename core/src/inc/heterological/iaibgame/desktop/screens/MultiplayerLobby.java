@@ -14,7 +14,6 @@ public class MultiplayerLobby extends GameState {
 
 
     OrthographicCamera camera;
-    Vector2 touch;
     SpriteBatch batch;
 
     public MultiplayerLobby(GameStateManager gsm) {
@@ -25,6 +24,7 @@ public class MultiplayerLobby extends GameState {
 
     @Override
     public void init() {
+        Assets.load();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         batch = new SpriteBatch();
@@ -40,7 +40,6 @@ public class MultiplayerLobby extends GameState {
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         Assets.font.draw(batch, "Multiplayer Lobby", 100, Main.GAME_HEIGHT - 100);
@@ -52,7 +51,7 @@ public class MultiplayerLobby extends GameState {
     @Override
     public void handleInput() {
         if (GameKeys.isPressed(GameKeys.BACKSPACE)) {
-            stateManager.setGameState(GameStateManager.CHOOSE_MODE);
+            stateManager.setGameState(GameStateManager.MENU);
         }
         if (GameKeys.isPressed(GameKeys.ENTER)) {
             stateManager.setGameState(GameStateManager.PLAY_MULTIPLAYER);

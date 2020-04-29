@@ -48,7 +48,7 @@ public class MainMenu extends GameState{
         handleInput();
         if (GameKeys.isPressed(GameKeys.ENTER)) {
             if(arrow.y == 120) {
-                stateManager.setGameState(GameStateManager.CHOOSE_MODE);
+                stateManager.setGameState(GameStateManager.LOBBY);
             }
             if(arrow.y == 30) {
                 Gdx.app.exit();
@@ -85,7 +85,7 @@ public class MainMenu extends GameState{
         if(Gdx.input.isTouched()) {
             touch.set(Gdx.input.getX(), Main.GAME_HEIGHT - Gdx.input.getY());
             if(playButton.clicked(touch)) {
-                stateManager.setGameState(GameStateManager.CHOOSE_MODE);
+                stateManager.setGameState(GameStateManager.LOBBY);
             }
             if(exitButton.clicked(touch)) {
                 Gdx.app.exit();

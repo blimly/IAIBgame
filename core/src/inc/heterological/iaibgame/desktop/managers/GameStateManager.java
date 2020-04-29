@@ -9,8 +9,6 @@ public class GameStateManager {
     private GameState gameState;
 
     public static final int MENU = 0;
-    public static final int CHOOSE_MODE = 2;
-    public static final int PLAY_SINGLEPLAYER = 3;
     public static final int LOBBY = 4;
     public static final int PLAY_MULTIPLAYER = 5;
 
@@ -23,12 +21,6 @@ public class GameStateManager {
 
         if (state == MENU) {
             gameState = new MainMenu(this);
-        }
-        if (state == CHOOSE_MODE) {
-            gameState = new ChooseSingleOrMulti(this);
-        }
-        if (state == PLAY_SINGLEPLAYER) {
-            gameState = new IAIBGame(this);
         }
         if (state == LOBBY) {
             gameState = new MultiplayerLobby(this);

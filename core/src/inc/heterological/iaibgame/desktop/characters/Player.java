@@ -102,18 +102,6 @@ public class Player {
             default:
                 break;
         }
-/*
-        if (currentState == Condition.MOVE_RIGHT || currentState == Condition.MOVE_LEFT) {
-            return Assets.playerMove.getKeyFrame(delta, true);
-        } else if (currentState == Condition.JAB_RIGHT || currentState == Condition.JAB_LEFT) {
-            return Assets.playerJab.getKeyFrame(delta, false);
-        } else if (currentState == Condition.KICK_RIGHT || currentState == Condition.KICK_LEFT) {
-            return Assets.playerKick.getKeyFrame(delta, false);
-        } else {
-            return Assets.playerIdle.getKeyFrame(delta, true);
-        }
-
- */
         return null;
     }
 

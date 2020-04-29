@@ -93,9 +93,6 @@ public class Assets {
         parameter.size = 24;
         font = gen.generateFont(parameter);
         font.setColor(Color.valueOf("39c6e6"));
-        parameter.size = 240;
-        byeFont = gen.generateFont(parameter);
-        byeFont.setColor(Color.valueOf("39c6e6"));
     }
 
     private static void loadSprites() {
@@ -190,6 +187,5 @@ public class Assets {
     }
 
     public static void dispose() {
-        font.dispose();
     }
 }

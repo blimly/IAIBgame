@@ -20,7 +20,6 @@ public class MainMenu extends GameState{
     Vector2 touch;
     Button playButton;
     Button exitButton;
-    SpriteBatch batch;
     SelectArrow arrow = new SelectArrow(180,120 ,120, 30, 90);
 
     float bg_scroll_y;
@@ -33,11 +32,9 @@ public class MainMenu extends GameState{
 
     @Override
     public void init() {
-        Assets.load();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         touch = new Vector2();
-        batch = new SpriteBatch();
         playButton = new Button(64 * 3, 24 * 3, 235, 120, Assets.play);
         exitButton = new Button(64 * 3, 24 * 3, 235, 30, Assets.exit);
         bg_scroll_y = 0;
@@ -70,14 +67,14 @@ public class MainMenu extends GameState{
         handleInput();
         bg_scroll_y -= 20 * Gdx.graphics.getDeltaTime();
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 640, 0, 640, 480);
-        batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 640 + 640, 0, 640, 480);
-        arrow.drawArrow(batch);
-        playButton.drawButton(batch);
-        exitButton.drawButton(batch);
-        batch.end();
+        Main.batch.setProjectionMatrix(camera.combined);
+        Main.batch.begin();
+        Main.batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 640, 0, 640, 480);
+        Main.batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 640 + 640, 0, 640, 480);
+        arrow.drawArrow(Main.batch);
+        playButton.drawButton(Main.batch);
+        exitButton.drawButton(Main.batch);
+        Main.batch.end();
     }
 
     @Override

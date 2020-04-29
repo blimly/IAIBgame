@@ -14,7 +14,7 @@ import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.server.GameServer;
 
 public class Main extends ApplicationAdapter {
-    public SpriteBatch batch;
+    public static SpriteBatch batch;
     public BitmapFont font;
 
     public static OrthographicCamera camera;
@@ -29,7 +29,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
-
+        Assets.load();
         GAME_WIDTH = Gdx.graphics.getWidth();
         GAME_HEIGHT = Gdx.graphics.getHeight();
 
@@ -46,7 +46,6 @@ public class Main extends ApplicationAdapter {
     }
 
     public void render() {
-
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f); // clear color magenta
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

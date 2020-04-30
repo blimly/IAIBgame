@@ -32,11 +32,12 @@ public class GameServer {
     public void updateArena(Play.EntitiesToBeRemoved entitiesRemoved) {
         Play.Players serverPlayers = new Play.Players();
         serverPlayers.players = players;
-
+        ServerLogic.players = players;
 
         Play.Enemies enemies = new Play.Enemies();
         enemies.enemies = serverLogic.getEnemies();
         server.sendToAllUDP(enemies);
+        //Log.info(String.valueOf(enemies.enemies.get(0)));
 
         //server.sendToAllUDP(entitiesRemoved);
     }

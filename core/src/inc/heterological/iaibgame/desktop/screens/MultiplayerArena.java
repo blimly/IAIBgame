@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import inc.heterological.iaibgame.Main;
@@ -20,8 +19,9 @@ import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class MultiplayerArena extends GameState{
 
@@ -92,6 +92,8 @@ public class MultiplayerArena extends GameState{
         stateTime = 0f;
         gameClient = new GameClient();
         camera = Main.camera;
+        players.clear();
+        enemies.clear();
     }
 
     @Override
@@ -113,24 +115,30 @@ public class MultiplayerArena extends GameState{
         Main.batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
         //updateOnButtons();
         //arenaButton.draw(batch, 480, 480, onButton);
-        Assets.font.draw(Main.batch, player.currentState.toString(), 0, 0);
 
         // draw online players
         for (PlayerEntity onlinePlayer : players.values()) {
+            String posString = (int) onlinePlayer.pos.x + "  " + (int) onlinePlayer.pos.y + "";
+            Assets.font.draw(Main.batch, posString, onlinePlayer.pos.x, onlinePlayer.pos.y + 80);
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
         }
 
         // draw enemies on server
         for (EnemyEntity onlineEnemy : enemies.values()) {
+            String posString = (int) onlineEnemy.pos.x + "  " + (int) onlineEnemy.pos.y + "";
+            Assets.font.draw(Main.batch, posString, onlineEnemy.pos.x, onlineEnemy.pos.y + 80);
             Main.batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
         }
 
         // draw myself
+        Assets.font.draw(Main.batch, player.currentState.toString(), player.position.x, player.position.y + 70);
+
         if (player.facingRight) {
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
         } else {
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
         }
+        System.out.println(players.toString());
 
         //onButton.clear();
         Main.batch.end();
@@ -153,6 +161,7 @@ public class MultiplayerArena extends GameState{
             RemovePlayer removePlayer = new RemovePlayer();
             removePlayer.playerID = gameClient.client.getID();
             gameClient.client.sendUDP(removePlayer);
+            gameClient.client.close();
             players.clear();
             enemies.clear();
             stateManager.setGameState(GameStateManager.MENU);

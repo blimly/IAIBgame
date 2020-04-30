@@ -1,6 +1,5 @@
 package inc.heterological.iaibgame.desktop;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 
@@ -28,6 +27,6 @@ public class SelectArrow {
     }
 
     public void drawArrow(SpriteBatch batch) {
-        batch.draw(Assets.selectArrow, x, y + 18, 36, 36);
+        batch.draw(Assets.selectArrow, x, y + 18, 30, 30);
     }
 }

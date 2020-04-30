@@ -43,23 +43,33 @@ public class Player {
     public void moveLeft(float dt) {
         facingRight = false;
         currentState = Condition.MOVE;
+        collideWithWall();
         position.add(dt * -MOVE_SPEED, 0);
     }
 
     public void moveRight(float dt) {
         facingRight = true;
         currentState = Condition.MOVE;
+        collideWithWall();
         position.add(dt * MOVE_SPEED, 0);
     }
 
     public void moveUp(float dt) {
         currentState = Condition.MOVE;
+        collideWithWall();
         position.add(0, dt * MOVE_SPEED);
     }
 
     public void moveDown(float dt) {
         currentState = Condition.MOVE;
+        collideWithWall();
         position.add(0, dt * -MOVE_SPEED);
+    }
+
+    private void collideWithWall() {
+        if (position.dst(480, 512) > 512) {
+            position.add(new Vector2(512, 512).sub(position).setLength(5));
+        }
     }
 
     public void jab() {

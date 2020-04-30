@@ -1,12 +1,23 @@
 package inc.heterological.iaibgame.net.shared.packets;
 
 import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryonet.Connection;
 
 import java.io.Serializable;
 
 public class EnemyEntity implements Serializable {
     public Vector2 pos;
+    public Vector2 vel;
+    public Vector2 acc;
     public int id, health;
-    public Connection c;
+    //public Connection c;
+
+
+    // debugging
+    @Override
+    public String toString() {
+        return "EnemyEntity{" +
+                "pos=" + pos +
+                ", id=" + id +
+                '}';
+    }
 }

@@ -2,6 +2,7 @@ package inc.heterological.iaibgame.net.shared;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
+import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.shared.packets.AddEnemy;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
@@ -27,6 +28,7 @@ public final class Network {
         kryo.register(AddPlayer.class);
         kryo.register(RemovePlayer.class);
         kryo.register(PlayerEntity.class);
+        kryo.register(Player.Condition.class);
 
         kryo.register(AddEnemy.class);
         kryo.register(RemoveEnemy.class);

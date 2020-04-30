@@ -43,27 +43,27 @@ public class Player {
     public void moveLeft(float dt) {
         facingRight = false;
         currentState = Condition.MOVE;
-        position.add(dt * -MOVE_SPEED, 0);
         collideWithWall();
+        position.add(dt * -MOVE_SPEED, 0);
     }
 
     public void moveRight(float dt) {
         facingRight = true;
         currentState = Condition.MOVE;
-        position.add(dt * MOVE_SPEED, 0);
         collideWithWall();
+        position.add(dt * MOVE_SPEED, 0);
     }
 
     public void moveUp(float dt) {
         currentState = Condition.MOVE;
-        position.add(0, dt * MOVE_SPEED);
         collideWithWall();
+        position.add(0, dt * MOVE_SPEED);
     }
 
     public void moveDown(float dt) {
         currentState = Condition.MOVE;
-        position.add(0, dt * -MOVE_SPEED);
         collideWithWall();
+        position.add(0, dt * -MOVE_SPEED);
     }
 
     private void collideWithWall() {

@@ -1,7 +1,6 @@
 package inc.heterological.iaibgame.net.server;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.Play;
@@ -37,16 +36,14 @@ public class ServerLogic implements Disposable {
     }
 
     public void updatePlayers(Set<PlayerEntity> plyrs, Play.EntitiesToBeRemoved entitiesRemoved) {
-        for (PlayerEntity player : plyrs) {
-            if (onlineArena.getPlayers().containsValue(player)) {
-                onlineArena.getPlayers().get(player.id).pos = player.pos;
-            } else if (!players.containsValue(player)) {
-                onlineArena.removePlayer(player.id);
-            } else {
-                addPlayer(player);
+        for (PlayerEntity p : players.values()) {
+            if (!plyrs.contains(p)) {
+                logicThread.addPlayerToThread(p);
+                onlineArena.addPlayer(p);
             }
-            players.get(player.id).pos = player.pos;
+            onlineArena.getPlayers().get(p.id).pos = p.pos;
         }
+
     }
 
     public void updateEnemies(Map<Integer, EnemyEntity>  ene, Play.EntitiesToBeRemoved entitiesRemoved) {
@@ -54,7 +51,6 @@ public class ServerLogic implements Disposable {
             enemy.pos = onlineArena.getEnemies().get(enemy.id).pos;
         }
         enemies = onlineArena.getEnemies();
-        Log.info(String.valueOf(enemies.get(0).pos.x));
     }
 
     public Map<Integer, EnemyEntity> getEnemies() {
@@ -79,6 +75,10 @@ public class ServerLogic implements Disposable {
         }
 
         public void close() { running = false; }
+
+        public void addPlayerToThread(PlayerEntity player) {
+            players.add(player);
+        }
 
         @Override
         public void run() {

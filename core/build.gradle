@@ -5,11 +5,10 @@ sourceCompatibility = 1.8
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-
-
 task server(type: Jar) {
     manifest {
-        attributes 'Main-Class': "inc.heterological.iaibgame.net.server.ServerLauncher"
+        attributes 'Main-Class': "inc.heterological.iaibgame.net.server.ServerLauncher",
+                'Class-Path': configurations.runtime.files.collect {"$it.name"}.join(' ')
     }
     dependsOn configurations.runtimeClasspath
     from {
@@ -17,3 +16,4 @@ task server(type: Jar) {
     }
     with jar
 }
+server.dependsOn classes

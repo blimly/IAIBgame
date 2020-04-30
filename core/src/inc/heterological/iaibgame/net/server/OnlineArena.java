@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-
 public class OnlineArena implements Disposable {
 
     private ArenaButton arenaButton;
@@ -38,10 +35,6 @@ public class OnlineArena implements Disposable {
         // should  update enemy locations
         for (EnemyEntity enemy : enemies.values()) {
             //enemy.updatePosition()
-
-            enemy.pos.x = 480 + 100 * (float) cos(stateTime);
-            enemy.pos.y = 480 + 100 * (float) sin(stateTime);
-
         }
     }
 

@@ -92,6 +92,8 @@ public class MultiplayerArena extends GameState{
         stateTime = 0f;
         gameClient = new GameClient();
         camera = Main.camera;
+        players.clear();
+        enemies.clear();
     }
 
     @Override
@@ -136,6 +138,7 @@ public class MultiplayerArena extends GameState{
         } else {
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
         }
+        System.out.println(players.toString());
 
         //onButton.clear();
         Main.batch.end();
@@ -158,6 +161,7 @@ public class MultiplayerArena extends GameState{
             RemovePlayer removePlayer = new RemovePlayer();
             removePlayer.playerID = gameClient.client.getID();
             gameClient.client.sendUDP(removePlayer);
+            gameClient.client.close();
             players.clear();
             enemies.clear();
             stateManager.setGameState(GameStateManager.MENU);

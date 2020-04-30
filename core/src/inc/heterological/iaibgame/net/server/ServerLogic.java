@@ -36,12 +36,19 @@ public class ServerLogic implements Disposable {
     }
 
     public void updatePlayers(Set<PlayerEntity> plyrs, Play.EntitiesToBeRemoved entitiesRemoved) {
+        //Log.info(players.toString());
         for (PlayerEntity p : players.values()) {
             if (!plyrs.contains(p)) {
                 logicThread.addPlayerToThread(p);
                 onlineArena.addPlayer(p);
             }
             onlineArena.getPlayers().get(p.id).pos = p.pos;
+        }
+
+        for (PlayerEntity p : onlineArena.getPlayers().values()) {
+            if (!players.containsValue(p)) {
+                onlineArena.removePlayer(p.id);
+            }
         }
 
     }

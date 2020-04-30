@@ -2,7 +2,6 @@ package inc.heterological.iaibgame.net.server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -57,7 +56,7 @@ public class OnlineArena implements Disposable {
             //enemy.pos.add(enemySeek(enemy, playerTarget));
             enemySeek(enemy, playerTarget);
             collideWithWall(enemy.pos);
-            Log.info(String.valueOf(enemy));
+            //Log.info(String.valueOf(enemy));
         }
     }
 

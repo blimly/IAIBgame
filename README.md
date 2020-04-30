@@ -1,4 +1,4 @@
-![banner](https://i.imgur.com/s8dZ8ZY.png)
+![banner](https://i.imgur.com/lkq1E2M.png)
 
 ## The tech
 * game library: libGDX ([tutorials](https://www.youtube.com/watch?v=6i78aqugqds&list=PLr8vdQlmR_8LKWYoIwwRiwAx1_KYBX-Xe&index=21))

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
 import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -15,6 +16,7 @@ public class ServerListener extends Listener {
         // Tell everybody that new player joined
         AddPlayer addPlayer = new AddPlayer();
         addPlayer.playerID = c.getID();
+
         GameServer.server.sendToAllExceptTCP(c.getID(), addPlayer);
 
         // Add all the players who are already in game to client's multiplayer arena
@@ -24,6 +26,9 @@ public class ServerListener extends Listener {
 
         // Make the connection a new PlayerEntity in the server
         PlayerEntity player = new PlayerEntity();
+
+        player.currentState = Player.Condition.IDLE;
+        player.facingRight = true;
         player.pos = Vector2.Zero;
         player.id = c.getID();
         GameServer.players.put(c.getID(), player);
@@ -35,6 +40,8 @@ public class ServerListener extends Listener {
         if (o instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) o;
             GameServer.players.get(c.getID()).pos = player.pos;
+            GameServer.players.get(c.getID()).currentState = player.currentState;
+            GameServer.players.get(c.getID()).facingRight = player.facingRight;
             player.id = c.getID();
             GameServer.server.sendToAllExceptTCP(c.getID(), player);
         }

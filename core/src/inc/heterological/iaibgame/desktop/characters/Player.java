@@ -115,5 +115,20 @@ public class Player {
         return null;
     }
 
+    public static TextureRegion getFrameBasedUponCondition(Condition state, float stateTime) {
+        switch (state) {
+            case KICK:
+                return Assets.playerKick.getKeyFrame(stateTime, false);
+            case JAB:
+                return Assets.playerJab.getKeyFrame(stateTime, false);
+            case IDLE:
+                return Assets.playerIdle.getKeyFrame(stateTime, true);
+            case MOVE:
+                return Assets.playerMove.getKeyFrame(stateTime, true);
+            default:
+                return Assets.playerIdle.getKeyFrame(stateTime, true);
+        }
+    }
+
     public enum Condition {IDLE, MOVE, JAB, KICK}
 }

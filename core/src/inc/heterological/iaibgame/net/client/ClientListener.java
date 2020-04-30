@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.screens.MultiplayerArena;
 import inc.heterological.iaibgame.net.shared.packets.AddEnemy;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
@@ -21,6 +22,8 @@ public class ClientListener extends Listener {
             AddPlayer packet = (AddPlayer) o;
             PlayerEntity newPlayer = new PlayerEntity();
             newPlayer.pos = new Vector2(Main.GAME_HEIGHT / 2f, Main.GAME_WIDTH / 2f);
+            newPlayer.currentState = Player.Condition.IDLE;
+            newPlayer.facingRight = true;
             MultiplayerArena.players.put(packet.playerID, newPlayer);
             Log.info("Player " + packet.playerID + " joined the game");
         } else if (o instanceof RemovePlayer) {
@@ -30,6 +33,9 @@ public class ClientListener extends Listener {
         } else if (o instanceof PlayerEntity) {
             PlayerEntity packet = (PlayerEntity) o;
             MultiplayerArena.players.get(packet.id).pos = packet.pos;
+            MultiplayerArena.players.get(packet.id).facingRight = packet.facingRight;
+            MultiplayerArena.players.get(packet.id).currentState = packet.currentState;
+
         }
 
         else if (o instanceof Play.Players) {

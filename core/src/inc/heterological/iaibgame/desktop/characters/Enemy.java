@@ -13,7 +13,7 @@ public class Enemy {
     public float currentHealth;
     public float maxHealth;
     protected Healthbar healthbar = new Healthbar(this);
-    private boolean alive = true;
+    public boolean alive = true;
 
     public float getCurrentHealth() {
         return currentHealth;

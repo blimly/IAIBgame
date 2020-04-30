@@ -30,6 +30,10 @@ public class GameStateManager {
         }
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
     public void update(float dt) {
         gameState.update(dt);
     }

@@ -77,14 +77,15 @@ public class MultiplayerArena extends GameState{
         camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
 
         // move on server
-        if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
+        //if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
             PlayerEntity packet = new PlayerEntity();
             packet.pos = player.position;
-            packet.currentState = player.currentState;
             packet.facingRight = player.facingRight;
+            packet.currentState = player.currentState;
             gameClient.client.sendUDP(packet);
             player.onlineBounds.setPosition(player.position);
-        }
+        //}
+
     }
 
     @Override
@@ -120,7 +121,12 @@ public class MultiplayerArena extends GameState{
         for (PlayerEntity onlinePlayer : players.values()) {
             String posString = (int) onlinePlayer.pos.x + "  " + (int) onlinePlayer.pos.y + "";
             Assets.font.draw(Main.batch, posString, onlinePlayer.pos.x, onlinePlayer.pos.y + 80);
-            Main.batch.draw(player.getCurrentFrame(stateTime, delta), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
+            System.out.println(onlinePlayer.currentState);
+            if (onlinePlayer.facingRight) {
+                Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
+            } else {
+                Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x + 64, onlinePlayer.pos.y, -64, 64);
+            }
         }
 
         // draw enemies on server
@@ -138,7 +144,7 @@ public class MultiplayerArena extends GameState{
         } else {
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
         }
-        System.out.println(players.toString());
+        //System.out.println(players.toString());
 
         //onButton.clear();
         Main.batch.end();

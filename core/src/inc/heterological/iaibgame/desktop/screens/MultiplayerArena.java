@@ -74,6 +74,8 @@ public class MultiplayerArena extends GameState{
             player.moveDown(delta);
         }
 
+        player.updatePlayerPhysics();
+
         camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
 
         // move on server

@@ -36,7 +36,7 @@ public class Player {
         health = 100;
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 0);
-        friction = 0.95f;
+        friction = 0.90f;
         //ANIMATION
         currentState = Condition.IDLE;
         facingRight = true;
@@ -77,14 +77,15 @@ public class Player {
     public void updatePlayerPhysics() {
         velocity.add(acceleration);
         velocity.limit(MOVE_SPEED);
-        velocity.scl(0.9f);
+        velocity.scl(friction);
         position.add(velocity);
         acceleration.scl(0, 0);
     }
 
     private void collideWithWall() {
         if (position.dst(480, 512) > 512) {
-            position.add(new Vector2(512, 512).sub(position).setLength(5));
+            velocity.scl(-0.5f);
+            acceleration.add(new Vector2(512, 512).sub(position).setLength(1f));
         }
     }
 

@@ -139,7 +139,7 @@ public class MultiplayerArena extends GameState{
         }
 
         // draw myself
-        Assets.font.draw(Main.batch, player.currentState.toString(), player.position.x, player.position.y + 70);
+        //Assets.font.draw(Main.batch, player.currentState.toString(), player.position.x, player.position.y + 70);
 
         if (player.facingRight) {
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);

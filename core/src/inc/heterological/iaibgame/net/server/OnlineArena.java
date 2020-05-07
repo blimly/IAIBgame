@@ -2,15 +2,16 @@ package inc.heterological.iaibgame.net.server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
+import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OnlineArena implements Disposable {
 
@@ -24,6 +25,8 @@ public class OnlineArena implements Disposable {
     private Vector2 playerTarget;
     EnemyEntity entity;
 
+    public static Set<Integer> enemiesToRemove = new HashSet<>();
+
     private Vector2 center;
     private static final int PLAYER_RADIUS = 20;
     private static final int ENEMY_PERCEPTION_RADIUS = 400;
@@ -33,15 +36,16 @@ public class OnlineArena implements Disposable {
 
     public OnlineArena() {
         newEnemyId = 0;
-        enemies = new HashMap<>();
-        for (int i = 0; i < 10; i++ ) {
-            spawnEnemy(100 + i * 100, 800);
+        enemies = new ConcurrentHashMap<>();
+        for (int i = 0; i < 25; i++ ) {
+            spawnEnemy(100 + i * 2, 800);
         }
-        players = new HashMap<>();
+        players = new ConcurrentHashMap<>();
     }
 
     private void spawnEnemy(float x, float y) {
         entity = new EnemyEntity();
+        entity.health = 100;
         entity.pos = new Vector2(x, y);
         entity.vel = new Vector2(0, 1);
         entity.acc = Vector2.Zero;
@@ -59,6 +63,9 @@ public class OnlineArena implements Disposable {
             //Log.info(enemy.target.toString());
             collideWithWall(enemy);
             collideWithOtherEnemies(enemy);
+            attackPlayers(enemy);
+            getHit(enemy);
+            killIfDead(enemy);
 
             enemy.vel.add(enemy.acc);
             enemy.vel.clamp(0, maxSpeed);
@@ -67,6 +74,59 @@ public class OnlineArena implements Disposable {
             //Log.info(enemy.toString());
             //collideWithPlayers(enemy);
         }
+    }
+
+    public void killIfDead(EnemyEntity enemy) {
+        if (enemy.health <= 0) {
+            enemies.remove(enemy.id);
+        }
+    }
+
+    public void getHit(EnemyEntity enemy) {
+        float hitRadius = PLAYER_RADIUS * 3f;
+        int kickAngle = 140 / 2; // 100 degrees in front of player
+        int jabAngle = 90 / 2;
+
+        for (PlayerEntity player : players.values()) {
+            float d = player.pos.dst(enemy.pos);
+
+            if (d > 0 && d < hitRadius) {
+                Vector2 diff = new Vector2(enemy.pos.cpy()).sub(player.pos);
+                if (player.currentState == Player.Condition.KICK) {
+                    if (player.facingRight && (diff.angle() < kickAngle || diff.angle() > (360 - kickAngle))) {
+                        diff.setLength(hitRadius - d);
+                        enemy.health -= diff.len() / 10;
+                        diff.scl(20f);
+                        enemy.acc.add(diff);
+                    }
+                    if (!player.facingRight && diff.angle() > (180 - kickAngle) && diff.angle() < (180 + kickAngle)) {
+                        diff.setLength(hitRadius - d);
+                        enemy.health -= diff.len() / 10;
+                        diff.scl(20f);
+                        enemy.acc.add(diff);
+                    }
+                }
+                if (player.currentState == Player.Condition.JAB) {
+                    if (player.facingRight && (diff.angle() < jabAngle || diff.angle() > (360 - jabAngle))) {
+                        diff.setLength(hitRadius - d);
+                        enemy.health -= diff.len() / 5;
+                        diff.scl(10f);
+                        enemy.acc.add(diff);
+                    }
+                    if (!player.facingRight && diff.angle() > (180 - jabAngle) && diff.angle() < (180 + jabAngle)) {
+                        diff.setLength(hitRadius - d);
+                        enemy.health -= diff.len() / 5;
+                        diff.scl(10f);
+                        enemy.acc.add(diff);
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void attackPlayers(EnemyEntity entity) {
+
     }
 
     public void getNearestTarget(EnemyEntity entity) {
@@ -106,7 +166,6 @@ public class OnlineArena implements Disposable {
                 diff.nor();
                 separation.add(diff);
                 count++;
-                Log.info("Enemies near. Dist: " + d);
             }
         }
         if (count > 0) {

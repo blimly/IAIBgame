@@ -6,16 +6,16 @@ import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerLogic implements Disposable {
     private OnlineArena onlineArena;
     private ServerLogicThread logicThread;
 
-    public static Map<Integer, PlayerEntity> players = new HashMap<>();
-    public static Map<Integer, EnemyEntity> enemies = new HashMap<>();
+    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
+    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>();
 
     public void loadArena() {
         if (onlineArena != null) {
@@ -57,6 +57,7 @@ public class ServerLogic implements Disposable {
         for (EnemyEntity enemy : ene.values()) {
             enemy.pos = onlineArena.getEnemies().get(enemy.id).pos;
         }
+        entitiesRemoved.enemies.addAll(OnlineArena.enemiesToRemove);
         enemies = onlineArena.getEnemies();
     }
 

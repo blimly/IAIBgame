@@ -14,12 +14,14 @@ import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class Network {
 
     public static void register(Kryo kryo) {
         kryo.register(Vector2.class);
         kryo.register(HashMap.class);
+        kryo.register(ConcurrentHashMap.class);
         kryo.register(Map.class);
         kryo.register(Integer.class);
 

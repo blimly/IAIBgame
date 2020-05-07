@@ -62,11 +62,19 @@ public class ClientListener extends Listener {
             MultiplayerArena.players.remove(packet.enemyId);
         }
 
-
-
         else if (o instanceof Play.Enemies) {
             Play.Enemies packet = (Play.Enemies) o;
             MultiplayerArena.enemies = packet.enemies;
+        }
+
+        else if (o instanceof Play.EntitiesToBeRemoved) {
+            Play.EntitiesToBeRemoved packet = (Play.EntitiesToBeRemoved) o;
+            for (Integer enemyID : packet.enemies) {
+                MultiplayerArena.enemies.remove(enemyID);
+            }
+            for (Integer playerID : packet.players) {
+                MultiplayerArena.players.remove(playerID);
+            }
         }
 
     }

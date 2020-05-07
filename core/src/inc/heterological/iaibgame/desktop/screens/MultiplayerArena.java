@@ -133,13 +133,15 @@ public class MultiplayerArena extends GameState{
 
         // draw enemies on server
         for (EnemyEntity onlineEnemy : enemies.values()) {
-            String posString = (int) onlineEnemy.pos.x + "  " + (int) onlineEnemy.pos.y + "";
-            Assets.font.draw(Main.batch, posString, onlineEnemy.pos.x, onlineEnemy.pos.y + 80);
-            Main.batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+            //String posString = (int) onlineEnemy.pos.x + "  " + (int) onlineEnemy.pos.y + "";
+            if (onlineEnemy.health > 0) {
+                Assets.font.draw(Main.batch, onlineEnemy.health + "", onlineEnemy.pos.x, onlineEnemy.pos.y + 80);
+                Main.batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+            }
         }
 
         // draw myself
-        //Assets.font.draw(Main.batch, player.currentState.toString(), player.position.x, player.position.y + 70);
+        Assets.font.draw(Main.batch, player.health  +  "", player.position.x, player.position.y + 80);
 
         if (player.facingRight) {
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);

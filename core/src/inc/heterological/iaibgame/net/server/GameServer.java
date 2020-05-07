@@ -8,14 +8,14 @@ import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GameServer {
 
     static Server server;
-    public static Map<Integer, PlayerEntity> players = new HashMap<>();
+    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
     private ServerLogic serverLogic;
 
     public GameServer() throws IOException {
@@ -39,7 +39,7 @@ public class GameServer {
         server.sendToAllUDP(enemies);
         //Log.info(String.valueOf(enemies.enemies.get(0)));
 
-        //server.sendToAllUDP(entitiesRemoved);
+        server.sendToAllUDP(entitiesRemoved);
     }
 
     public void onStartGame() {

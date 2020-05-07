@@ -26,6 +26,7 @@ public class OnlineArena implements Disposable {
 
     private Vector2 center;
     private static final int PLAYER_RADIUS = 20;
+    private static final int ENEMY_PERCEPTION_RADIUS = 400;
 
     private float maxSpeed = 5f;
     private float maxForce = 0.20f;
@@ -71,6 +72,7 @@ public class OnlineArena implements Disposable {
     public void getNearestTarget(EnemyEntity entity) {
         entity.target = players.values().stream()
                 .map(p -> p.pos)
+                .filter(p -> p.dst(entity.pos) < ENEMY_PERCEPTION_RADIUS)
                 .min(Comparator.comparing(p -> p.dst(entity.pos)))
                 .orElse(center.cpy());
     }

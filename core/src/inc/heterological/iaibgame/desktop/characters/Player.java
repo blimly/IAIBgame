@@ -36,7 +36,7 @@ public class Player {
         health = 100;
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 0);
-        friction = 0.90f;
+        friction = 0.93f;
         //ANIMATION
         currentState = Condition.IDLE;
         facingRight = true;
@@ -45,36 +45,28 @@ public class Player {
     public void moveLeft(float dt) {
         facingRight = false;
         currentState = Condition.MOVE;
-        collideWithWall();
-        //position.add(dt * -MOVE_SPEED, 0);
         acceleration.add(dt * -MOVE_SPEED, 0);
     }
 
     public void moveRight(float dt) {
         facingRight = true;
         currentState = Condition.MOVE;
-        collideWithWall();
-        //position.add(dt * MOVE_SPEED, 0);
         acceleration.add(dt * MOVE_SPEED, 0);
     }
 
     public void moveUp(float dt) {
         currentState = Condition.MOVE;
-        collideWithWall();
-        //position.add(0, dt * MOVE_SPEED);
         acceleration.add(0, dt * MOVE_SPEED);
     }
 
     public void moveDown(float dt) {
         currentState = Condition.MOVE;
-        collideWithWall();
-        //position.add(0, dt * -MOVE_SPEED);
         acceleration.add(0, dt * -MOVE_SPEED);
-
     }
 
 
     public void updatePlayerPhysics() {
+        collideWithWall();
         velocity.add(acceleration);
         velocity.limit(MOVE_SPEED);
         velocity.scl(friction);
@@ -83,9 +75,12 @@ public class Player {
     }
 
     private void collideWithWall() {
-        if (position.dst(480, 512) > 512) {
+        float distFromCenter = position.dst(880, 912);
+        if (distFromCenter > 512) {
             velocity.scl(-0.5f);
-            acceleration.add(new Vector2(512, 512).sub(position).setLength(1f));
+            acceleration.add(new Vector2(912, 912)
+                    .sub(position)
+                    .setLength(distFromCenter - 512));
         }
     }
 
@@ -138,8 +133,6 @@ public class Player {
                 return Assets.playerKick.getKeyFrame(stateTime, false);
             case JAB:
                 return Assets.playerJab.getKeyFrame(stateTime, false);
-            case IDLE:
-                return Assets.playerIdle.getKeyFrame(stateTime, true);
             case MOVE:
                 return Assets.playerMove.getKeyFrame(stateTime, true);
             default:

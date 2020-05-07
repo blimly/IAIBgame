@@ -115,7 +115,7 @@ public class MultiplayerArena extends GameState{
         Main.batch.begin();
         update();
 
-        Main.batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
+        Main.batch.draw(Assets.mpArenaTex, 0, 0, 1824, 1824);
         //updateOnButtons();
         //arenaButton.draw(batch, 480, 480, onButton);
 

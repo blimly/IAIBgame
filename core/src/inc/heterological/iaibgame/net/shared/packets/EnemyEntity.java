@@ -8,6 +8,7 @@ public class EnemyEntity implements Serializable {
     public Vector2 pos;
     public Vector2 vel;
     public Vector2 acc;
+    public Vector2 target;
     public int id, health;
     //public Connection c;
 
@@ -18,6 +19,7 @@ public class EnemyEntity implements Serializable {
         return "EnemyEntity{" +
                 "pos=" + pos +
                 ", id=" + id +
+                ", target=" + target +
                 '}';
     }
 }

@@ -146,7 +146,7 @@ public class Assets {
 
     private static void loadAnimations() {
         textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
-        playerTex = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE.png"));
+        playerTex = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE-Sheet-newKick.png"));
         enemy1Tex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
         TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
         TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);

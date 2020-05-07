@@ -74,6 +74,8 @@ public class MultiplayerArena extends GameState{
             player.moveDown(delta);
         }
 
+        player.updatePlayerPhysics();
+
         camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
 
         // move on server
@@ -113,7 +115,7 @@ public class MultiplayerArena extends GameState{
         Main.batch.begin();
         update();
 
-        Main.batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
+        Main.batch.draw(Assets.mpArenaTex, 0, 0, 1824, 1824);
         //updateOnButtons();
         //arenaButton.draw(batch, 480, 480, onButton);
 
@@ -137,7 +139,7 @@ public class MultiplayerArena extends GameState{
         }
 
         // draw myself
-        Assets.font.draw(Main.batch, player.currentState.toString(), player.position.x, player.position.y + 70);
+        //Assets.font.draw(Main.batch, player.currentState.toString(), player.position.x, player.position.y + 70);
 
         if (player.facingRight) {
             Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);

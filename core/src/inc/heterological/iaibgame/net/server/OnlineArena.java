@@ -37,7 +37,7 @@ public class OnlineArena implements Disposable {
     public OnlineArena() {
         newEnemyId = 0;
         enemies = new ConcurrentHashMap<>();
-        for (int i = 0; i < 25; i++ ) {
+        for (int i = 0; i < 1; i++ ) {
             spawnEnemy(100 + i * 2, 800);
         }
         players = new ConcurrentHashMap<>();
@@ -50,6 +50,8 @@ public class OnlineArena implements Disposable {
         entity.vel = new Vector2(0, 1);
         entity.acc = Vector2.Zero;
         entity.target = new Vector2(5000, 5000);
+        entity.attackTimer = 0;
+        entity.attacking = false;
         enemies.put(newEnemyId, entity);
         newEnemyId++;
     }
@@ -57,22 +59,21 @@ public class OnlineArena implements Disposable {
     public void update(float delta) {
         center = new Vector2(912, 912);
         for (EnemyEntity enemy : enemies.values()) {
-
             getNearestTarget(enemy);
             enemySeek(enemy, enemy.target);
-            //Log.info(enemy.target.toString());
             collideWithWall(enemy);
             collideWithOtherEnemies(enemy);
-            attackPlayers(enemy);
             getHit(enemy);
-            killIfDead(enemy);
+            attackTarget(enemy);
+            if (enemy.health <= 0) {
+                enemies.remove(enemy.id);
+                continue;
+            }
 
             enemy.vel.add(enemy.acc);
             enemy.vel.clamp(0, maxSpeed);
             enemy.pos.add(enemy.vel);
             enemy.acc.scl(0, 0);
-            //Log.info(enemy.toString());
-            //collideWithPlayers(enemy);
         }
     }
 
@@ -82,9 +83,24 @@ public class OnlineArena implements Disposable {
         }
     }
 
+    public void attackTarget(EnemyEntity enemy) {
+        float d = enemy.pos.dst(enemy.target);
+        if (d > 0 && d < PLAYER_RADIUS * 2) {
+            if (enemy.attackTimer < 10) {
+                enemy.attackTimer++;
+                enemy.attacking = false;
+            } else {
+                enemy.attackTimer = 0;
+                enemy.attacking = true;
+            }
+        } else {
+            enemy.attacking = false;
+        }
+    }
+
     public void getHit(EnemyEntity enemy) {
         float hitRadius = PLAYER_RADIUS * 3f;
-        int kickAngle = 140 / 2; // 100 degrees in front of player
+        int kickAngle = 140 / 2; // 140 degrees in front of player
         int jabAngle = 90 / 2;
 
         for (PlayerEntity player : players.values()) {
@@ -120,12 +136,9 @@ public class OnlineArena implements Disposable {
                         enemy.acc.add(diff);
                     }
                 }
+
             }
         }
-
-    }
-
-    public void attackPlayers(EnemyEntity entity) {
 
     }
 

@@ -19,9 +19,9 @@ import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiplayerArena extends GameState{
 
@@ -31,8 +31,8 @@ public class MultiplayerArena extends GameState{
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
-    public static Map<Integer, PlayerEntity> players = new HashMap<>();
-    public static Map<Integer, EnemyEntity> enemies = new HashMap<>(); // enemie positions on server
+    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
+    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>(); // enemie positions on server
 
 
     private ArenaButton arenaButton;
@@ -80,12 +80,13 @@ public class MultiplayerArena extends GameState{
 
         // move on server
         //if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
-            PlayerEntity packet = new PlayerEntity();
-            packet.pos = player.position;
-            packet.facingRight = player.facingRight;
-            packet.currentState = player.currentState;
-            gameClient.client.sendUDP(packet);
-            player.onlineBounds.setPosition(player.position);
+        PlayerEntity packet = new PlayerEntity();
+        packet.pos = player.position;
+        packet.facingRight = player.facingRight;
+        packet.currentState = player.currentState;
+        packet.health = player.health;
+        gameClient.client.sendUDP(packet);
+        player.onlineBounds.setPosition(player.position);
         //}
 
     }
@@ -137,6 +138,11 @@ public class MultiplayerArena extends GameState{
             if (onlineEnemy.health > 0) {
                 Assets.font.draw(Main.batch, onlineEnemy.health + "", onlineEnemy.pos.x, onlineEnemy.pos.y + 80);
                 Main.batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+            }
+
+            float distToEnemy = onlineEnemy.pos.dst(player.position);
+            if (onlineEnemy.attacking && distToEnemy < 40) {
+                player.health -= (40 - distToEnemy) / 100;
             }
         }
 

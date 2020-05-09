@@ -144,6 +144,7 @@ public class OnlineArena implements Disposable {
 
     public void getNearestTarget(EnemyEntity entity) {
         entity.target = players.values().stream()
+                .filter(p -> p.health > 0)
                 .map(p -> p.pos)
                 .filter(p -> p.dst(entity.pos) < ENEMY_PERCEPTION_RADIUS)
                 .min(Comparator.comparing(p -> p.dst(entity.pos)))

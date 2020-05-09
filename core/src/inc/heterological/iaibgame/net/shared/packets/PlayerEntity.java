@@ -9,6 +9,7 @@ public class PlayerEntity implements Serializable {
 
     public Player.Condition currentState;
     public Vector2 pos;
+    public int health;
     public int id;
     public boolean facingRight;
     public long latency;

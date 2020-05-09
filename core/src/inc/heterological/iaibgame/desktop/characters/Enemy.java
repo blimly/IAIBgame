@@ -8,6 +8,9 @@ import inc.heterological.iaibgame.desktop.Healthbar;
 
 public class Enemy {
 
+    public enum ENEMY_TYPE { ZOMBIE, BOB, HEALER }
+
+
     public Vector2 position;
     public float sense;
     public float currentHealth;

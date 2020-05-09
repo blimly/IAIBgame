@@ -67,9 +67,9 @@ public class Player {
 
     public void updatePlayerPhysics() {
         collideWithWall();
-        velocity.add(acceleration);
-        velocity.limit(MOVE_SPEED);
-        velocity.scl(friction);
+        velocity.add(acceleration)
+                .limit(MOVE_SPEED)
+                .scl(friction);
         position.add(velocity);
         acceleration.scl(0, 0);
     }
@@ -127,6 +127,7 @@ public class Player {
         return null;
     }
 
+    // For animating online players
     public static TextureRegion getFrameBasedUponCondition(Condition state, float stateTime) {
         switch (state) {
             case KICK:

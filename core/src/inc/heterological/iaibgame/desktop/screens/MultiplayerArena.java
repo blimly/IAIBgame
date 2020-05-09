@@ -19,9 +19,9 @@ import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiplayerArena extends GameState{
 
@@ -31,8 +31,8 @@ public class MultiplayerArena extends GameState{
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
-    public static Map<Integer, PlayerEntity> players = new HashMap<>();
-    public static Map<Integer, EnemyEntity> enemies = new HashMap<>(); // enemie positions on server
+    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
+    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>(); // enemie positions on server
 
 
     private ArenaButton arenaButton;
@@ -52,40 +52,55 @@ public class MultiplayerArena extends GameState{
     public void update() {
         delta = Gdx.graphics.getDeltaTime();
         stateTime += delta;
+        if (player.health > 0) {
+            if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
+                player.stand();
+            } else if (GameKeys.isPressed(GameKeys.KICK)) {
+                player.kick();
+            } else if (GameKeys.isPressed(GameKeys.JAB)) {
+                player.jab();
+            } else if (GameKeys.isDown(GameKeys.LEFT)) {
+                player.moveLeft(delta);
+            } else if (GameKeys.isDown(GameKeys.RIGHT)) {
+                player.moveRight(delta);
+            } else {
+                player.stand();
+            }
+            if (GameKeys.isDown(GameKeys.UP)) {
+                player.moveUp(delta);
+            }
 
-        if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
-            player.stand();
-        } else if (GameKeys.isPressed(GameKeys.KICK)) {
-            player.kick();
-        } else if (GameKeys.isPressed(GameKeys.JAB)) {
-            player.jab();
-        } else if (GameKeys.isDown(GameKeys.LEFT)) {
-            player.moveLeft(delta);
-        } else if (GameKeys.isDown(GameKeys.RIGHT)) {
-            player.moveRight(delta);
+            if (GameKeys.isDown(GameKeys.DOWN)) {
+                player.moveDown(delta);
+            }
+
+            player.updatePlayerPhysics();
+
+            camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
         } else {
-            player.stand();
-        }
-        if (GameKeys.isDown(GameKeys.UP)) {
-            player.moveUp(delta);
-        }
-
-        if (GameKeys.isDown(GameKeys.DOWN)) {
-            player.moveDown(delta);
+            camera.position.lerp(new Vector3(912, 912, 0), delta);
+            if (camera.zoom < 2.5f) {
+                camera.zoom += delta / 10f;
+            }
         }
 
-        player.updatePlayerPhysics();
 
-        camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
+        for (EnemyEntity onlineEnemy : enemies.values()) {
+            float distToEnemy = onlineEnemy.pos.dst(player.position);
+            if (onlineEnemy.attacking && distToEnemy < 40) {
+                player.health -= (40 - distToEnemy) / 100;
+            }
+        }
 
         // move on server
         //if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
-            PlayerEntity packet = new PlayerEntity();
-            packet.pos = player.position;
-            packet.facingRight = player.facingRight;
-            packet.currentState = player.currentState;
-            gameClient.client.sendUDP(packet);
-            player.onlineBounds.setPosition(player.position);
+        PlayerEntity packet = new PlayerEntity();
+        packet.pos = player.position;
+        packet.facingRight = player.facingRight;
+        packet.currentState = player.currentState;
+        packet.health = player.health;
+        gameClient.client.sendUDP(packet);
+        player.onlineBounds.setPosition(player.position);
         //}
 
     }
@@ -141,12 +156,16 @@ public class MultiplayerArena extends GameState{
         }
 
         // draw myself
-        Assets.font.draw(Main.batch, player.health  +  "", player.position.x, player.position.y + 80);
+        if (player.health > 0) {
+            Assets.font.draw(Main.batch, player.health  +  "", player.position.x, player.position.y + 80);
 
-        if (player.facingRight) {
-            Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
+            if (player.facingRight) {
+                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
+            } else {
+                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
+            }
         } else {
-            Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
+            Assets.font.draw(Main.batch, "GAME OVER", 900, 1000);
         }
         //System.out.println(players.toString());
 

@@ -42,6 +42,8 @@ public class ServerListener extends Listener {
             GameServer.players.get(c.getID()).pos = player.pos;
             GameServer.players.get(c.getID()).currentState = player.currentState;
             GameServer.players.get(c.getID()).facingRight = player.facingRight;
+            GameServer.players.get(c.getID()).health = player.health;
+
             player.id = c.getID();
             GameServer.server.sendToAllExceptTCP(c.getID(), player);
         }

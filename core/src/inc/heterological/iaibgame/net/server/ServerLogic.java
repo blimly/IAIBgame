@@ -43,6 +43,7 @@ public class ServerLogic implements Disposable {
                 onlineArena.addPlayer(p);
             }
             onlineArena.getPlayers().get(p.id).pos = p.pos;
+            onlineArena.getPlayers().get(p.id).health = p.health;
         }
 
         for (PlayerEntity p : onlineArena.getPlayers().values()) {

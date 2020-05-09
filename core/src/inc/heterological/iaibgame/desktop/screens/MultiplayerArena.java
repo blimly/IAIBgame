@@ -110,6 +110,8 @@ public class MultiplayerArena extends GameState{
         stateTime = 0f;
         gameClient = new GameClient();
         camera = Main.camera;
+        Main.camera.zoom = 1f;
+        player = new Player();
         players.clear();
         enemies.clear();
     }

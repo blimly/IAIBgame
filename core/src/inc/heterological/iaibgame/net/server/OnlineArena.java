@@ -2,6 +2,7 @@ package inc.heterological.iaibgame.net.server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
@@ -37,7 +38,7 @@ public class OnlineArena implements Disposable {
     public OnlineArena() {
         newEnemyId = 0;
         enemies = new ConcurrentHashMap<>();
-        for (int i = 0; i < 1; i++ ) {
+        for (int i = 0; i < 2; i++ ) {
             spawnEnemy(100 + i * 2, 800);
         }
         players = new ConcurrentHashMap<>();
@@ -52,6 +53,7 @@ public class OnlineArena implements Disposable {
         entity.target = new Vector2(5000, 5000);
         entity.attackTimer = 0;
         entity.attacking = false;
+        entity.id = newEnemyId;
         enemies.put(newEnemyId, entity);
         newEnemyId++;
     }
@@ -59,6 +61,7 @@ public class OnlineArena implements Disposable {
     public void update(float delta) {
         center = new Vector2(912, 912);
         for (EnemyEntity enemy : enemies.values()) {
+            Log.info(enemy.toString());
             getNearestTarget(enemy);
             enemySeek(enemy, enemy.target);
             collideWithWall(enemy);

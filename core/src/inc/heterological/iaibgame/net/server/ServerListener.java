@@ -30,6 +30,7 @@ public class ServerListener extends Listener {
         player.currentState = Player.Condition.IDLE;
         player.facingRight = true;
         player.pos = Vector2.Zero;
+        player.health = 100;
         player.id = c.getID();
         GameServer.players.put(c.getID(), player);
 

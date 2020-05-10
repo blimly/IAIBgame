@@ -12,5 +12,4 @@ public class PlayerEntity implements Serializable {
     public int health;
     public int id;
     public boolean facingRight;
-    public long latency;
 }

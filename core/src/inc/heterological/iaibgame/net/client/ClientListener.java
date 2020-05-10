@@ -25,6 +25,7 @@ public class ClientListener extends Listener {
             newPlayer.pos = new Vector2(Main.GAME_HEIGHT / 2f, Main.GAME_WIDTH / 2f);
             newPlayer.currentState = Player.Condition.IDLE;
             newPlayer.facingRight = true;
+            newPlayer.health = 100;
             MultiplayerArena.players.put(packet.playerID, newPlayer);
             Log.info("Player " + packet.playerID + " joined the game");
         } else if (o instanceof RemovePlayer) {

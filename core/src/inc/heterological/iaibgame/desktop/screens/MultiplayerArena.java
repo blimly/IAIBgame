@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.ArenaButton;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
@@ -23,21 +23,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiplayerArena extends GameState{
+public class MultiplayerArena extends GameState {
 
-    OrthographicCamera camera;
-    float stateTime;
-    float delta;
+    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
+    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>(); // enemie positions on server
+    public static ArenaButton.ARENA_BUTTON_STATE onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
-    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
-    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>(); // enemie positions on server
-
-
+    private final Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
+    OrthographicCamera camera;
+    float stateTime;
+    float delta;
     private ArenaButton arenaButton;
     private Set<Boolean> onButton;
-    private final Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
 
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);
@@ -107,6 +106,8 @@ public class MultiplayerArena extends GameState{
 
     @Override
     public void init() {
+        arenaButton = new ArenaButton(848, 870, ArenaButton.ARENA_BUTTON_STATE.UP);
+        onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
         stateTime = 0f;
         gameClient = new GameClient();
         camera = Main.camera;
@@ -134,17 +135,19 @@ public class MultiplayerArena extends GameState{
 
         Main.batch.draw(Assets.mpArenaTex, 0, 0, 1824, 1824);
         //updateOnButtons();
-        //arenaButton.draw(batch, 480, 480, onButton);
+        arenaButton.draw(Main.batch, onlineButtonState);
 
         // draw online players
         for (PlayerEntity onlinePlayer : players.values()) {
-            String posString = (int) onlinePlayer.pos.x + "  " + (int) onlinePlayer.pos.y + "";
-            Assets.font.draw(Main.batch, posString, onlinePlayer.pos.x, onlinePlayer.pos.y + 80);
-            System.out.println(onlinePlayer.currentState);
-            if (onlinePlayer.facingRight) {
-                Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
-            } else {
-                Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x + 64, onlinePlayer.pos.y, -64, 64);
+            if (onlinePlayer.health > 0) {
+                String posString = (int) onlinePlayer.pos.x + "  " + (int) onlinePlayer.pos.y + "";
+                Assets.font.draw(Main.batch, posString, onlinePlayer.pos.x, onlinePlayer.pos.y + 80);
+                System.out.println(onlinePlayer.currentState);
+                if (onlinePlayer.facingRight) {
+                    Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
+                } else {
+                    Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x + 64, onlinePlayer.pos.y, -64, 64);
+                }
             }
         }
 
@@ -159,12 +162,12 @@ public class MultiplayerArena extends GameState{
 
         // draw myself
         if (player.health > 0) {
-            Assets.font.draw(Main.batch, player.health  +  "", player.position.x, player.position.y + 80);
+            Assets.font.draw(Main.batch, player.health + "", player.position.x, player.position.y + 80);
 
             if (player.facingRight) {
-                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
+                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y, player.width, player.height);
             } else {
-                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
+                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x + player.width, player.position.y, -player.width, player.height);
             }
         } else {
             Assets.font.draw(Main.batch, "GAME OVER", 900, 1000);
@@ -174,13 +177,6 @@ public class MultiplayerArena extends GameState{
         //onButton.clear();
         Main.batch.end();
         handleInput();
-    }
-
-    private void updateOnButtons() {
-        onButton.add(arenaButton.playerOnButton((int) player.position.x, (int) player.position.y));
-        for (PlayerEntity onlinePlayer : players.values()) {
-            onButton.add(arenaButton.playerOnButton((int)onlinePlayer.pos.x, (int)onlinePlayer.pos.y));
-        }
     }
 
     @Override

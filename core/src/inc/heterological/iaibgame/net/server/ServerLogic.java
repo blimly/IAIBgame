@@ -1,7 +1,9 @@
 package inc.heterological.iaibgame.net.server;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.ArenaButton;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -11,11 +13,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerLogic implements Disposable {
-    private OnlineArena onlineArena;
-    private ServerLogicThread logicThread;
-
     public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
     public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>();
+    public static ArenaButton.ARENA_BUTTON_STATE buttonState = ArenaButton.ARENA_BUTTON_STATE.UP;
+    public static boolean buttonChanged = false;
+    private OnlineArena onlineArena;
+    private ServerLogicThread logicThread;
 
     public void loadArena() {
         if (onlineArena != null) {
@@ -36,7 +39,6 @@ public class ServerLogic implements Disposable {
     }
 
     public void updatePlayers(Set<PlayerEntity> plyrs, Play.EntitiesToBeRemoved entitiesRemoved) {
-        //Log.info(players.toString());
         for (PlayerEntity p : players.values()) {
             if (!plyrs.contains(p)) {
                 logicThread.addPlayerToThread(p);
@@ -51,15 +53,25 @@ public class ServerLogic implements Disposable {
                 onlineArena.removePlayer(p.id);
             }
         }
-
     }
 
-    public void updateEnemies(Map<Integer, EnemyEntity>  ene, Play.EntitiesToBeRemoved entitiesRemoved) {
+    public void updateEnemies(Map<Integer, EnemyEntity> ene, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (EnemyEntity enemy : ene.values()) {
             enemy.pos = onlineArena.getEnemies().get(enemy.id).pos;
         }
         entitiesRemoved.enemies.addAll(OnlineArena.enemiesToRemove);
         enemies = onlineArena.getEnemies();
+    }
+
+    public void updateArenaButton(ArenaButton.ARENA_BUTTON_STATE state) {
+        if (onlineArena.getArenaButtonState() != state) {
+            Log.info(onlineArena.getArenaButtonState().toString());
+            logicThread.setArenaButtonState(onlineArena.getArenaButtonState());
+            buttonState = onlineArena.getArenaButtonState();
+            buttonChanged = true;
+        } else {
+            buttonChanged = false;
+        }
     }
 
     public Map<Integer, EnemyEntity> getEnemies() {
@@ -75,18 +87,26 @@ public class ServerLogic implements Disposable {
 
     public class ServerLogicThread extends Thread {
         private boolean running = true;
-        private Set<PlayerEntity> players;
-        private Map<Integer, EnemyEntity> enemies;
+        private final Set<PlayerEntity> players;
+        private final Map<Integer, EnemyEntity> enemies;
+        private ArenaButton.ARENA_BUTTON_STATE arenaButtonState;
 
-        public ServerLogicThread(Set<PlayerEntity> players, Map<Integer, EnemyEntity>  enemies) {
+        public ServerLogicThread(Set<PlayerEntity> players, Map<Integer, EnemyEntity> enemies) {
             this.players = players;
             this.enemies = enemies;
+            arenaButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
         }
 
-        public void close() { running = false; }
+        public void close() {
+            running = false;
+        }
 
         public void addPlayerToThread(PlayerEntity player) {
             players.add(player);
+        }
+
+        public void setArenaButtonState(ArenaButton.ARENA_BUTTON_STATE state) {
+            arenaButtonState = state;
         }
 
         @Override
@@ -101,6 +121,8 @@ public class ServerLogic implements Disposable {
 
                 Play.EntitiesToBeRemoved entitiesRemoved = new Play.EntitiesToBeRemoved();
 
+                // update arena button
+                updateArenaButton(arenaButtonState);
                 // update player locations in server
                 updatePlayers(players, entitiesRemoved);
                 // update the enemy AI in server

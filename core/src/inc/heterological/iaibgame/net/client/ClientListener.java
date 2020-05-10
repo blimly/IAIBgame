@@ -9,6 +9,7 @@ import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.screens.MultiplayerArena;
 import inc.heterological.iaibgame.net.shared.packets.AddEnemy;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
+import inc.heterological.iaibgame.net.shared.packets.ArenaButtonChange;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -75,6 +76,11 @@ public class ClientListener extends Listener {
             for (Integer playerID : packet.players) {
                 MultiplayerArena.players.remove(playerID);
             }
+        }
+
+        else if (o instanceof ArenaButtonChange) {
+            ArenaButtonChange packet = (ArenaButtonChange) o;
+            MultiplayerArena.onlineButtonState = packet.state;
         }
 
     }

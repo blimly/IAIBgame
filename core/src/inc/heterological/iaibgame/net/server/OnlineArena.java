@@ -2,8 +2,7 @@ package inc.heterological.iaibgame.net.server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.minlog.Log;
-import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
+import inc.heterological.iaibgame.desktop.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -13,15 +12,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class OnlineArena implements Disposable {
 
     private ArenaButton arenaButton;
-    private Set<Boolean> onButton;
     private Map<Integer, PlayerEntity> players;
     private Map<Integer, EnemyEntity> enemies;
     private int newEnemyId;
-    private double stateTime;
+    private boolean gameStarted;
 
     private Vector2 playerTarget;
     EnemyEntity entity;
@@ -36,47 +35,70 @@ public class OnlineArena implements Disposable {
     private float maxForce = 0.20f;
 
     public OnlineArena() {
+        gameStarted = false;
         newEnemyId = 0;
         enemies = new ConcurrentHashMap<>();
-        for (int i = 0; i < 2; i++ ) {
-            spawnEnemy(100 + i * 2, 800);
-        }
         players = new ConcurrentHashMap<>();
+        arenaButton = new ArenaButton(848, 870, ArenaButton.ARENA_BUTTON_STATE.UP);
     }
 
-    private void spawnEnemy(float x, float y) {
-        entity = new EnemyEntity();
-        entity.health = 100;
-        entity.pos = new Vector2(x, y);
-        entity.vel = new Vector2(0, 1);
-        entity.acc = Vector2.Zero;
-        entity.target = new Vector2(5000, 5000);
-        entity.attackTimer = 0;
-        entity.attacking = false;
-        entity.id = newEnemyId;
-        enemies.put(newEnemyId, entity);
-        newEnemyId++;
+    private void spawnEnemies(float x, float y, int count) {
+        for (int i = 0; i < count; i++) {
+            entity = new EnemyEntity();
+            entity.health = 100;
+            entity.pos = new Vector2(x, y);
+            entity.vel = new Vector2(0, 1);
+            entity.acc = Vector2.Zero;
+            entity.target = new Vector2(5000, 5000);
+            entity.attackTimer = 0;
+            entity.attacking = false;
+            entity.id = newEnemyId;
+            enemies.put(newEnemyId, entity);
+            newEnemyId++;
+        }
     }
 
     public void update(float delta) {
         center = new Vector2(912, 912);
-        for (EnemyEntity enemy : enemies.values()) {
-            Log.info(enemy.toString());
-            getNearestTarget(enemy);
-            enemySeek(enemy, enemy.target);
-            collideWithWall(enemy);
-            collideWithOtherEnemies(enemy);
-            getHit(enemy);
-            attackTarget(enemy);
-            if (enemy.health <= 0) {
-                enemies.remove(enemy.id);
-                continue;
-            }
 
-            enemy.vel.add(enemy.acc);
-            enemy.vel.clamp(0, maxSpeed);
-            enemy.pos.add(enemy.vel);
-            enemy.acc.scl(0, 0);
+        if (!gameStarted) {
+            updateArenaButtonState();
+        } else {
+            for (EnemyEntity enemy : enemies.values()) {
+                getNearestTarget(enemy);
+                enemySeek(enemy, enemy.target);
+                collideWithWall(enemy);
+                collideWithOtherEnemies(enemy);
+                getHit(enemy);
+                attackTarget(enemy);
+                if (enemy.health <= 0) {
+                    enemies.remove(enemy.id);
+                    continue;
+                }
+
+                enemy.vel.add(enemy.acc);
+                enemy.vel.clamp(0, maxSpeed);
+                enemy.pos.add(enemy.vel);
+                enemy.acc.scl(0, 0);
+            }
+        }
+    }
+
+    public void updateArenaButtonState() {
+        Set<Vector2> playerPositions = players.values().stream()
+                .map(p -> p.pos)
+                .collect(Collectors.toSet());
+
+        if (playerPositions.stream().anyMatch(ArenaButton::playerOnButton)) {
+            arenaButton.state = ArenaButton.ARENA_BUTTON_STATE.READY;
+        } else {
+            arenaButton.state = ArenaButton.ARENA_BUTTON_STATE.UP;
+        }
+
+        if (playerPositions.size() > 0 && playerPositions.stream().allMatch(ArenaButton::playerOnButton)) {
+            arenaButton.state = ArenaButton.ARENA_BUTTON_STATE.DOWN;
+            spawnEnemies(912, 1200, 10);
+            gameStarted = true;
         }
     }
 
@@ -242,6 +264,10 @@ public class OnlineArena implements Disposable {
             return true;
         }
         return false;
+    }
+
+    public ArenaButton.ARENA_BUTTON_STATE getArenaButtonState() {
+        return arenaButton.state;
     }
 
     @Override

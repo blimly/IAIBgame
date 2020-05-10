@@ -30,7 +30,7 @@ public class Player {
     private float attackStateTime = 0;
 
     public Player() {
-        position = new Vector2(Main.GAME_WIDTH / 2f - width / 2f, Main.GAME_HEIGHT / 2f - height / 2f);
+        position = new Vector2(880, 600);
         bounds = new Rectangle(position.x, position.y, width, height);
         onlineBounds = new Rectangle(Main.GAME_WIDTH / 2f, Main.GAME_HEIGHT / 2f, width, height);
         health = 100;

@@ -1,56 +1,21 @@
 package inc.heterological.iaibgame.desktop.characters;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.Healthbar;
 
 public class Enemy {
 
-    public enum ENEMY_TYPE { ZOMBIE, BOB, HEALER }
-
-
     public Vector2 position;
-    public float sense;
-    public float currentHealth;
-    public float maxHealth;
-    protected Healthbar healthbar = new Healthbar(this);
-    public boolean alive = true;
 
-    public float getCurrentHealth() {
-        return currentHealth;
-    }
-
-    public void setCurrentHealth(float currentHealth) {
-        if (currentHealth > 0) {
-            this.currentHealth = currentHealth;
-        } else {
-            alive = false;
-        }
-    }
-
-    public Enemy(Vector2 position, float sense, float health) {
+    public Enemy(Vector2 position) {
         this.position = position;
-        this.currentHealth = health;
-        this.maxHealth = health;
-        this.sense = sense;
-    }
-    public TextureRegion getCurrentFrame(float statetime) {
-        return Assets.enemy1.getKeyFrame(statetime, true);
     }
 
-    public void drawEnemyAndHealthbar(SpriteBatch batch, float statetime) {
-        if (alive) {
-            batch.draw(this.getCurrentFrame(statetime), position.x, position.y, 64, 64);
-            healthbar.drawHealth(batch);
-        }
+    public TextureRegion getCurrentFrame(float stateTime) {
+        return Assets.enemy1.getKeyFrame(stateTime, true);
     }
 
-    public void move(Vector2 dest, float delta) {
-        if (position.dst(dest) < sense) {
-            position.lerp(dest, delta);
-        }
-    }
+    public enum ENEMY_TYPE {ZOMBIE, BOB, HEALER}
 
 }

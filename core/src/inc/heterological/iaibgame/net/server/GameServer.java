@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.net.shared.Network;
+import inc.heterological.iaibgame.net.shared.packets.ArenaButtonChange;
 import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 
@@ -37,7 +38,14 @@ public class GameServer {
         Play.Enemies enemies = new Play.Enemies();
         enemies.enemies = serverLogic.getEnemies();
         server.sendToAllUDP(enemies);
-        //Log.info(String.valueOf(enemies.enemies.get(0)));
+
+        if (ServerLogic.buttonChanged) {
+            ArenaButtonChange buttonChangePacket = new ArenaButtonChange();
+            buttonChangePacket.state = ServerLogic.buttonState;
+            server.sendToAllTCP(buttonChangePacket);
+            ServerLogic.buttonChanged = false;
+            Log.info("Send button change packet");
+        }
 
         server.sendToAllUDP(entitiesRemoved);
     }

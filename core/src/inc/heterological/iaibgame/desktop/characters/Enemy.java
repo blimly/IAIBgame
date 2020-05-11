@@ -12,10 +12,27 @@ public class Enemy {
         this.position = position;
     }
 
-    public TextureRegion getCurrentFrame(float stateTime) {
-        return Assets.enemy1.getKeyFrame(stateTime, true);
+    public TextureRegion getCurrentFrame(float stateTime, ENEMY_TYPE type) {
+        switch (type) {
+
+            case ZOMBIE:
+                return Assets.zombie.getKeyFrame(stateTime, true);
+            case BOB_RUNNING:
+                return Assets.bob_run.getKeyFrame(stateTime, true);
+            case BOB_FLEEING:
+                return Assets.bob_flee.getKeyFrame(stateTime, true);
+            case HEALER_WALKING:
+                break;
+            case HEALER_HEALING:
+                break;
+        }
+        return null;
     }
 
-    public enum ENEMY_TYPE {ZOMBIE, BOB, HEALER}
+    public TextureRegion getHealingParticles(float statetime) {
+        return null; // todo
+    }
+
+    public enum ENEMY_TYPE {ZOMBIE, BOB_RUNNING, BOB_FLEEING, HEALER_WALKING, HEALER_HEALING }
 
 }

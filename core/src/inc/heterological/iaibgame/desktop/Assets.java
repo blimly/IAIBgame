@@ -58,8 +58,13 @@ public class Assets {
     public static Animation<TextureRegion> playerKick;
     public static Animation<TextureRegion> playerJab;
 
-    public static Texture enemy1Tex;
-    public static Animation<TextureRegion> enemy1;
+    public static Texture zombieTex;
+    public static Animation<TextureRegion> zombie;
+
+    public static Texture bouncingBobTex;
+    public static Animation<TextureRegion> bob_run;
+    public static Animation<TextureRegion> bob_flee;
+
 
     public static Texture textureSheet;
     public static TextureRegion[] loading_frames;
@@ -147,7 +152,9 @@ public class Assets {
     private static void loadAnimations() {
         textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
         playerTex = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE-Sheet-newKick.png"));
-        enemy1Tex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
+        zombieTex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
+        bouncingBobTex = new Texture(Gdx.files.internal("images/characters/bouncing_bob.png"));
+
         TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
         TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
         TextureRegion[] playerIdleSprites = Arrays.copyOfRange(player_temp[0], 0, 6, TextureRegion[].class);
@@ -155,10 +162,8 @@ public class Assets {
         TextureRegion[] playerKickSprites = Arrays.copyOfRange(player_temp[0], 12, 16, TextureRegion[].class);
         TextureRegion[] playerJabSprites = Arrays.copyOfRange(player_temp[0], 16, 21, TextureRegion[].class);
 
-        TextureRegion[][] enemy1_temp = TextureRegion.split(enemy1Tex,16,16);
+
         loading_frames = new TextureRegion[8];
-
-
         System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
         loading = new Animation<>(0.1f, loading_frames);
 
@@ -167,22 +172,13 @@ public class Assets {
         playerKick = new Animation<>(0.1f, playerKickSprites);
         playerJab = new Animation<>(0.05f, playerJabSprites);
 
-        enemy1 = new Animation<>(0.3f, enemy1_temp[0]);
 
+        TextureRegion[][] zombie_temp = TextureRegion.split(zombieTex,16,16);
+        zombie = new Animation<>(0.3f, zombie_temp[0]);
 
-        runSheet = new Texture(Gdx.files.internal("images/run-sheet.png"));
-        TextureRegion[][] run_temp = TextureRegion.split(runSheet, 500, 500);
-        TextureRegion[] runFrames = new TextureRegion[60];
-        int index = 0;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (index < 60) runFrames[index++] = run_temp[i][j];
-
-            }
-        }
-
-
-        run = new Animation<>(0.033f, runFrames);
+        TextureRegion[][] bob_temp = TextureRegion.split(bouncingBobTex, 16, 16);
+        bob_run = new Animation<>(0.4f, Arrays.copyOfRange(bob_temp[0], 0, 8, TextureRegion[].class));
+        bob_flee = new Animation<>(0.4f, Arrays.copyOfRange(bob_temp[0], 8, 12, TextureRegion[].class));
 
     }
 

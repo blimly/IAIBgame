@@ -32,8 +32,8 @@ public final class Network {
 
         kryo.register(AddPlayer.class);
         kryo.register(RemovePlayer.class);
-        kryo.register(PlayerEntity.class);
         kryo.register(Player.Condition.class);
+        kryo.register(PlayerEntity.class);
         kryo.register(Enemy.ENEMY_TYPE.class);
 
         kryo.register(ArenaButtonChange.class);

@@ -14,6 +14,7 @@ import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
+import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -52,6 +53,8 @@ public class MultiplayerArena extends GameState{
     public void update() {
         delta = Gdx.graphics.getDeltaTime();
         stateTime += delta;
+
+
 
         if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
             player.stand();
@@ -95,6 +98,7 @@ public class MultiplayerArena extends GameState{
         camera = Main.camera;
         players.clear();
         enemies.clear();
+
     }
 
     @Override

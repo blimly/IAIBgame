@@ -1,14 +1,12 @@
 package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Button;
-import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.SelectArrow;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
@@ -69,8 +67,8 @@ public class MainMenu extends GameState{
 
         Main.batch.setProjectionMatrix(camera.combined);
         Main.batch.begin();
-        Main.batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 640, 0, 640, 480);
-        Main.batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 640 + 640, 0, 640, 480);
+        Main.batch.draw(Assets.mainSpriteBack1, bg_scroll_y % 1280, 0, 1280, 480);
+        Main.batch.draw(Assets.mainSpriteBack2, bg_scroll_y % 1280 + 1280, 0, 1280, 480);
         arrow.drawArrow(Main.batch);
         playButton.drawButton(Main.batch);
         exitButton.drawButton(Main.batch);

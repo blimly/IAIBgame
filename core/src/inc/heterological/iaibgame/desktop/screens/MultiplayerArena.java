@@ -155,7 +155,7 @@ public class MultiplayerArena extends GameState {
         for (EnemyEntity onlineEnemy : enemies.values()) {
             if (onlineEnemy.health > 0) {
                 Healthbar.drawHealth(Main.batch, onlineEnemy.pos, onlineEnemy.health);
-                Main.batch.draw(zombieEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+                Main.batch.draw(zombieEnemy.getCurrentFrame(stateTime, onlineEnemy.type), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
             }
         }
 

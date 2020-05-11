@@ -3,6 +3,7 @@ package inc.heterological.iaibgame.net.server;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import inc.heterological.iaibgame.desktop.ArenaButton;
+import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -52,6 +53,7 @@ public class OnlineArena implements Disposable {
             entity.target = new Vector2(5000, 5000);
             entity.attackTimer = 0;
             entity.attacking = false;
+            entity.type = (i < 1) ? Enemy.ENEMY_TYPE.ZOMBIE : Enemy.ENEMY_TYPE.BOB_RUNNING;
             entity.id = newEnemyId;
             enemies.put(newEnemyId, entity);
             newEnemyId++;
@@ -71,6 +73,7 @@ public class OnlineArena implements Disposable {
                 collideWithOtherEnemies(enemy);
                 getHit(enemy);
                 attackTarget(enemy);
+                updateState(enemy);
                 if (enemy.health <= 0) {
                     enemies.remove(enemy.id);
                     continue;
@@ -81,6 +84,12 @@ public class OnlineArena implements Disposable {
                 enemy.pos.add(enemy.vel);
                 enemy.acc.scl(0, 0);
             }
+        }
+    }
+
+    public void updateState(EnemyEntity enemy) {
+        if (enemy.type == Enemy.ENEMY_TYPE.BOB_RUNNING && enemy.health < 50) {
+            enemy.type = Enemy.ENEMY_TYPE.BOB_FLEEING;
         }
     }
 
@@ -97,7 +106,7 @@ public class OnlineArena implements Disposable {
 
         if (playerPositions.size() > 0 && playerPositions.stream().allMatch(ArenaButton::playerOnButton)) {
             arenaButton.state = ArenaButton.ARENA_BUTTON_STATE.DOWN;
-            spawnEnemies(912, 1200, 10);
+            spawnEnemies(912, 1200, 5);
             gameStarted = true;
         }
     }
@@ -138,12 +147,15 @@ public class OnlineArena implements Disposable {
                         diff.setLength(hitRadius - d);
                         enemy.health -= diff.len() / 10;
                         diff.scl(20f);
+                        enemy.vel.scl(-1);
                         enemy.acc.add(diff);
                     }
                     if (!player.facingRight && diff.angle() > (180 - kickAngle) && diff.angle() < (180 + kickAngle)) {
                         diff.setLength(hitRadius - d);
                         enemy.health -= diff.len() / 10;
                         diff.scl(20f);
+                        enemy.vel.scl(-1);
+
                         enemy.acc.add(diff);
                     }
                 }
@@ -174,23 +186,6 @@ public class OnlineArena implements Disposable {
                 .filter(p -> p.dst(entity.pos) < ENEMY_PERCEPTION_RADIUS)
                 .min(Comparator.comparing(p -> p.dst(entity.pos)))
                 .orElse(center.cpy());
-    }
-
-    public void applyForce(EnemyEntity enemy, Vector2 force) {
-        enemy.acc.add(force);
-    }
-
-    private void collideWithPlayers(EnemyEntity enemy) {
-        for (PlayerEntity p : players.values()) {
-            if (enemy.pos.dst(p.pos) < PLAYER_RADIUS) {
-                Vector2 repulsion = new Vector2();
-                repulsion.add(enemy.pos)
-                        .sub(p.pos)
-                        .setLength(PLAYER_RADIUS - enemy.pos.dst(p.pos));
-                //enemy.vel.scl(0);
-                enemy.vel.add(repulsion);
-            }
-        }
     }
 
     private void collideWithOtherEnemies(EnemyEntity enemy) {
@@ -230,20 +225,21 @@ public class OnlineArena implements Disposable {
         Vector2 desired = target.cpy().sub(enemy.pos);
         desired.nor();
 
-        if (dist < PLAYER_RADIUS) {
-            // arrive
-            //float m = dist / PLAYER_RADIUS * maxSpeed;
-            //desired.scl(m);
-            desired.scl(0);
+        if (enemy.type != Enemy.ENEMY_TYPE.BOB_FLEEING) {
+            if (dist < PLAYER_RADIUS) {
+                desired.scl(0);
+            } else {
+                desired.scl(maxSpeed);
+            }
+            desired.sub(enemy.vel);
+            desired.clamp(0, maxForce);
+
         } else {
-            // seek
-            desired.scl(maxSpeed);
+            desired.add(enemy.vel);
         }
 
-        desired.sub(enemy.vel);
-        desired.clamp(0, maxForce);
+
         enemy.acc.add(desired);
-        //applyForce(enemy, desired);
     }
 
     public Map<Integer, PlayerEntity> getPlayers() {

@@ -58,12 +58,16 @@ public class Assets {
     public static Animation<TextureRegion> playerKick;
     public static Animation<TextureRegion> playerJab;
 
-    public static Texture zombieTex;
+    private static Texture zombieTex;
     public static Animation<TextureRegion> zombie;
 
-    public static Texture bouncingBobTex;
+    private static Texture bouncingBobTex;
     public static Animation<TextureRegion> bob_run;
     public static Animation<TextureRegion> bob_flee;
+
+    private static Texture healerTex;
+    public static Animation<TextureRegion> healer_walking;
+    public static Animation<TextureRegion> healer_healing;
 
 
     public static Texture textureSheet;
@@ -154,6 +158,7 @@ public class Assets {
         playerTex = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE-Sheet-newKick.png"));
         zombieTex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
         bouncingBobTex = new Texture(Gdx.files.internal("images/characters/bouncing_bob.png"));
+        healerTex = new Texture(Gdx.files.internal("images/characters/healer_sam.png"));
 
         TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
         TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
@@ -174,11 +179,15 @@ public class Assets {
 
 
         TextureRegion[][] zombie_temp = TextureRegion.split(zombieTex,16,16);
-        zombie = new Animation<>(0.3f, zombie_temp[0]);
+        zombie = new Animation<>(0.2f, zombie_temp[0]);
 
         TextureRegion[][] bob_temp = TextureRegion.split(bouncingBobTex, 16, 16);
-        bob_run = new Animation<>(0.4f, Arrays.copyOfRange(bob_temp[0], 0, 8, TextureRegion[].class));
-        bob_flee = new Animation<>(0.4f, Arrays.copyOfRange(bob_temp[0], 8, 12, TextureRegion[].class));
+        bob_run = new Animation<>(0.2f, Arrays.copyOfRange(bob_temp[0], 0, 8, TextureRegion[].class));
+        bob_flee = new Animation<>(0.2f, Arrays.copyOfRange(bob_temp[0], 8, 12, TextureRegion[].class));
+
+        TextureRegion[][] healer_temp = TextureRegion.split(healerTex, 16, 16);
+        healer_walking = new Animation<>(0.2f, Arrays.copyOfRange(healer_temp[0], 0, 3, TextureRegion[].class));
+        healer_walking = new Animation<>(0.2f, Arrays.copyOfRange(healer_temp[0], 3, 6, TextureRegion[].class));
 
     }
 

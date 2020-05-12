@@ -133,9 +133,9 @@ public class Player {
     public static TextureRegion getFrameBasedUponCondition(Condition state, float stateTime) {
         switch (state) {
             case KICK:
-                return Assets.playerKick.getKeyFrame(stateTime, false);
+                return Assets.playerKick.getKeyFrame(stateTime, true);
             case JAB:
-                return Assets.playerJab.getKeyFrame(stateTime, false);
+                return Assets.playerJab.getKeyFrame(stateTime, true);
             case MOVE:
                 return Assets.playerMove.getKeyFrame(stateTime, true);
             default:

@@ -17,7 +17,8 @@ import java.util.Arrays;
 public class Assets {
 
     public static BitmapFont font;
-    public static BitmapFont byeFont;
+    public static BitmapFont bigFont;
+    public static BitmapFont hugeFont;
 
     public static Texture blank;
 
@@ -89,7 +90,7 @@ public class Assets {
     public static Sound hell;
 
     public static void load() {
-        loadFont();
+        loadFonts();
         loadSprites();
         loadAnimations();
         loadSounds();
@@ -99,12 +100,18 @@ public class Assets {
         return font;
     }
 
-    private static void loadFont() {
+    private static void loadFonts() {
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("ui/Pixeboy-z8XGD.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 24;
         font = gen.generateFont(parameter);
         font.setColor(Color.valueOf("39c6e6"));
+        parameter.size = 150;
+        bigFont = gen.generateFont(parameter);
+        bigFont.setColor(Color.valueOf("39c6e6"));
+        parameter.size = 300;
+        hugeFont = gen.generateFont(parameter);
+        hugeFont.setColor(Color.valueOf("39c6e6"));
     }
 
     private static void loadSprites() {

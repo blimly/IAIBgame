@@ -29,15 +29,16 @@ public class MultiplayerArena extends GameState {
     public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
     public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>();
     public static ArenaButton.ARENA_BUTTON_STATE onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
-    private ArenaButton arenaButton;
 
+    private boolean gameEnded = false;
+
+    private ArenaButton arenaButton;
     static Player player = new Player();
     private final Enemy enemy = new Enemy(Vector2.Zero);
     OrthographicCamera camera;
     float stateTime;
     float delta;
 
-    private boolean gameEnded = false;
 
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);

@@ -14,8 +14,8 @@ public class SoundEffects {
         soundEffects.put(name, sound);
     }
 
-    public static void loop(String name) {
-        soundEffects.get(name).loop();
+    public static void loop(String name, float volume) {
+        soundEffects.get(name).loop(volume);
     }
 
     public static void play(String name, float volume) {
@@ -24,6 +24,7 @@ public class SoundEffects {
     public static void stop(String name) {
         soundEffects.get(name).stop();
     }
+
 
     public static void stopAll() {
         for (Sound s: soundEffects.values()) {

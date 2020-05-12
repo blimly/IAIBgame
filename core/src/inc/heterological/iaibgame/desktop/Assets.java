@@ -145,6 +145,12 @@ public class Assets {
         SoundEffects.load("audio/Kick.wav", "Kick");
         SoundEffects.load("audio/ChangeScreen.wav", "ChangeScreen");
         SoundEffects.load("audio/bg_loop.wav", "BattleMusic");
+        SoundEffects.load("audio/FootSteps.wav", "FootSteps");
+        SoundEffects.load("audio/BreakEnemyBone.wav", "BreakEnemyBone");
+        SoundEffects.load("audio/HealerHealingEnemies.wav", "HealerHealingEnemies");
+        SoundEffects.load("audio/EnemyEscaping.wav", "EnemyEscaping");
+        SoundEffects.load("audio/PlayerGettingAttacked.wav", "PlayerGettingAttacked");
+        SoundEffects.load("audio/EnemyAttackSound-Huwawa.wav", "Huwawa");
     }
 
     private static void loadAnimations() {

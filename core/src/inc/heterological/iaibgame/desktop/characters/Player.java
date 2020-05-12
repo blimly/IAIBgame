@@ -27,6 +27,7 @@ public class Player {
 
     public boolean facingRight;
     private float attackStateTime = 0;
+    public static boolean stomping = false;
 
     public Player() {
         position = new Vector2(Main.GAME_WIDTH / 2f - width / 2f, Main.GAME_HEIGHT / 2f - height / 2f);
@@ -38,6 +39,13 @@ public class Player {
         //ANIMATION
         currentState = Condition.IDLE;
         facingRight = true;
+    }
+
+    public void playFootSteps() {
+        if (!stomping) {
+            stomping = true;
+            SoundEffects.loop("FootSteps", 0.3f);
+        }
 
     }
 
@@ -46,6 +54,7 @@ public class Player {
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(dt * -MOVE_SPEED, 0);
+        playFootSteps();
     }
 
     public void moveRight(float dt) {
@@ -53,18 +62,21 @@ public class Player {
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(dt * MOVE_SPEED, 0);
+        playFootSteps();
     }
 
     public void moveUp(float dt) {
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(0, dt * MOVE_SPEED);
+        playFootSteps();
     }
 
     public void moveDown(float dt) {
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(0, dt * -MOVE_SPEED);
+        playFootSteps();
     }
 
     private void collideWithWall() {
@@ -74,13 +86,13 @@ public class Player {
     }
 
     public void jab() {
+        SoundEffects.play("Jab", 0.3f);
         currentState = Condition.JAB;
-        SoundEffects.play("Jab", 0.1f);
     }
 
     public void kick() {
+        SoundEffects.play("Kick", 0.3f);
         currentState = Condition.KICK;
-        SoundEffects.play("Kick", 0.1f);
     }
 
     public void stand() {
@@ -109,6 +121,7 @@ public class Player {
                     attackStateTime = 0;
                 }
             case MOVE:
+                playFootSteps();
                 return Assets.playerMove.getKeyFrame(stateTime, true);
             case IDLE:
                 return Assets.playerIdle.getKeyFrame(stateTime, true);
@@ -124,8 +137,6 @@ public class Player {
                 return Assets.playerKick.getKeyFrame(stateTime, false);
             case JAB:
                 return Assets.playerJab.getKeyFrame(stateTime, false);
-            case IDLE:
-                return Assets.playerIdle.getKeyFrame(stateTime, true);
             case MOVE:
                 return Assets.playerMove.getKeyFrame(stateTime, true);
             default:

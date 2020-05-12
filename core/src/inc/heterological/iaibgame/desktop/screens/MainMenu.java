@@ -40,7 +40,7 @@ public class MainMenu extends GameState{
         playButton = new Button(64 * 3, 24 * 3, 235, 120, Assets.play);
         exitButton = new Button(64 * 3, 24 * 3, 235, 30, Assets.exit);
         bg_scroll_y = 0;
-        SoundEffects.loop("MenuBackground");
+        SoundEffects.loop("MenuBackground", 0.25f);
     }
 
     @Override

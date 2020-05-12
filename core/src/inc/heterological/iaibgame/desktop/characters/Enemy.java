@@ -30,7 +30,7 @@ public class Enemy {
     }
 
     public TextureRegion getHealingParticles(float statetime) {
-        return Assets.healing.getKeyFrame(statetime);
+        return Assets.healing.getKeyFrame(statetime, true);
     }
 
     public enum ENEMY_TYPE {ZOMBIE, BOB_RUNNING, BOB_FLEEING, HEALER_WALKING, HEALER_HEALING }

@@ -58,22 +58,24 @@ public class Assets {
     public static Animation<TextureRegion> playerKick;
     public static Animation<TextureRegion> playerJab;
 
-    public static Texture zombieTex;
+    private static Texture zombieTex;
     public static Animation<TextureRegion> zombie;
 
-    public static Texture bouncingBobTex;
+    private static Texture bouncingBobTex;
     public static Animation<TextureRegion> bob_run;
     public static Animation<TextureRegion> bob_flee;
+
+    private static Texture healerTex;
+    public static Animation<TextureRegion> healer_walking;
+    public static Animation<TextureRegion> healer_healing;
+
+    private static Texture healingTex;
+    public static Animation<TextureRegion> healing;
 
 
     public static Texture textureSheet;
     public static TextureRegion[] loading_frames;
-    public static TextureRegion current_frame;
     public static Animation<TextureRegion> loading;
-
-    public static Texture runSheet;
-    public static Animation<TextureRegion> run;
-
 
     public static Sound menu_loop;
     public static Sound backgound_loop;
@@ -138,7 +140,6 @@ public class Assets {
 
         Texture buttonSheet = new Texture(Gdx.files.internal("images/arena_big_button.png"));
         arenaButton = TextureRegion.split(buttonSheet, 32, 21)[0];
-
     }
 
     private static void loadSounds() {
@@ -154,6 +155,8 @@ public class Assets {
         playerTex = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE-Sheet-newKick.png"));
         zombieTex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
         bouncingBobTex = new Texture(Gdx.files.internal("images/characters/bouncing_bob.png"));
+        healerTex = new Texture(Gdx.files.internal("images/characters/healer_sam.png"));
+        healingTex = new Texture(Gdx.files.internal("images/healing.png"));
 
         TextureRegion[][] loading_temp = TextureRegion.split(textureSheet, 16, 16);
         TextureRegion[][] player_temp = TextureRegion.split(playerTex, 16, 16);
@@ -161,7 +164,6 @@ public class Assets {
         TextureRegion[] playerMoveSprites = Arrays.copyOfRange(player_temp[0], 6, 11, TextureRegion[].class);
         TextureRegion[] playerKickSprites = Arrays.copyOfRange(player_temp[0], 12, 16, TextureRegion[].class);
         TextureRegion[] playerJabSprites = Arrays.copyOfRange(player_temp[0], 16, 21, TextureRegion[].class);
-
 
         loading_frames = new TextureRegion[8];
         System.arraycopy(loading_temp[1], 0, loading_frames, 0, 8);
@@ -172,14 +174,19 @@ public class Assets {
         playerKick = new Animation<>(0.1f, playerKickSprites);
         playerJab = new Animation<>(0.05f, playerJabSprites);
 
-
         TextureRegion[][] zombie_temp = TextureRegion.split(zombieTex,16,16);
-        zombie = new Animation<>(0.3f, zombie_temp[0]);
+        zombie = new Animation<>(0.2f, zombie_temp[0]);
 
         TextureRegion[][] bob_temp = TextureRegion.split(bouncingBobTex, 16, 16);
-        bob_run = new Animation<>(0.4f, Arrays.copyOfRange(bob_temp[0], 0, 8, TextureRegion[].class));
-        bob_flee = new Animation<>(0.4f, Arrays.copyOfRange(bob_temp[0], 8, 12, TextureRegion[].class));
+        bob_run = new Animation<>(0.2f, Arrays.copyOfRange(bob_temp[0], 0, 8, TextureRegion[].class));
+        bob_flee = new Animation<>(0.2f, Arrays.copyOfRange(bob_temp[0], 8, 12, TextureRegion[].class));
 
+        TextureRegion[][] healer_temp = TextureRegion.split(healerTex, 16, 16);
+        healer_walking = new Animation<>(0.2f, Arrays.copyOfRange(healer_temp[0], 0, 4, TextureRegion[].class));
+        healer_healing = new Animation<>(0.2f, Arrays.copyOfRange(healer_temp[0], 4, 6, TextureRegion[].class));
+
+        TextureRegion[][] heal_temp = TextureRegion.split(healingTex,16,16);
+        healing = new Animation<>(0.2f, heal_temp[0]);
     }
 
     public static void dispose() {

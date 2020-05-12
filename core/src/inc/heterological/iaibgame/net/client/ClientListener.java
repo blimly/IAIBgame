@@ -38,7 +38,6 @@ public class ClientListener extends Listener {
             MultiplayerArena.players.get(packet.id).facingRight = packet.facingRight;
             MultiplayerArena.players.get(packet.id).currentState = packet.currentState;
             MultiplayerArena.players.get(packet.id).health = packet.health;
-
         }
 
         else if (o instanceof Play.Players) {

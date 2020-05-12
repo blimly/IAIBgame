@@ -32,7 +32,7 @@ public class MultiplayerArena extends GameState {
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
-    private final Enemy zombieEnemy = new Enemy(Vector2.Zero);
+    private final Enemy enemy = new Enemy(Vector2.Zero);
     OrthographicCamera camera;
     float stateTime;
     float delta;
@@ -93,7 +93,6 @@ public class MultiplayerArena extends GameState {
         }
 
         // move on server
-        //if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
         PlayerEntity packet = new PlayerEntity();
         packet.pos = player.position;
         packet.facingRight = player.facingRight;
@@ -101,7 +100,6 @@ public class MultiplayerArena extends GameState {
         packet.health = player.health;
         gameClient.client.sendUDP(packet);
         player.onlineBounds.setPosition(player.position);
-        //}
 
     }
 
@@ -140,7 +138,6 @@ public class MultiplayerArena extends GameState {
         // draw online players
         for (PlayerEntity onlinePlayer : players.values()) {
             if (onlinePlayer.health > 0) {
-
                 Healthbar.drawHealth(Main.batch, onlinePlayer.pos, onlinePlayer.health);
 
                 if (onlinePlayer.facingRight) {
@@ -155,7 +152,7 @@ public class MultiplayerArena extends GameState {
         for (EnemyEntity onlineEnemy : enemies.values()) {
             if (onlineEnemy.health > 0) {
                 Healthbar.drawHealth(Main.batch, onlineEnemy.pos, onlineEnemy.health);
-                Main.batch.draw(zombieEnemy.getCurrentFrame(stateTime, onlineEnemy.type), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+                Main.batch.draw(enemy.getCurrentFrame(stateTime, onlineEnemy.type), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
             }
         }
 

@@ -1,5 +1,6 @@
 package inc.heterological.iaibgame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;

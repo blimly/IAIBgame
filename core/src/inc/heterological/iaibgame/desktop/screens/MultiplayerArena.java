@@ -13,13 +13,10 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Healthbar;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
-import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
-import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
-import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
@@ -41,9 +38,7 @@ public class MultiplayerArena extends GameState {
     OrthographicCamera camera;
     float stateTime;
     float delta;
-    private ArenaButton arenaButton;
-    private Set<Boolean> onButton;
-    private final Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
+
     private static boolean battleMusicOff = true;
 
     public MultiplayerArena(GameStateManager gsm) {
@@ -94,7 +89,6 @@ public class MultiplayerArena extends GameState {
             camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
         }
 
-
         for (EnemyEntity onlineEnemy : enemies.values()) {
             float distToEnemy = onlineEnemy.pos.dst(player.position);
             if (onlineEnemy.attacking && distToEnemy < 40) {
@@ -133,7 +127,6 @@ public class MultiplayerArena extends GameState {
         gameEnded = false;
         players.clear();
         enemies.clear();
-
     }
 
     @Override

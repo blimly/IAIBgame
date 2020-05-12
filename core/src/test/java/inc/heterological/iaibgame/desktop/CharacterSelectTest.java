@@ -8,6 +8,13 @@ import static org.junit.Assert.*;
 public class CharacterSelectTest {
 
     @Test
+    public void lock() {
+        CharacterSelect cSel = new CharacterSelect(0,0);
+        cSel.ChangeChar(GameKeys.ENTER);
+        assertTrue(cSel.locked);
+    }
+
+    @Test
     public void changeChar() {
         CharacterSelect cSel = new CharacterSelect(0,0);
         cSel.ChangeChar(GameKeys.DOWN);

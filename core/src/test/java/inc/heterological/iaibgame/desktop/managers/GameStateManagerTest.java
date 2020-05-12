@@ -1,6 +1,8 @@
 package inc.heterological.iaibgame.desktop.managers;
 
 import inc.heterological.iaibgame.desktop.screens.GameState;
+import inc.heterological.iaibgame.desktop.screens.MainMenu;
+import inc.heterological.iaibgame.desktop.screens.MultiplayerArena;
 import inc.heterological.iaibgame.desktop.screens.MultiplayerLobby;
 import org.junit.Test;
 

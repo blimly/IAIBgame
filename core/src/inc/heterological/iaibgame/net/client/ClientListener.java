@@ -9,6 +9,7 @@ import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.screens.MultiplayerArena;
 import inc.heterological.iaibgame.net.shared.packets.AddEnemy;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
+import inc.heterological.iaibgame.net.shared.packets.ArenaButtonChange;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -24,6 +25,7 @@ public class ClientListener extends Listener {
             newPlayer.pos = new Vector2(Main.GAME_HEIGHT / 2f, Main.GAME_WIDTH / 2f);
             newPlayer.currentState = Player.Condition.IDLE;
             newPlayer.facingRight = true;
+            newPlayer.health = 100;
             MultiplayerArena.players.put(packet.playerID, newPlayer);
             Log.info("Player " + packet.playerID + " joined the game");
         } else if (o instanceof RemovePlayer) {
@@ -35,7 +37,7 @@ public class ClientListener extends Listener {
             MultiplayerArena.players.get(packet.id).pos = packet.pos;
             MultiplayerArena.players.get(packet.id).facingRight = packet.facingRight;
             MultiplayerArena.players.get(packet.id).currentState = packet.currentState;
-
+            MultiplayerArena.players.get(packet.id).health = packet.health;
         }
 
         else if (o instanceof Play.Players) {
@@ -62,11 +64,24 @@ public class ClientListener extends Listener {
             MultiplayerArena.players.remove(packet.enemyId);
         }
 
-
-
         else if (o instanceof Play.Enemies) {
             Play.Enemies packet = (Play.Enemies) o;
             MultiplayerArena.enemies = packet.enemies;
+        }
+
+        else if (o instanceof Play.EntitiesToBeRemoved) {
+            Play.EntitiesToBeRemoved packet = (Play.EntitiesToBeRemoved) o;
+            for (Integer enemyID : packet.enemies) {
+                MultiplayerArena.enemies.remove(enemyID);
+            }
+            for (Integer playerID : packet.players) {
+                MultiplayerArena.players.remove(playerID);
+            }
+        }
+
+        else if (o instanceof ArenaButtonChange) {
+            ArenaButtonChange packet = (ArenaButtonChange) o;
+            MultiplayerArena.onlineButtonState = packet.state;
         }
 
     }

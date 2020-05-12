@@ -10,28 +10,30 @@ public class PlayerTest {
     public void moveLeft() {
         Player player = new Player();
         player.moveLeft(1);
-        assertEquals(88, player.position.x, 0);
+        assertEquals(880, player.position.x, 0);
+        assertFalse(player.facingRight);
     }
 
     @Test
     public void moveRight() {
         Player player = new Player();
         player.moveRight(1);
-        assertEquals(488, player.position.x, 0);
+        assertEquals(880, player.position.x, 0);
+        assertTrue(player.facingRight);
     }
 
     @Test
     public void moveUp() {
         Player player = new Player();
         player.moveUp(1);
-        assertEquals(408, player.position.y, 0);
+        assertEquals(600, player.position.y, 0);
     }
 
     @Test
     public void moveDown() {
         Player player = new Player();
         player.moveDown(1);
-        assertEquals(8, player.position.y, 0);
+        assertEquals(600, player.position.y, 0);
 
     }
 

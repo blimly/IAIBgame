@@ -8,8 +8,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import inc.heterological.iaibgame.Main;
+import inc.heterological.iaibgame.desktop.ArenaButton;
 import inc.heterological.iaibgame.desktop.Assets;
-import inc.heterological.iaibgame.desktop.arena_objects.ArenaButton;
+import inc.heterological.iaibgame.desktop.Healthbar;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
@@ -22,22 +23,22 @@ import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiplayerArena extends GameState{
+public class MultiplayerArena extends GameState {
 
-    OrthographicCamera camera;
-    float stateTime;
-    float delta;
+    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
+    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>(); // enemie positions on server
+    public static ArenaButton.ARENA_BUTTON_STATE onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
     // online stuff
     static Player player = new Player();
     static GameClient gameClient;
-    public static Map<Integer, PlayerEntity> players = new HashMap<>();
-    public static Map<Integer, EnemyEntity> enemies = new HashMap<>(); // enemie positions on server
-
-
+    private final Enemy enemy = new Enemy(Vector2.Zero);
+    OrthographicCamera camera;
+    float stateTime;
+    float delta;
     private ArenaButton arenaButton;
     private Set<Boolean> onButton;
     private final Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
@@ -56,53 +57,67 @@ public class MultiplayerArena extends GameState{
     public void update() {
         delta = Gdx.graphics.getDeltaTime();
         stateTime += delta;
+        if (player.health > 0) {
+            if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
+                player.stand();
+            } else if (GameKeys.isPressed(GameKeys.KICK)) {
+                player.kick();
+            } else if (GameKeys.isPressed(GameKeys.JAB)) {
+                player.jab();
+            } else if (GameKeys.isDown(GameKeys.LEFT)) {
+                player.moveLeft(delta);
+            } else if (GameKeys.isDown(GameKeys.RIGHT)) {
+                player.moveRight(delta);
+            } else {
+                player.stand();
+            }
+            if (GameKeys.isDown(GameKeys.UP)) {
+                player.moveUp(delta);
+            }
 
-        if (battleMusicOff) {
-            SoundEffects.loop("BattleMusic", 0.05f);
-            battleMusicOff = false;
-        }
+            if (GameKeys.isDown(GameKeys.DOWN)) {
+                player.moveDown(delta);
+            }
 
+            player.updatePlayerPhysics();
 
-        if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
-            player.stand();
-        } else if (GameKeys.isPressed(GameKeys.KICK)) {
-            player.kick();
-        } else if (GameKeys.isPressed(GameKeys.JAB)) {
-            player.jab();
-        } else if (GameKeys.isDown(GameKeys.LEFT)) {
-            player.moveLeft(delta);
-        } else if (GameKeys.isDown(GameKeys.RIGHT)) {
-            player.moveRight(delta);
+            camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
         } else {
-            player.stand();
-        }
-        if (GameKeys.isDown(GameKeys.UP)) {
-            player.moveUp(delta);
-        }
-
-        if (GameKeys.isDown(GameKeys.DOWN)) {
-            player.moveDown(delta);
+            camera.position.lerp(new Vector3(912, 912, 0), delta);
+            if (camera.zoom < 2.5f) {
+                camera.zoom += delta / 10f;
+            }
         }
 
-        camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
+
+        for (EnemyEntity onlineEnemy : enemies.values()) {
+            float distToEnemy = onlineEnemy.pos.dst(player.position);
+            if (onlineEnemy.attacking && distToEnemy < 40) {
+                player.health -= (40 - distToEnemy) / 100;
+            }
+        }
 
         // move on server
-        //if (player.onlineBounds.x != player.position.x || player.onlineBounds.y != player.position.y) {
-            PlayerEntity packet = new PlayerEntity();
-            packet.pos = player.position;
-            packet.facingRight = player.facingRight;
-            packet.currentState = player.currentState;
-            gameClient.client.sendUDP(packet);
-            player.onlineBounds.setPosition(player.position);
-        //}
+        PlayerEntity packet = new PlayerEntity();
+        packet.pos = player.position;
+        packet.facingRight = player.facingRight;
+        packet.currentState = player.currentState;
+        packet.health = player.health;
+        gameClient.client.sendUDP(packet);
+        player.onlineBounds.setPosition(player.position);
 
     }
 
     @Override
     public void init() {
+        arenaButton = new ArenaButton(848, 870, ArenaButton.ARENA_BUTTON_STATE.UP);
+        onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
         stateTime = 0f;
         gameClient = new GameClient();
         camera = Main.camera;
+        Main.camera.position.set(player.position, 0f);
+        Main.camera.zoom = 1f;
+        player = new Player();
         players.clear();
         enemies.clear();
 
@@ -117,56 +132,54 @@ public class MultiplayerArena extends GameState{
     public void draw() {
         Gdx.gl.glClearColor(0.12f, 0.11f, 0.22f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
         Main.batch.setProjectionMatrix(camera.combined);
-
         Main.batch.begin();
         update();
 
-        Main.batch.draw(Assets.mpArenaTex, 0, 0, 1024, 1024);
-        //updateOnButtons();
-        //arenaButton.draw(batch, 480, 480, onButton);
+        Main.batch.draw(Assets.mpArenaTex, 0, 0, 1824, 1824);
+
+        arenaButton.draw(Main.batch, onlineButtonState);
 
         // draw online players
         for (PlayerEntity onlinePlayer : players.values()) {
-            String posString = (int) onlinePlayer.pos.x + "  " + (int) onlinePlayer.pos.y + "";
-            Assets.font.draw(Main.batch, posString, onlinePlayer.pos.x, onlinePlayer.pos.y + 80);
-            System.out.println(onlinePlayer.currentState);
-            if (onlinePlayer.facingRight) {
-                Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
-            } else {
-                Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x + 64, onlinePlayer.pos.y, -64, 64);
+            if (onlinePlayer.health > 0) {
+                Healthbar.drawHealth(Main.batch, onlinePlayer.pos, onlinePlayer.health);
+
+                if (onlinePlayer.facingRight) {
+                    Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
+                } else {
+                    Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x + 64, onlinePlayer.pos.y, -64, 64);
+                }
             }
         }
 
         // draw enemies on server
         for (EnemyEntity onlineEnemy : enemies.values()) {
-            String posString = (int) onlineEnemy.pos.x + "  " + (int) onlineEnemy.pos.y + "";
-            Assets.font.draw(Main.batch, posString, onlineEnemy.pos.x, onlineEnemy.pos.y + 80);
-            Main.batch.draw(dummyEnemy.getCurrentFrame(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+            if (onlineEnemy.health > 0) {
+                Healthbar.drawHealth(Main.batch, onlineEnemy.pos, onlineEnemy.health);
+                if (onlineEnemy.gettingHealed) {
+                    Main.batch.draw(enemy.getHealingParticles(stateTime), onlineEnemy.pos.x, onlineEnemy.pos.y + 20, 64, 64);
+                }
+                Main.batch.draw(enemy.getCurrentFrame(stateTime, onlineEnemy.type), onlineEnemy.pos.x, onlineEnemy.pos.y, 64, 64);
+            }
         }
 
         // draw myself
-        Assets.font.draw(Main.batch, player.currentState.toString(), player.position.x, player.position.y + 70);
+        if (player.health > 0) {
 
-        if (player.facingRight) {
-            Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y , player.width, player.height);
+            Healthbar.drawHealth(Main.batch, player.position, player.health);
+            if (player.facingRight) {
+                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y, player.width, player.height);
+            } else {
+                Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x + player.width, player.position.y, -player.width, player.height);
+            }
         } else {
-            Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x+player.width, player.position.y , -player.width, player.height);
+            Assets.font.draw(Main.batch, "GAME OVER", 900, 1000);
         }
-        //System.out.println(players.toString());
 
-        //onButton.clear();
         Main.batch.end();
         handleInput();
-    }
-
-    private void updateOnButtons() {
-        onButton.add(arenaButton.playerOnButton((int) player.position.x, (int) player.position.y));
-        for (PlayerEntity onlinePlayer : players.values()) {
-            onButton.add(arenaButton.playerOnButton((int)onlinePlayer.pos.x, (int)onlinePlayer.pos.y));
-        }
     }
 
     @Override

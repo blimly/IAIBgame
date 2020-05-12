@@ -9,7 +9,8 @@ import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 
 
 public class Player {
-    private static final int MOVE_SPEED = 200;
+    private static final int MOVE_SPEED = 20;
+
     public final Rectangle bounds;
     public final Rectangle onlineBounds;
     public Condition currentState;
@@ -19,8 +20,9 @@ public class Player {
     public int health;
 
     public Vector2 position;
-    public Vector2 velocity;
-    public Vector2 friction;
+    private Vector2 velocity;
+    private Vector2 acceleration;
+    private float friction;
 
     public String username;
     public boolean onButton;
@@ -29,12 +31,13 @@ public class Player {
     private float attackStateTime = 0;
 
     public Player() {
-        position = new Vector2(Main.GAME_WIDTH / 2f - width / 2f, Main.GAME_HEIGHT / 2f - height / 2f);
+        position = new Vector2(880, 600);
         bounds = new Rectangle(position.x, position.y, width, height);
         onlineBounds = new Rectangle(Main.GAME_WIDTH / 2f, Main.GAME_HEIGHT / 2f, width, height);
         health = 100;
         velocity = new Vector2(0, 0);
-        friction = new Vector2(0, 0);
+        acceleration = new Vector2(0, 0);
+        friction = 0.93f;
         //ANIMATION
         currentState = Condition.IDLE;
         facingRight = true;
@@ -43,32 +46,42 @@ public class Player {
     public void moveLeft(float dt) {
         facingRight = false;
         currentState = Condition.MOVE;
-        collideWithWall();
-        position.add(dt * -MOVE_SPEED, 0);
+        acceleration.add(dt * -MOVE_SPEED, 0);
     }
 
     public void moveRight(float dt) {
         facingRight = true;
         currentState = Condition.MOVE;
-        collideWithWall();
-        position.add(dt * MOVE_SPEED, 0);
+        acceleration.add(dt * MOVE_SPEED, 0);
     }
 
     public void moveUp(float dt) {
         currentState = Condition.MOVE;
-        collideWithWall();
-        position.add(0, dt * MOVE_SPEED);
+        acceleration.add(0, dt * MOVE_SPEED);
     }
 
     public void moveDown(float dt) {
         currentState = Condition.MOVE;
+        acceleration.add(0, dt * -MOVE_SPEED);
+    }
+
+
+    public void updatePlayerPhysics() {
         collideWithWall();
-        position.add(0, dt * -MOVE_SPEED);
+        velocity.add(acceleration)
+                .limit(MOVE_SPEED)
+                .scl(friction);
+        position.add(velocity);
+        acceleration.scl(0, 0);
     }
 
     private void collideWithWall() {
-        if (position.dst(480, 512) > 512) {
-            position.add(new Vector2(512, 512).sub(position).setLength(5));
+        float distFromCenter = position.dst(880, 912);
+        if (distFromCenter > 512) {
+            velocity.scl(-0.5f);
+            acceleration.add(new Vector2(912, 912)
+                    .sub(position)
+                    .setLength(distFromCenter - 512));
         }
     }
 
@@ -112,11 +125,11 @@ public class Player {
             case IDLE:
                 return Assets.playerIdle.getKeyFrame(stateTime, true);
             default:
-                break;
+                return null;
         }
-        return null;
     }
 
+    // For animating online players
     public static TextureRegion getFrameBasedUponCondition(Condition state, float stateTime) {
         switch (state) {
             case KICK:

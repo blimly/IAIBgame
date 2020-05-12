@@ -27,6 +27,14 @@ public class ServerLogic implements Disposable {
         onlineArena = new OnlineArena();
     }
 
+    public OnlineArena getOnlineArena() {
+        return onlineArena;
+    }
+
+    public ServerLogicThread getLogicThread() {
+        return logicThread;
+    }
+
     public void run(Set<PlayerEntity> players) {
         if (logicThread != null) logicThread.close();
         logicThread = new ServerLogicThread(players, enemies);

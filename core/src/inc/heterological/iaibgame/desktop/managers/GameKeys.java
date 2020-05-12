@@ -38,5 +38,15 @@ public class GameKeys {
         return keys[key] && !pressedKeys[key];
     }
 
+    public static boolean noKeyPressed() {
+        int keydown = 0;
+        for (boolean keyPressed : pressedKeys) {
+            if (keyPressed) {
+                keydown += 1;
+            }
+        }
+        return keydown == 0;
+    }
+
 
 }

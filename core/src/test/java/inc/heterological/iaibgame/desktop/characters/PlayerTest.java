@@ -1,10 +1,45 @@
 package inc.heterological.iaibgame.desktop.characters;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.graphics.GL20;
+import inc.heterological.iaibgame.desktop.Assets;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
 public class PlayerTest {
+
+    private static Application application;
+
+    @BeforeClass
+    public static void init() {
+        // Note that we don't need to implement any of the listener's methods
+        application = new HeadlessApplication(new ApplicationListener() {
+            @Override public void create() {}
+            @Override public void resize(int width, int height) {}
+            @Override public void render() {}
+            @Override public void pause() {}
+            @Override public void resume() {}
+            @Override public void dispose() {}
+        });
+
+        // Use Mockito to mock the OpenGL methods since we are running headlessly
+        Gdx.gl20 = Mockito.mock(GL20.class);
+        Gdx.gl = Gdx.gl20;
+    }
+
+    @AfterClass
+    public static void cleanUp() {
+        // Exit the application first
+        application.exit();
+        application = null;
+    }
 
     @Test
     public void moveLeft() {
@@ -56,5 +91,19 @@ public class PlayerTest {
         Player player = new Player();
         player.stand();
         assertEquals(Player.Condition.IDLE, player.currentState);
+    }
+
+    @Test
+    public void getCurrentFrame() {
+        Player player = new Player();
+        player.stand();
+        assertEquals(Assets.playerIdle.getKeyFrame(1, true), player.getCurrentFrame(1, 1));
+        player.moveUp(1);
+        assertEquals(Assets.playerMove.getKeyFrame(1, true), player.getCurrentFrame(1, 1));
+        player.jab();
+        assertEquals(Assets.playerJab.getKeyFrame(1, true), player.getCurrentFrame(1, 1));
+        player.kick();
+        assertEquals(Assets.playerKick.getKeyFrame(1, true), player.getCurrentFrame(1, 1));
+
     }
 }

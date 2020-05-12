@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
+import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 
 
 public class Player {
@@ -85,10 +86,12 @@ public class Player {
     }
 
     public void jab() {
+        SoundEffects.play("Jab", 0.3f);
         currentState = Condition.JAB;
     }
 
     public void kick() {
+        SoundEffects.play("Kick", 0.3f);
         currentState = Condition.KICK;
     }
 

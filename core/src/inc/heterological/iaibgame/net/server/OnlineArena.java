@@ -49,7 +49,7 @@ public class OnlineArena implements Disposable {
 
     private void spawnEnemies(float x, float y, int count) {
         for (int i = 0; i < count; i++) {
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 10; j++) {
                 entity = new EnemyEntity();
                 entity.health = 100;
                 entity.pos = new Vector2(x, y);
@@ -60,9 +60,9 @@ public class OnlineArena implements Disposable {
                 entity.attacking = false;
                 entity.gettingHealed = false;
 
-                if (j < 2) {
+                if (j < 4) {
                     entity.type = Enemy.ENEMY_TYPE.ZOMBIE;
-                } else if (j < 4) {
+                } else if (j < 8) {
                     entity.type = Enemy.ENEMY_TYPE.BOB_RUNNING;
                 } else {
                     entity.type = Enemy.ENEMY_TYPE.HEALER_WALKING;
@@ -76,7 +76,6 @@ public class OnlineArena implements Disposable {
     }
 
     public void update(float delta) {
-
         if (!gameStarted) {
             updateArenaButtonState();
         } else {
@@ -113,11 +112,11 @@ public class OnlineArena implements Disposable {
                 enemy.pos.add(enemy.vel);
                 enemy.acc.scl(0, 0);
             }
-            Log.info(enemies.size() + "");
         }
     }
 
     private void resetArena() {
+        Log.info("Reseting arena");
         secondsFromLogOut = 0;
         updateArenaButtonState();
         enemies.clear();

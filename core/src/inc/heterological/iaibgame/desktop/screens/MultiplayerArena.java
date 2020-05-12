@@ -13,10 +13,13 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Healthbar;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
+import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
+import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
+import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
@@ -38,6 +41,8 @@ public class MultiplayerArena extends GameState {
     float delta;
     private ArenaButton arenaButton;
     private Set<Boolean> onButton;
+    private final Enemy dummyEnemy = new Enemy(Vector2.Zero, 10, 100);
+    private static boolean battleMusicOff = true;
 
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);
@@ -115,6 +120,7 @@ public class MultiplayerArena extends GameState {
         player = new Player();
         players.clear();
         enemies.clear();
+
     }
 
     @Override

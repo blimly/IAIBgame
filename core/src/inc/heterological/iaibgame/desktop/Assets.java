@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 
 import java.util.Arrays;
 
 
 public class Assets {
+
     public static BitmapFont font;
     public static BitmapFont byeFont;
 
@@ -77,7 +79,10 @@ public class Assets {
     public static TextureRegion[] loading_frames;
     public static Animation<TextureRegion> loading;
 
-    public static Sound menu_loop;
+    public static Texture runSheet;
+    public static Animation<TextureRegion> run;
+
+
     public static Sound backgound_loop;
     public static Sound ooyeah;
     public static Sound no;
@@ -143,11 +148,19 @@ public class Assets {
     }
 
     private static void loadSounds() {
-        menu_loop = Gdx.audio.newSound(Gdx.files.internal("audio/menu_ambient.wav"));
-        backgound_loop = Gdx.audio.newSound(Gdx.files.internal("audio/bg_loop.wav"));
-        ooyeah = Gdx.audio.newSound(Gdx.files.internal("audio/ohoh_yeh.wav"));
-        no = Gdx.audio.newSound(Gdx.files.internal("audio/no.wav"));
-        hell = Gdx.audio.newSound(Gdx.files.internal("audio/violent_delights.wav"));
+        SoundEffects.load("audio/menu_ambient.wav", "MenuBackground");
+        SoundEffects.load("audio/SelectButton.wav", "Navigate");
+        SoundEffects.load("audio/LobbyMusic.wav", "LobbyMusic");
+        SoundEffects.load("audio/Jab.wav", "Jab");
+        SoundEffects.load("audio/Kick.wav", "Kick");
+        SoundEffects.load("audio/ChangeScreen.wav", "ChangeScreen");
+        SoundEffects.load("audio/bg_loop.wav", "BattleMusic");
+        SoundEffects.load("audio/FootSteps.wav", "FootSteps");
+        SoundEffects.load("audio/BreakEnemyBone.wav", "BreakEnemyBone");
+        SoundEffects.load("audio/HealerHealingEnemies.wav", "HealerHealingEnemies");
+        SoundEffects.load("audio/EnemyEscaping.wav", "EnemyEscaping");
+        SoundEffects.load("audio/PlayerGettingAttacked.wav", "PlayerGettingAttacked");
+        SoundEffects.load("audio/EnemyAttackSound-Huwawa.wav", "Huwawa");
     }
 
     private static void loadAnimations() {

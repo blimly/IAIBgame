@@ -122,9 +122,8 @@ public class Player {
             case IDLE:
                 return Assets.playerIdle.getKeyFrame(stateTime, true);
             default:
-                break;
+                return null;
         }
-        return null;
     }
 
     // For animating online players

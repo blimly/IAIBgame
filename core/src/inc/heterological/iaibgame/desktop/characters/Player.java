@@ -27,7 +27,6 @@ public class Player {
 
     public boolean facingRight;
     private float attackStateTime = 0;
-    public static boolean stomping = false;
 
     public Player() {
         position = new Vector2(Main.GAME_WIDTH / 2f - width / 2f, Main.GAME_HEIGHT / 2f - height / 2f);
@@ -41,20 +40,11 @@ public class Player {
         facingRight = true;
     }
 
-    public void playFootSteps() {
-        if (!stomping) {
-            stomping = true;
-            SoundEffects.loop("FootSteps", 0.3f);
-        }
-
-    }
-
     public void moveLeft(float dt) {
         facingRight = false;
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(dt * -MOVE_SPEED, 0);
-        playFootSteps();
     }
 
     public void moveRight(float dt) {
@@ -62,21 +52,18 @@ public class Player {
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(dt * MOVE_SPEED, 0);
-        playFootSteps();
     }
 
     public void moveUp(float dt) {
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(0, dt * MOVE_SPEED);
-        playFootSteps();
     }
 
     public void moveDown(float dt) {
         currentState = Condition.MOVE;
         collideWithWall();
         position.add(0, dt * -MOVE_SPEED);
-        playFootSteps();
     }
 
     private void collideWithWall() {
@@ -121,7 +108,6 @@ public class Player {
                     attackStateTime = 0;
                 }
             case MOVE:
-                playFootSteps();
                 return Assets.playerMove.getKeyFrame(stateTime, true);
             case IDLE:
                 return Assets.playerIdle.getKeyFrame(stateTime, true);

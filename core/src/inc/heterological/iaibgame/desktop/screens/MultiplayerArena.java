@@ -75,10 +75,6 @@ public class MultiplayerArena extends GameState{
             player.moveRight(delta);
         } else {
             player.stand();
-            if (GameKeys.noKeyPressed()){
-                Player.stomping = false;
-            }
-            SoundEffects.stop("FootSteps");
         }
         if (GameKeys.isDown(GameKeys.UP)) {
             player.moveUp(delta);

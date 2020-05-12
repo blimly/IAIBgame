@@ -2,6 +2,7 @@ package inc.heterological.iaibgame.net.server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.desktop.ArenaButton;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
@@ -27,13 +28,16 @@ public class OnlineArena implements Disposable {
 
     public static Set<Integer> enemiesToRemove = new HashSet<>();
 
-    private Vector2 center;
+    private final Vector2 center =  new Vector2(912, 912);
     private static final int PLAYER_RADIUS = 20;
     private static final int ENEMY_PERCEPTION_RADIUS = 400;
     private static final int HEALER_HEALING_RADIUS = 250;
 
     private float maxSpeed = 5f;
     private float maxForce = 0.20f;
+
+    private static final float EMPTY_ARENA_TIMEOUT = 5f; // seconds
+    private double secondsFromLogOut = 0;
 
     public OnlineArena() {
         gameStarted = false;
@@ -72,11 +76,18 @@ public class OnlineArena implements Disposable {
     }
 
     public void update(float delta) {
-        center = new Vector2(912, 912);
 
         if (!gameStarted) {
             updateArenaButtonState();
         } else {
+            if (players.isEmpty()) {
+                secondsFromLogOut += delta;
+            }
+
+            if (secondsFromLogOut > EMPTY_ARENA_TIMEOUT) {
+                resetArena();
+            }
+
             for (EnemyEntity enemy : enemies.values()) {
                 getTarget(enemy);
                 enemySeek(enemy, enemy.target);
@@ -102,7 +113,15 @@ public class OnlineArena implements Disposable {
                 enemy.pos.add(enemy.vel);
                 enemy.acc.scl(0, 0);
             }
+            Log.info(enemies.size() + "");
         }
+    }
+
+    private void resetArena() {
+        secondsFromLogOut = 0;
+        updateArenaButtonState();
+        enemies.clear();
+        gameStarted = false;
     }
 
     private void healEnemies(EnemyEntity healer) {
@@ -175,7 +194,7 @@ public class OnlineArena implements Disposable {
         }
     }
 
-    private void getHit(EnemyEntity enemy) {
+    public void getHit(EnemyEntity enemy) {
         float hitRadius = PLAYER_RADIUS * 3f;
         int kickAngle = 140 / 2; // 140 degrees in front of player
         int jabAngle = 90 / 2;
@@ -282,7 +301,7 @@ public class OnlineArena implements Disposable {
         }
     }
 
-    private void enemySeek(EnemyEntity enemy, Vector2 target) {
+    public void enemySeek(EnemyEntity enemy, Vector2 target) {
         float dist = enemy.pos.dst(target);
         Vector2 desired = target.cpy().sub(enemy.pos);
         desired.nor();

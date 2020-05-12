@@ -186,7 +186,7 @@ public class Assets {
         healer_healing = new Animation<>(0.2f, Arrays.copyOfRange(healer_temp[0], 4, 6, TextureRegion[].class));
 
         TextureRegion[][] heal_temp = TextureRegion.split(healingTex,16,16);
-        healing = new Animation<>(0.2f, heal_temp[0]);
+        healing = new Animation<>(0.1f, heal_temp[0]);
     }
 
     public static void dispose() {

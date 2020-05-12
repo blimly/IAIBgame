@@ -15,6 +15,7 @@ public class EnemyEntity implements Serializable {
     public Vector2 acc;
     public Vector2 target;
     public int id, health;
+    public boolean gettingHealed;
     // debugging
     @Override
     public String toString() {

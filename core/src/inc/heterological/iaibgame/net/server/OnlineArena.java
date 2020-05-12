@@ -54,6 +54,7 @@ public class OnlineArena implements Disposable {
                 entity.target = new Vector2(5000, 5000);
                 entity.attackTimer = 0;
                 entity.attacking = false;
+                entity.gettingHealed = false;
 
                 if (j < 2) {
                     entity.type = Enemy.ENEMY_TYPE.ZOMBIE;
@@ -78,19 +79,22 @@ public class OnlineArena implements Disposable {
         } else {
             for (EnemyEntity enemy : enemies.values()) {
                 getTarget(enemy);
-                if (enemy.type != Enemy.ENEMY_TYPE.HEALER_HEALING) {
-                    enemySeek(enemy, enemy.target);
-                }
+                enemySeek(enemy, enemy.target);
                 collideWithWall(enemy);
                 collideWithOtherEnemies(enemy);
                 getHit(enemy);
-                if (enemy.type != Enemy.ENEMY_TYPE.HEALER_HEALING && enemy.type != Enemy.ENEMY_TYPE.HEALER_WALKING) {
+                if (!isHealer(enemy)) {
                     attackTarget(enemy);
                 }
                 updateState(enemy);
                 if (enemy.health <= 0) {
                     enemies.remove(enemy.id);
                     continue;
+                }
+                if (enemy.type == Enemy.ENEMY_TYPE.HEALER_HEALING) {
+                    healEnemies(enemy);
+                } else {
+                    enemy.gettingHealed = false;
                 }
 
                 enemy.vel.add(enemy.acc);
@@ -101,7 +105,22 @@ public class OnlineArena implements Disposable {
         }
     }
 
-    public void updateState(EnemyEntity enemy) {
+    private void healEnemies(EnemyEntity healer) {
+        for (EnemyEntity enemy : enemies.values()) {
+            if (!isHealer(enemy)) {
+                float distFromHealer = healer.pos.dst(enemy.pos);
+                if (distFromHealer < HEALER_HEALING_RADIUS) {
+                    enemy.gettingHealed = true;
+                    enemy.health += (HEALER_HEALING_RADIUS - distFromHealer) / 200;
+                } else {
+                    enemy.gettingHealed = false;
+                }
+            }
+        }
+
+    }
+
+    private void updateState(EnemyEntity enemy) {
         if (enemy.type == Enemy.ENEMY_TYPE.BOB_RUNNING && enemy.health < 50) {
             enemy.type = Enemy.ENEMY_TYPE.BOB_FLEEING;
         }
@@ -116,13 +135,14 @@ public class OnlineArena implements Disposable {
 
     private double getAverageEnemyHealthInRadius(EnemyEntity enemy) {
         return enemies.values().stream()
+                .filter(e -> !isHealer(e))
                 .filter(e -> e.pos.dst(enemy.pos) < HEALER_HEALING_RADIUS)
                 .mapToInt(e -> e.health)
                 .average()
                 .orElse(100);
     }
 
-    public void updateArenaButtonState() {
+    private void updateArenaButtonState() {
         Set<Vector2> playerPositions = players.values().stream()
                 .map(p -> p.pos)
                 .collect(Collectors.toSet());
@@ -140,7 +160,7 @@ public class OnlineArena implements Disposable {
         }
     }
 
-    public void attackTarget(EnemyEntity enemy) {
+    private void attackTarget(EnemyEntity enemy) {
         float d = enemy.pos.dst(enemy.target);
         if (d > 0 && d < PLAYER_RADIUS * 2) {
             if (enemy.attackTimer < 10) {
@@ -155,7 +175,7 @@ public class OnlineArena implements Disposable {
         }
     }
 
-    public void getHit(EnemyEntity enemy) {
+    private void getHit(EnemyEntity enemy) {
         float hitRadius = PLAYER_RADIUS * 3f;
         int kickAngle = 140 / 2; // 140 degrees in front of player
         int jabAngle = 90 / 2;
@@ -185,13 +205,13 @@ public class OnlineArena implements Disposable {
                 if (player.currentState == Player.Condition.JAB) {
                     if (player.facingRight && (diff.angle() < jabAngle || diff.angle() > (360 - jabAngle))) {
                         diff.setLength(hitRadius - d);
-                        enemy.health -= diff.len() / 5;
+                        enemy.health -= diff.len() / 4;
                         diff.scl(10f);
                         enemy.acc.add(diff);
                     }
                     if (!player.facingRight && diff.angle() > (180 - jabAngle) && diff.angle() < (180 + jabAngle)) {
                         diff.setLength(hitRadius - d);
-                        enemy.health -= diff.len() / 5;
+                        enemy.health -= diff.len() / 4;
                         diff.scl(10f);
                         enemy.acc.add(diff);
                     }
@@ -202,7 +222,7 @@ public class OnlineArena implements Disposable {
 
     }
 
-    public void getTarget(EnemyEntity entity) {
+    private void getTarget(EnemyEntity entity) {
         boolean healerInArena = enemies.values().stream().anyMatch(this::isHealer);
 
         if (healerInArena && !isHealer(entity) && entity.health < 50) {
@@ -244,7 +264,10 @@ public class OnlineArena implements Disposable {
             separation.scl(maxSpeed);
             Vector2 steer = separation.sub(enemy.vel);
             steer.clamp(0, maxForce);
-            if (!isHealer(enemy)) {
+            if (enemy.type == Enemy.ENEMY_TYPE.HEALER_HEALING) {
+                enemy.vel.scl(0);
+                enemy.acc.scl(0);
+            } else {
                 enemy.acc.add(steer);
             }
         }
@@ -259,7 +282,7 @@ public class OnlineArena implements Disposable {
         }
     }
 
-    public void enemySeek(EnemyEntity enemy, Vector2 target) {
+    private void enemySeek(EnemyEntity enemy, Vector2 target) {
         float dist = enemy.pos.dst(target);
         Vector2 desired = target.cpy().sub(enemy.pos);
         desired.nor();
@@ -273,6 +296,7 @@ public class OnlineArena implements Disposable {
             desired.sub(enemy.vel);
             desired.clamp(0, maxForce);
         } else if (enemy.type == Enemy.ENEMY_TYPE.HEALER_HEALING) {
+            enemy.vel.scl(0);
             desired.scl(0);
         } else {
             desired.sub(enemy.vel.cpy().scl(-1f)); // reverse direction

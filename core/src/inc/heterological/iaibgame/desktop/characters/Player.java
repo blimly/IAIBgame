@@ -20,14 +20,10 @@ public class Player {
     public int health;
 
     public Vector2 position;
+    public boolean facingRight;
     private Vector2 velocity;
     private Vector2 acceleration;
     private float friction;
-
-    public String username;
-    public boolean onButton;
-
-    public boolean facingRight;
     private float attackStateTime = 0;
 
     public Player() {
@@ -41,6 +37,20 @@ public class Player {
         //ANIMATION
         currentState = Condition.IDLE;
         facingRight = true;
+    }
+
+    // For animating online players
+    public static TextureRegion getFrameBasedUponCondition(Condition state, float stateTime) {
+        switch (state) {
+            case KICK:
+                return Assets.playerKick.getKeyFrame(stateTime, true);
+            case JAB:
+                return Assets.playerJab.getKeyFrame(stateTime, true);
+            case MOVE:
+                return Assets.playerMove.getKeyFrame(stateTime, true);
+            default:
+                return Assets.playerIdle.getKeyFrame(stateTime, true);
+        }
     }
 
     public void moveLeft(float dt) {
@@ -64,7 +74,6 @@ public class Player {
         currentState = Condition.MOVE;
         acceleration.add(0, dt * -MOVE_SPEED);
     }
-
 
     public void updatePlayerPhysics() {
         collideWithWall();
@@ -128,20 +137,6 @@ public class Player {
                 return Assets.playerIdle.getKeyFrame(stateTime, true);
             default:
                 return null;
-        }
-    }
-
-    // For animating online players
-    public static TextureRegion getFrameBasedUponCondition(Condition state, float stateTime) {
-        switch (state) {
-            case KICK:
-                return Assets.playerKick.getKeyFrame(stateTime, true);
-            case JAB:
-                return Assets.playerJab.getKeyFrame(stateTime, true);
-            case MOVE:
-                return Assets.playerMove.getKeyFrame(stateTime, true);
-            default:
-                return Assets.playerIdle.getKeyFrame(stateTime, true);
         }
     }
 

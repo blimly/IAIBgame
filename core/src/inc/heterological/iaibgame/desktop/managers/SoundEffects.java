@@ -10,6 +10,7 @@ public class SoundEffects {
 
     private static HashMap<String, Sound> soundEffects = new HashMap<>();
     private static HashMap<String, Music> music = new HashMap<>();
+
     public static void load(String path, String name, int soundId, float volume) {
         Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
         sound.setVolume(soundId, volume);
@@ -29,13 +30,14 @@ public class SoundEffects {
     public static void play(String name) {
         soundEffects.get(name).play();
     }
+
     public static void stop(String name) {
         soundEffects.get(name).stop();
     }
 
 
     public static void stopAll() {
-        for (Sound s: soundEffects.values()) {
+        for (Sound s : soundEffects.values()) {
             s.stop();
         }
     }
@@ -47,6 +49,11 @@ public class SoundEffects {
     public static void playMusic(String name) {
         getMusicToPlay(name).play();
     }
+
+    public static void loopMusic(String name) {
+        getMusicToPlay(name).setLooping(true);
+    }
+
 
     public static void stopAllMusic() {
         for (Music music : music.values()) {

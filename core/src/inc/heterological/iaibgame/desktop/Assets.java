@@ -1,7 +1,6 @@
 package inc.heterological.iaibgame.desktop;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -22,13 +21,6 @@ public class Assets {
 
     public static Texture blank;
 
-    public static Texture triangle;
-    public static Sprite triangleUp;
-    public static Sprite triangleDown;
-
-    public static Texture lockTex;
-    public static Sprite lock;
-
     public static Texture buttons;
     public static Sprite play;
     public static Sprite exit;
@@ -36,15 +28,7 @@ public class Assets {
     public static Sprite singleplayer;
 
     public static Texture playerTex1;
-    public static Texture playerTex2;
-    public static Texture playerTex3;
-    public static Texture playerTex4;
     public static Texture selectArrow;
-
-    public static Sprite player1_select;
-    public static Sprite player2_select;
-    public static Sprite player3_select;
-    public static Sprite player4_select;
 
     public static Sprite mainSpriteBack1;
     public static Sprite mainSpriteBack2;
@@ -60,38 +44,22 @@ public class Assets {
     public static Animation<TextureRegion> playerMove;
     public static Animation<TextureRegion> playerKick;
     public static Animation<TextureRegion> playerJab;
-
-    private static Texture zombieTex;
     public static Animation<TextureRegion> zombie;
-
-    private static Texture bouncingBobTex;
     public static Animation<TextureRegion> bob_run;
     public static Animation<TextureRegion> bob_flee;
-
-    private static Texture healerTex;
     public static Animation<TextureRegion> healer_walking;
     public static Animation<TextureRegion> healer_healing;
-
-    private static Texture healingTex;
     public static Animation<TextureRegion> healing;
-
-
     public static Texture textureSheet;
-
-    private static Texture loadingTex;
     public static Animation<TextureRegion> loading;
-
-    public static Texture runSheet;
-    public static Animation<TextureRegion> run;
-
-
-    public static Sound backgound_loop;
-    public static Sound ooyeah;
-    public static Sound no;
-    public static Sound hell;
+    private static Texture zombieTex;
+    private static Texture bouncingBobTex;
+    private static Texture healerTex;
+    private static Texture healingTex;
+    private static Texture loadingTex;
 
     public static void load() {
-        loadFonts();
+        //loadFonts();
         loadSprites();
         loadAnimations();
         loadSounds();
@@ -116,38 +84,19 @@ public class Assets {
     }
 
     private static void loadSprites() {
-        lockTex = new Texture(Gdx.files.internal("images/lock.png"));
-        lock = new Sprite(lockTex);
         blank = new Texture(Gdx.files.internal("images/blank.png"));
-        triangle = new Texture(Gdx.files.internal("images/triangle.png"));
-        triangleUp = new Sprite(triangle);
-        triangleUp.flip(false, true);
-        triangleDown = new Sprite(triangle);
+
         selectArrow = new Texture(Gdx.files.internal("images/SelectArrow.png"));
         buttons = new Texture(Gdx.files.internal("ui/buttons.png"));
         playerTex1 = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE.png"));
-        playerTex2 = new Texture(Gdx.files.internal("images/characters/MainCharacter_TWO.png"));
-        playerTex3 = new Texture(Gdx.files.internal("images/characters/MainCharacter_THREE.png"));
-        playerTex4 = new Texture(Gdx.files.internal("images/characters/MainCharacter_FOUR.png"));
         play = new Sprite(new TextureRegion(buttons, 0, 0, 64, 24));
         exit = new Sprite(new TextureRegion(buttons, 0, 24, 64, 24));
-        player1_select = new Sprite(new TextureRegion(playerTex1, 0, 0, 16, 10));
-        player2_select = new Sprite(new TextureRegion(playerTex2, 0, 0, 16, 10));
-        player3_select = new Sprite(new TextureRegion(playerTex3, 0, 0, 16, 10));
-        player4_select = new Sprite(new TextureRegion(playerTex4, 0, 0, 16, 10));
-        Assets.player1_select.flip(true,false);
-        Assets.player2_select.flip(true,false);
-        Assets.player3_select.flip(true,false);
-        Assets.player4_select.flip(true,false);
-        
+
         singleplayer = new Sprite(new TextureRegion(buttons, 0, 48, 192, 24));
-        multiplayer =  new Sprite(new TextureRegion(buttons, 0, 72, 192, 24));
+        multiplayer = new Sprite(new TextureRegion(buttons, 0, 72, 192, 24));
 
         mainSpriteBack1 = new Sprite(new Texture(Gdx.files.internal("images/backgrounds/menu2.png")));
         mainSpriteBack2 = new Sprite(new Texture(Gdx.files.internal("images/backgrounds/menu2.png")));
-
-        levelsTexture = new Texture(Gdx.files.internal("images/backgrounds/levels.png"));
-        spriteBack = new Sprite(levelsTexture, 0, 0, 720, 160);
 
         mpArenaTex = new Texture(Gdx.files.internal("images/arenas/mp-arena.png"));
 
@@ -171,11 +120,11 @@ public class Assets {
         SoundEffects.loadMusic("audio/EnemyAttackSound-Huwawa.wav", "Huwawa", 0.5f);
         SoundEffects.loadMusic("audio/HealerHealingEnemies.wav", "HealerHealingEnemies", 0.8f); //used badly
         SoundEffects.loadMusic("audio/SelectButton.wav", "Navigate", 0.9f);  //used
+        SoundEffects.loadMusic("audio/bg_loop.wav", "BattleMusic", 0.6f);  //used
 
     }
 
     private static void loadAnimations() {
-        textureSheet = new Texture(Gdx.files.internal("images/characters/spritesheet.png"));
         playerTex = new Texture(Gdx.files.internal("images/characters/MainCharacter_ONE-Sheet-newKick.png"));
         zombieTex = new Texture(Gdx.files.internal("images/characters/Enemy1.png"));
         bouncingBobTex = new Texture(Gdx.files.internal("images/characters/bouncing_bob.png"));
@@ -193,7 +142,7 @@ public class Assets {
         TextureRegion[] loading_frames = new TextureRegion[37 * 7];
         int index = 0;
         for (int y = 0; y < 7; y++) {
-            for(int x = 0; x < 37; x++) {
+            for (int x = 0; x < 37; x++) {
                 loading_frames[index++] = temp[y][x];
             }
         }
@@ -204,7 +153,7 @@ public class Assets {
         playerKick = new Animation<>(0.1f, playerKickSprites);
         playerJab = new Animation<>(0.05f, playerJabSprites);
 
-        TextureRegion[][] zombie_temp = TextureRegion.split(zombieTex,16,16);
+        TextureRegion[][] zombie_temp = TextureRegion.split(zombieTex, 16, 16);
         zombie = new Animation<>(0.2f, zombie_temp[0]);
 
         TextureRegion[][] bob_temp = TextureRegion.split(bouncingBobTex, 16, 16);
@@ -215,7 +164,7 @@ public class Assets {
         healer_walking = new Animation<>(0.2f, Arrays.copyOfRange(healer_temp[0], 0, 4, TextureRegion[].class));
         healer_healing = new Animation<>(0.2f, Arrays.copyOfRange(healer_temp[0], 4, 6, TextureRegion[].class));
 
-        TextureRegion[][] heal_temp = TextureRegion.split(healingTex,16,16);
+        TextureRegion[][] heal_temp = TextureRegion.split(healingTex, 16, 16);
         healing = new Animation<>(0.1f, heal_temp[0]);
     }
 

@@ -17,6 +17,7 @@ import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
+import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
@@ -40,13 +41,13 @@ public class MultiplayerArena extends GameState {
     OrthographicCamera camera;
     float stateTime;
     float delta;
-    private ArenaButton arenaButton;
 
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);
         init();
         show();
-        SoundEffects.loop("BattleMusic");
+        SoundEffects.loopMusic("BattleMusic");
+        SoundEffects.playMusic("BattleMusic");
     }
 
     public void show() {
@@ -174,10 +175,6 @@ public class MultiplayerArena extends GameState {
                 } else {
                     Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x + 64, onlinePlayer.pos.y, -64, 64);
                 }
-            }
-            if (arenaButton.playerOnButton(player.position) && !SoundEffects.getMusicToPlay("Navigate").isPlaying()) {
-                SoundEffects.playMusic("Navigate");
-
             }
         }
 

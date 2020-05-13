@@ -25,7 +25,7 @@ public class MultiplayerLobby extends GameState {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         statetime = 0;
-        SoundEffects.loop("LobbyMusic", 0.25f);
+        SoundEffects.loop("LobbyMusic");
     }
 
     @Override

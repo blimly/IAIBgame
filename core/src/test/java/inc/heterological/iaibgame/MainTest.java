@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
+import inc.heterological.iaibgame.desktop.screens.MainMenu;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
 
 public class MainTest {
@@ -46,13 +48,10 @@ public class MainTest {
     @Test
     public void create() {
         Main main = new Main();
-        assertNull(Main.batch);
-        assertNull(Main.camera);
-        assertNull(Main.gameStateManager);
         main.create();
-        assertEquals(new SpriteBatch(), Main.batch);
-        assertEquals(new OrthographicCamera(640, 480), Main.camera);
-        assertEquals(new GameStateManager(), Main.gameStateManager);
+        assertThat(Main.batch, instanceOf(SpriteBatch.class));
+        assertThat(Main.camera, instanceOf(OrthographicCamera.class));
+        assertThat(Main.gameStateManager, instanceOf(GameStateManager.class));
     }
 
     @Test

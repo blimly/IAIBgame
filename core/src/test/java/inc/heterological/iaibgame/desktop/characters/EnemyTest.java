@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.desktop.Assets;
 import org.junit.AfterClass;
@@ -12,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
 
 public class EnemyTest {
@@ -42,8 +44,8 @@ public class EnemyTest {
     @Test
     public void getCurrentFrame() {
         Enemy enemy = new Enemy(new Vector2(0,0));
-        assertEquals(Assets.zombie.getKeyFrame(1, false), enemy.getCurrentFrame(1, Enemy.ENEMY_TYPE.ZOMBIE));
-        assertEquals(Assets.bob_run.getKeyFrame(1, true), enemy.getCurrentFrame(1, Enemy.ENEMY_TYPE.BOB_RUNNING));
+        assertThat(enemy.getCurrentFrame(1, Enemy.ENEMY_TYPE.ZOMBIE), instanceOf(TextureRegion.class));
+        assertThat(enemy.getCurrentFrame(1, Enemy.ENEMY_TYPE.BOB_RUNNING), instanceOf(TextureRegion.class));
         assertEquals(Assets.bob_flee.getKeyFrame(1, true), enemy.getCurrentFrame(1, Enemy.ENEMY_TYPE.BOB_FLEEING));
         assertEquals(Assets.healer_walking.getKeyFrame(1, true), enemy.getCurrentFrame(1, Enemy.ENEMY_TYPE.HEALER_WALKING));
         assertEquals(Assets.healer_healing.getKeyFrame(1, true), enemy.getCurrentFrame(1, Enemy.ENEMY_TYPE.HEALER_HEALING));
@@ -52,6 +54,6 @@ public class EnemyTest {
     @Test
     public void getHealingParticles() {
         Enemy enemy = new Enemy(new Vector2(0,0));
-        assertEquals(Assets.healing.getKeyFrame(1), enemy.getHealingParticles(1));
+        assertEquals(Assets.healing.getKeyFrame(0), enemy.getHealingParticles(0));
     }
 }

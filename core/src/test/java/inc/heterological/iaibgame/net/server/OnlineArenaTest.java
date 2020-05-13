@@ -20,9 +20,9 @@ public class OnlineArenaTest extends TestCase {
         oArena.addPlayer(player);
         oArena.update(1);
         oArena.getEnemies().get(1).health -= 100;
-        assertEquals(5, oArena.getEnemies().size());
+        assertEquals(10, oArena.getEnemies().size());
         oArena.update(1);
-        assertEquals(4, oArena.getEnemies().size());
+        assertEquals(9, oArena.getEnemies().size());
     }
 
     public void testGetHitRightKickAndJab() {
@@ -40,7 +40,7 @@ public class OnlineArenaTest extends TestCase {
         assertEquals(94, oArena.getEnemies().get(0).health);
         oArena.getPlayers().get(0).currentState = Player.Condition.JAB;
         oArena.getHit(oArena.getEnemies().get(0));
-        assertEquals(82, oArena.getEnemies().get(0).health);
+        assertEquals(79, oArena.getEnemies().get(0).health);
     }
 
     public void testGetHitLeftKickAndJab() {
@@ -58,7 +58,7 @@ public class OnlineArenaTest extends TestCase {
         assertEquals(94, oArena.getEnemies().get(0).health);
         oArena.getPlayers().get(0).currentState = Player.Condition.JAB;
         oArena.getHit(oArena.getEnemies().get(0));
-        assertEquals(82, oArena.getEnemies().get(0).health);
+        assertEquals(79, oArena.getEnemies().get(0).health);
     }
 
     public void testAttackPlayers() {

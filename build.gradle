@@ -25,6 +25,10 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+<<<<<<< HEAD
+=======
+        junitVersion = '4.12'
+>>>>>>> origin/develop
     }
 
     repositories {
@@ -48,7 +52,10 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+<<<<<<< HEAD
         
+=======
+>>>>>>> origin/develop
     }
 }
 
@@ -57,6 +64,19 @@ project(":core") {
 
 
     dependencies {
+<<<<<<< HEAD
+=======
+        implementation 'junit:junit:4.12'
+        implementation "org.mockito:mockito-core:2.2.29"
+        implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testCompile "junit:junit:+"
+        testCompile "org.mockito:mockito-core:2.2.29"
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+>>>>>>> origin/develop
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
@@ -65,6 +85,16 @@ project(":core") {
             exclude module : 'kryo'
         }
         compile "com.esotericsoftware:kryo:3.0.1"
+<<<<<<< HEAD
         
     }
 }
+=======
+
+        testCompile "junit:junit:$junitVersion"
+
+    }
+}
+
+
+>>>>>>> origin/develop

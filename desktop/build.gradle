@@ -1,6 +1,10 @@
 apply plugin: "java"
 
+<<<<<<< HEAD
 sourceCompatibility = 1.7
+=======
+sourceCompatibility = 1.8
+>>>>>>> origin/develop
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
@@ -36,4 +40,8 @@ task dist(type: Jar) {
 }
 
 
+<<<<<<< HEAD
 dist.dependsOn classes
+=======
+dist.dependsOn classes
+>>>>>>> origin/develop

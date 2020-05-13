@@ -1,6 +1,27 @@
 apply plugin: "java"
 
+<<<<<<< HEAD
 sourceCompatibility = 1.7
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
+=======
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.test.resources.srcDirs = [ "assets/" ]
+
+task server(type: Jar) {
+    manifest {
+        attributes 'Main-Class': "inc.heterological.iaibgame.net.server.ServerLauncher",
+                'Class-Path': configurations.runtime.files.collect {"$it.name"}.join(' ')
+    }
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+server.dependsOn classes
+>>>>>>> origin/develop

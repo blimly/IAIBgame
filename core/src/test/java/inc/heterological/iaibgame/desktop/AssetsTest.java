@@ -45,8 +45,8 @@ public class AssetsTest {
     @Test
     public void load() {
         Assets.load();
-        assertEquals(16, Assets.lockTex.getHeight());
-        assertNotNull(Assets.textureSheet);
+        assertEquals(10, Assets.selectArrow.getHeight());
+        assertNotNull(Assets.playerTex);
     }
 
     @Test

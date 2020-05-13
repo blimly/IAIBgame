@@ -59,7 +59,7 @@ public class Assets {
     private static Texture loadingTex;
 
     public static void load() {
-        //loadFonts();
+        loadFonts();
         loadSprites();
         loadAnimations();
         loadSounds();

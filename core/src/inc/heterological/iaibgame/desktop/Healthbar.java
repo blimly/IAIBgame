@@ -14,16 +14,16 @@ public class Healthbar {
         batch.draw(Assets.blank, entityPos.x , entityPos.y + 70, 64, 8);
 
         if (health <= 100 && health > 75) {
-            batch.setColor(Color.GREEN);
+            batch.setColor(Color.valueOf("20e2de"));
         }
         else if (health <= 75 && health > 50) {
-            batch.setColor(Color.YELLOW);
+            batch.setColor(Color.valueOf("2999ac"));
         }
         else if (health <= 50 && health > 25) {
-            batch.setColor(Color.ORANGE);
+            batch.setColor(Color.valueOf("317d9c"));
         }
         else if (health <= 25 && health > 0) {
-            batch.setColor(Color.RED);
+            batch.setColor(Color.valueOf("414883"));
         }
 
         float healthInPercent = health / 100f;

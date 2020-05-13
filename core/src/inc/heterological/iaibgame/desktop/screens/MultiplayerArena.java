@@ -3,6 +3,8 @@ package inc.heterological.iaibgame.desktop.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -38,13 +40,13 @@ public class MultiplayerArena extends GameState {
     OrthographicCamera camera;
     float stateTime;
     float delta;
-
-    private static boolean battleMusicOff = true;
+    private ArenaButton arenaButton;
 
     public MultiplayerArena(GameStateManager gsm) {
         super(gsm);
         init();
         show();
+        SoundEffects.loop("BattleMusic");
     }
 
     public void show() {
@@ -52,6 +54,7 @@ public class MultiplayerArena extends GameState {
     }
 
     public void update() {
+
         delta = Gdx.graphics.getDeltaTime();
         stateTime += delta;
 
@@ -91,8 +94,23 @@ public class MultiplayerArena extends GameState {
 
         for (EnemyEntity onlineEnemy : enemies.values()) {
             float distToEnemy = onlineEnemy.pos.dst(player.position);
+            boolean playerTookDamage = false;
             if (onlineEnemy.attacking && distToEnemy < 40) {
                 player.health -= (40 - distToEnemy) / 100;
+                playerTookDamage = true;
+                SoundEffects.play("PlayerGettingAttacked");
+            }
+            if (onlineEnemy.type == Enemy.ENEMY_TYPE.HEALER_HEALING) {
+                if (!SoundEffects.getMusicToPlay("HealerHealingEnemies").isPlaying()) {
+                    SoundEffects.getMusicToPlay("HealerHealingEnemies").play();
+                }
+            } else if (onlineEnemy.type == Enemy.ENEMY_TYPE.HEALER_WALKING){
+                SoundEffects.getMusicToPlay("HealerHealingEnemies").stop();
+            }
+            if (onlineEnemy.attacking && playerTookDamage) {
+                if (!SoundEffects.getMusicToPlay("Huwawa").isPlaying()) {
+                    SoundEffects.getMusicToPlay("Huwawa").play();
+                }
             }
         }
 
@@ -157,6 +175,10 @@ public class MultiplayerArena extends GameState {
                     Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x + 64, onlinePlayer.pos.y, -64, 64);
                 }
             }
+            if (arenaButton.playerOnButton(player.position) && !SoundEffects.getMusicToPlay("Navigate").isPlaying()) {
+                SoundEffects.playMusic("Navigate");
+
+            }
         }
 
         // draw enemies on server
@@ -203,6 +225,8 @@ public class MultiplayerArena extends GameState {
             Gdx.app.exit();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+            SoundEffects.stopAll();
+            SoundEffects.stopAllMusic();
             RemovePlayer removePlayer = new RemovePlayer();
             removePlayer.playerID = gameClient.client.getID();
             gameClient.client.sendUDP(removePlayer);

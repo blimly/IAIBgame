@@ -156,19 +156,22 @@ public class Assets {
     }
 
     private static void loadSounds() {
-        SoundEffects.load("audio/menu_ambient.wav", "MenuBackground");
-        SoundEffects.load("audio/SelectButton.wav", "Navigate");
-        SoundEffects.load("audio/LobbyMusic.wav", "LobbyMusic");
-        SoundEffects.load("audio/Jab.wav", "Jab");
-        SoundEffects.load("audio/Kick.wav", "Kick");
-        SoundEffects.load("audio/ChangeScreen.wav", "ChangeScreen");
-        SoundEffects.load("audio/bg_loop.wav", "BattleMusic");
-        SoundEffects.load("audio/FootSteps.wav", "FootSteps");
-        SoundEffects.load("audio/BreakEnemyBone.wav", "BreakEnemyBone");
-        SoundEffects.load("audio/HealerHealingEnemies.wav", "HealerHealingEnemies");
-        SoundEffects.load("audio/EnemyEscaping.wav", "EnemyEscaping");
-        SoundEffects.load("audio/PlayerGettingAttacked.wav", "PlayerGettingAttacked");
-        SoundEffects.load("audio/EnemyAttackSound-Huwawa.wav", "Huwawa");
+        SoundEffects.load("audio/menu_ambient.wav", "MenuBackground", 1, 0.025f); //used
+        SoundEffects.load("audio/LobbyMusic.wav", "LobbyMusic", 3, 0.025f);  //used
+        SoundEffects.load("audio/ChangeScreen.wav", "ChangeScreen", 6, 0.05f); //used
+        SoundEffects.load("audio/bg_loop.wav", "BattleMusic", 7, 0.01f); //used
+        SoundEffects.load("audio/BreakEnemyBone.wav", "BreakEnemyBone", 9, 0.01f); //used
+        SoundEffects.load("audio/EnemyEscaping.wav", "EnemyEscaping", 11, 0.1f); //used badly
+        SoundEffects.load("audio/PlayerGettingAttacked.wav", "PlayerGettingAttacked", 12, 0.01f); //used badly
+        SoundEffects.load("audio/Whoosh1.wav", "Woosh1", 13, 0.1f); //used
+        SoundEffects.load("audio/Whoosh2.wav", "Woosh2", 14, 0.1f); //used
+        SoundEffects.load("audio/Whoosh3.wav", "Woosh3", 15, 0.1f);
+        SoundEffects.loadMusic("audio/Jab.wav", "Jab", 0.5f); //used
+        SoundEffects.loadMusic("audio/Kick.wav", "Kick", 0.01f); //used
+        SoundEffects.loadMusic("audio/EnemyAttackSound-Huwawa.wav", "Huwawa", 0.5f);
+        SoundEffects.loadMusic("audio/HealerHealingEnemies.wav", "HealerHealingEnemies", 0.8f); //used badly
+        SoundEffects.loadMusic("audio/SelectButton.wav", "Navigate", 0.9f);  //used
+
     }
 
     private static void loadAnimations() {

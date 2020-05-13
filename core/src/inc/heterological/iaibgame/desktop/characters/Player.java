@@ -86,12 +86,12 @@ public class Player {
     }
 
     public void jab() {
-        SoundEffects.play("Jab", 0.3f);
+        SoundEffects.play("Woosh1");
         currentState = Condition.JAB;
     }
 
     public void kick() {
-        SoundEffects.play("Kick", 0.3f);
+        SoundEffects.play("Woosh2");
         currentState = Condition.KICK;
     }
 
@@ -106,9 +106,11 @@ public class Player {
         switch (currentState) {
             case JAB:
                 if (attackStateTime < Assets.playerJab.getAnimationDuration()) {
+                    boolean jab = true;
                     attackStateTime += delta;
                     return Assets.playerJab.getKeyFrame(attackStateTime, false);
                 } else {
+                    boolean jab = false;
                     currentState = Condition.IDLE;
                     attackStateTime = 0;
                 }

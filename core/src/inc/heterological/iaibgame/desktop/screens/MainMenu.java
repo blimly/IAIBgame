@@ -37,7 +37,7 @@ public class MainMenu extends GameState{
         playButton = new Button(64 * 3, 24 * 3, 235, 120, Assets.play);
         exitButton = new Button(64 * 3, 24 * 3, 235, 30, Assets.exit);
         bg_scroll_y = 0;
-        SoundEffects.loop("MenuBackground", 0.25f);
+        SoundEffects.loop("MenuBackground");
     }
 
     @Override
@@ -46,20 +46,20 @@ public class MainMenu extends GameState{
         if (GameKeys.isPressed(GameKeys.ENTER)) {
             if(arrow.y == 120) {
                 stateManager.setGameState(GameStateManager.LOBBY);
-                SoundEffects.play("ChangeScreen", 0.1f);
+                SoundEffects.play("ChangeScreen");
             }
             if(arrow.y == 30) {
                 Gdx.app.exit();
-                SoundEffects.play("ChangeScreen", 0.1f);
+                SoundEffects.play("ChangeScreen");
             }
         }
         if (GameKeys.isPressed(GameKeys.UP)) {
             arrow.moveArrow(GameKeys.UP);
-            SoundEffects.play("Navigate", 0.1f);
+            SoundEffects.playMusic("Navigate");
         }
         if (GameKeys.isPressed(GameKeys.DOWN)) {
             arrow.moveArrow(GameKeys.DOWN);
-            SoundEffects.play("Navigate", 0.1f);
+            SoundEffects.playMusic("Navigate");
         }
     }
 
@@ -87,10 +87,10 @@ public class MainMenu extends GameState{
             touch.set(Gdx.input.getX(), Main.GAME_HEIGHT - Gdx.input.getY());
             if(playButton.clicked(touch)) {
                 stateManager.setGameState(GameStateManager.LOBBY);
-                SoundEffects.play("ChangeScreen", 0.1f);
+                SoundEffects.play("ChangeScreen");
             }
             if(exitButton.clicked(touch)) {
-                SoundEffects.play("ChangeScreen", 0.1f);
+                SoundEffects.play("ChangeScreen");
                 Gdx.app.exit();
             }
         }

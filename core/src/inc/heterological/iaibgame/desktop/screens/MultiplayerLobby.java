@@ -13,7 +13,6 @@ import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 
 public class MultiplayerLobby extends GameState {
 
-
     OrthographicCamera camera;
 
     public MultiplayerLobby(GameStateManager gsm) {
@@ -26,7 +25,7 @@ public class MultiplayerLobby extends GameState {
     public void init() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
-        SoundEffects.loop("LobbyMusic", 0.25f);
+        SoundEffects.loop("LobbyMusic");
     }
 
     @Override
@@ -50,13 +49,14 @@ public class MultiplayerLobby extends GameState {
     @Override
     public void handleInput() {
         if (GameKeys.isPressed(GameKeys.BACKSPACE)) {
-            stateManager.setGameState(GameStateManager.MENU);
-            SoundEffects.play("ChangeScreen", 0.1f);
+            SoundEffects.play("ChangeScreen");
             SoundEffects.stop("LobbyMusic");
+            SoundEffects.stop("MenuBackground");
+            stateManager.setGameState(GameStateManager.MENU);
         }
         if (GameKeys.isPressed(GameKeys.ENTER)) {
-            stateManager.setGameState(GameStateManager.PLAY_MULTIPLAYER);
             SoundEffects.stopAll();
+            stateManager.setGameState(GameStateManager.PLAY_MULTIPLAYER);
         }
     }
 

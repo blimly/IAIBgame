@@ -1,9 +1,6 @@
 package inc.heterological.iaibgame.desktop.managers;
 
-import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.InputAdapter;
 
 public class GameInputProcessor extends InputAdapter {

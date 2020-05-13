@@ -2,10 +2,6 @@ package inc.heterological.iaibgame.desktop.managers;
 
 public class GameKeys {
 
-    private static boolean[] keys;
-    private static boolean[] pressedKeys;
-
-    private static final int NUM_OF_KEYS = 8;
     public static final int UP = 0;
     public static final int DOWN = 1;
     public static final int LEFT = 2;
@@ -14,6 +10,9 @@ public class GameKeys {
     public static final int JAB = 5;
     public static final int ENTER = 6;
     public static final int BACKSPACE = 7;
+    private static final int NUM_OF_KEYS = 8;
+    private static boolean[] keys;
+    private static boolean[] pressedKeys;
 
     static {
         keys = new boolean[NUM_OF_KEYS];

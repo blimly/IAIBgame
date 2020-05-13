@@ -12,14 +12,14 @@ import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
 import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 
-public class MainMenu extends GameState{
+public class MainMenu extends GameState {
 
 
     OrthographicCamera camera;
     Vector2 touch;
     Button playButton;
     Button exitButton;
-    SelectArrow arrow = new SelectArrow(180,120 ,120, 30, 90);
+    SelectArrow arrow = new SelectArrow(180, 120, 120, 30, 90);
 
     float bg_scroll_y;
 
@@ -44,11 +44,11 @@ public class MainMenu extends GameState{
     public void update(float dt) {
         handleInput();
         if (GameKeys.isPressed(GameKeys.ENTER)) {
-            if(arrow.y == 120) {
+            if (arrow.y == 120) {
                 stateManager.setGameState(GameStateManager.LOBBY);
                 SoundEffects.play("ChangeScreen");
             }
-            if(arrow.y == 30) {
+            if (arrow.y == 30) {
                 Gdx.app.exit();
                 SoundEffects.play("ChangeScreen");
             }
@@ -83,13 +83,13 @@ public class MainMenu extends GameState{
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched()) {
             touch.set(Gdx.input.getX(), Main.GAME_HEIGHT - Gdx.input.getY());
-            if(playButton.clicked(touch)) {
+            if (playButton.clicked(touch)) {
                 stateManager.setGameState(GameStateManager.LOBBY);
                 SoundEffects.play("ChangeScreen");
             }
-            if(exitButton.clicked(touch)) {
+            if (exitButton.clicked(touch)) {
                 SoundEffects.play("ChangeScreen");
                 Gdx.app.exit();
             }

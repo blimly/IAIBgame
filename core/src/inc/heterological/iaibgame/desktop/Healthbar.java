@@ -11,18 +11,15 @@ public class Healthbar {
         batch.setColor(Color.BLACK);
         batch.draw(Assets.blank, entityPos.x - 4, entityPos.y + 68, 72, 12);
         batch.setColor(Color.GRAY);
-        batch.draw(Assets.blank, entityPos.x , entityPos.y + 70, 64, 8);
+        batch.draw(Assets.blank, entityPos.x, entityPos.y + 70, 64, 8);
 
         if (health <= 100 && health > 75) {
             batch.setColor(Color.valueOf("20e2de"));
-        }
-        else if (health <= 75 && health > 50) {
+        } else if (health <= 75 && health > 50) {
             batch.setColor(Color.valueOf("2999ac"));
-        }
-        else if (health <= 50 && health > 25) {
+        } else if (health <= 50 && health > 25) {
             batch.setColor(Color.valueOf("317d9c"));
-        }
-        else if (health <= 25 && health > 0) {
+        } else if (health <= 25 && health > 0) {
             batch.setColor(Color.valueOf("414883"));
         }
 

@@ -3,8 +3,6 @@ package inc.heterological.iaibgame.desktop.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import inc.heterological.iaibgame.Main;
 import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
@@ -14,6 +12,7 @@ import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 public class MultiplayerLobby extends GameState {
 
     OrthographicCamera camera;
+    private float statetime;
 
     public MultiplayerLobby(GameStateManager gsm) {
         super(gsm);
@@ -25,12 +24,19 @@ public class MultiplayerLobby extends GameState {
     public void init() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
-        SoundEffects.loop("LobbyMusic");
+        statetime = 0;
+        SoundEffects.loop("LobbyMusic", 0.25f);
     }
 
     @Override
     public void update(float dt) {
+        statetime += dt;
+        if (statetime > 3) {
+            stateManager.setGameState(GameStateManager.PLAY_MULTIPLAYER);
+            SoundEffects.stopAll();
+        }
         handleInput();
+
     }
 
     @Override
@@ -40,8 +46,8 @@ public class MultiplayerLobby extends GameState {
         camera.update();
         Main.batch.setProjectionMatrix(camera.combined);
         Main.batch.begin();
-        Assets.font.draw(Main.batch, "Multiplayer Lobby", 100, Main.GAME_HEIGHT - 100);
-        Assets.font.draw(Main.batch, "Press ENTER to go to multiplayer Arena.", 100, Main.GAME_HEIGHT - 300);
+        Main.batch.draw(Assets.loading.getKeyFrame(statetime), 230, 150, 180, 288);
+        Assets.font.draw(Main.batch, "Connecting...", Main.GAME_WIDTH / 2f - 100, 100);
         Main.batch.end();
 
     }

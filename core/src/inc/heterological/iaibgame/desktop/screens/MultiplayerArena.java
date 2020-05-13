@@ -15,28 +15,27 @@ import inc.heterological.iaibgame.desktop.Assets;
 import inc.heterological.iaibgame.desktop.Healthbar;
 import inc.heterological.iaibgame.desktop.characters.Enemy;
 import inc.heterological.iaibgame.desktop.characters.Player;
-import inc.heterological.iaibgame.desktop.managers.GameInputProcessor;
 import inc.heterological.iaibgame.desktop.managers.GameKeys;
 import inc.heterological.iaibgame.desktop.managers.GameStateManager;
-import inc.heterological.iaibgame.desktop.managers.SoundEffects;
 import inc.heterological.iaibgame.net.client.GameClient;
 import inc.heterological.iaibgame.net.shared.packets.EnemyEntity;
-import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiplayerArena extends GameState {
 
-    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
-    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>(); // enemie positions on server
-    public static ArenaButton.ARENA_BUTTON_STATE onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
-    // online stuff
-    static Player player = new Player();
     static GameClient gameClient;
+    public static Map<Integer, PlayerEntity> players = new ConcurrentHashMap<>();
+    public static Map<Integer, EnemyEntity> enemies = new ConcurrentHashMap<>();
+    public static ArenaButton.ARENA_BUTTON_STATE onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
+
+    private boolean gameEnded = false;
+
+    private ArenaButton arenaButton;
+    static Player player = new Player();
     private final Enemy enemy = new Enemy(Vector2.Zero);
     OrthographicCamera camera;
     float stateTime;
@@ -58,6 +57,7 @@ public class MultiplayerArena extends GameState {
 
         delta = Gdx.graphics.getDeltaTime();
         stateTime += delta;
+
         if (player.health > 0) {
             if (GameKeys.isDown(GameKeys.LEFT) && GameKeys.isDown(GameKeys.RIGHT)) {
                 player.stand();
@@ -81,15 +81,16 @@ public class MultiplayerArena extends GameState {
             }
 
             player.updatePlayerPhysics();
-
-            camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
         } else {
-            camera.position.lerp(new Vector3(912, 912, 0), delta);
-            if (camera.zoom < 2.5f) {
-                camera.zoom += delta / 10f;
-            }
+            gameEnded = true;
         }
 
+        if (gameEnded) {
+            zoomOutCamera(delta);
+        } else {
+            camera.zoom = 1f;
+            camera.position.lerp(new Vector3(player.position.x + player.width / 2f, player.position.y + player.height / 2f, 0), delta);
+        }
 
         for (EnemyEntity onlineEnemy : enemies.values()) {
             float distToEnemy = onlineEnemy.pos.dst(player.position);
@@ -124,19 +125,26 @@ public class MultiplayerArena extends GameState {
 
     }
 
+    private void zoomOutCamera(float delta) {
+        camera.position.lerp(new Vector3(912, 912, 0), delta / 4f);
+        if (camera.zoom < 2.5f) {
+            camera.zoom += delta / 5f;
+        }
+    }
+
     @Override
     public void init() {
         arenaButton = new ArenaButton(848, 870, ArenaButton.ARENA_BUTTON_STATE.UP);
-        onlineButtonState = ArenaButton.ARENA_BUTTON_STATE.UP;
+        gameEnded = false;
         stateTime = 0f;
         gameClient = new GameClient();
         camera = Main.camera;
         Main.camera.position.set(player.position, 0f);
         Main.camera.zoom = 1f;
         player = new Player();
+        gameEnded = false;
         players.clear();
         enemies.clear();
-
     }
 
     @Override
@@ -161,7 +169,6 @@ public class MultiplayerArena extends GameState {
         for (PlayerEntity onlinePlayer : players.values()) {
             if (onlinePlayer.health > 0) {
                 Healthbar.drawHealth(Main.batch, onlinePlayer.pos, onlinePlayer.health);
-
                 if (onlinePlayer.facingRight) {
                     Main.batch.draw(Player.getFrameBasedUponCondition(onlinePlayer.currentState, stateTime), onlinePlayer.pos.x, onlinePlayer.pos.y, 64, 64);
                 } else {
@@ -187,7 +194,6 @@ public class MultiplayerArena extends GameState {
 
         // draw myself
         if (player.health > 0) {
-
             Healthbar.drawHealth(Main.batch, player.position, player.health);
             if (player.facingRight) {
                 Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x, player.position.y, player.width, player.height);
@@ -195,7 +201,18 @@ public class MultiplayerArena extends GameState {
                 Main.batch.draw(player.getCurrentFrame(stateTime, delta), player.position.x + player.width, player.position.y, -player.width, player.height);
             }
         } else {
-            Assets.font.draw(Main.batch, "GAME OVER", 900, 1000);
+            Assets.bigFont.draw(Main.batch, "GAME OVER", 600, 1200);
+            Assets.bigFont.draw(Main.batch, "YOU ARE NOT INFO BOY", 300, 600);
+        }
+
+        if (enemies.size() == 0 && player.health > 0 && onlineButtonState == ArenaButton.ARENA_BUTTON_STATE.DOWN) {
+            gameEnded = true;
+            Assets.bigFont.draw(Main.batch, "WELL DONE", 600, 1300);
+            Assets.bigFont.draw(Main.batch, "YOU ARE", 700, 800);
+            Assets.hugeFont.draw(Main.batch, "INFO BOY", 400, 600);
+
+        } else {
+            gameEnded = false;
         }
 
         Main.batch.end();

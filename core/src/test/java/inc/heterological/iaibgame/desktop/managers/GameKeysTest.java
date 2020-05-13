@@ -7,18 +7,16 @@ import static org.junit.Assert.*;
 public class GameKeysTest {
 
     @Test
-    public void update() {
-    }
-
-    @Test
-    public void setKeys() {
-    }
-
-    @Test
-    public void isDown() {
-    }
-
-    @Test
     public void isPressed() {
+        GameKeys.setKeys(GameKeys.UP, true);
+        assertTrue(GameKeys.isPressed(GameKeys.UP));
+    }
+
+    @Test
+    public void noKeyPressed() {
+        assertTrue(GameKeys.noKeyPressed());
+        GameKeys.setKeys(GameKeys.UP, true);
+        GameKeys.update();
+        assertFalse(GameKeys.noKeyPressed());
     }
 }

@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import inc.heterological.iaibgame.desktop.characters.Player;
 import inc.heterological.iaibgame.net.shared.packets.AddPlayer;
+import inc.heterological.iaibgame.net.shared.packets.ArenaButtonChange;
 import inc.heterological.iaibgame.net.shared.packets.Play;
 import inc.heterological.iaibgame.net.shared.packets.PlayerEntity;
 import inc.heterological.iaibgame.net.shared.packets.RemovePlayer;
@@ -23,6 +24,10 @@ public class ServerListener extends Listener {
         Play.Players playersInGame = new Play.Players();
         playersInGame.players = GameServer.players;
         c.sendTCP(playersInGame);
+
+        ArenaButtonChange arenaButtonOnServer = new ArenaButtonChange();
+        arenaButtonOnServer.state = ServerLogic.buttonState;
+        c.sendTCP(arenaButtonOnServer);
 
         // Make the connection a new PlayerEntity in the server
         PlayerEntity player = new PlayerEntity();

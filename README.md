@@ -11,4 +11,4 @@ Mäng saab alguse sellest, kuidas üks IT tudeng ärkab ühikas enda voodis üle
 
 ## Trailer
 
-[![Watch the video](https://img.youtube.com/vi/APOPm01BVrk/hqdefault.jpg)](https://youtu.be/EvHmgVH9-kg)
+[![Watch the video](https://img.youtube.com/vi/EvHmgVH9-kg/hqdefault.jpg)](https://youtu.be/EvHmgVH9-kg)
